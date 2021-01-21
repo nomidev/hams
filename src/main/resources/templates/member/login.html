@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html lang="en"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/content_layout}">
 <head>
-    <th:block th:replace="fragments/common :: commonFragment"></th:block>
     <title>Login</title>
     <link rel="stylesheet" th:href="@{/css/signin.css}">
 </head>
 <body>
-<main class="form-signin">
+<main class="form-signin" layout:fragment="content">
     <form>
         <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
         <label for="username" class="visually-hidden">Email address</label>
