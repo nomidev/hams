@@ -11,3 +11,16 @@ spring:
     username: huneth
     password: 1234
 
+  jpa:
+    open-in-view: false
+    hibernate:
+#      ddl-auto: create
+      ddl-auto: update
+      naming:
+        physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
+      use-new-id-generator-mappings: false
+    show-sql: true
+    properties:
+      hibernate.enable_lazy_load_no_trans: true
+      hibernate.format_sql: true
+

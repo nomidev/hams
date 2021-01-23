@@ -2,17 +2,25 @@
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layouts/content_layout}">
+      layout:decorate="~{layouts/default_layout}">
 <head>
     <title>Sign Up</title>
 </head>
 <body class="bg-light">
-<div class="container" layout:fragment="content">
+<div class="container w-50" layout:fragment="content">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item"><a href="#">Library</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Data</li>
+        </ol>
+    </nav>
+
     <main>
         <div class="py-5 text-center">
 <!--            <img class="d-block mx-auto mb-4" src="/docs/5.0/assets/brand/bootstrap-logo.svg" alt="" width="72" height="57">-->
-            <h2>Sign up Form</h2>
-            <p class="lead">Below is an example form built entirely with Bootstrap’s form controls. Each required form group has a validation state that can be triggered by attempting to submit the form without completing it.</p>
+            <h2>회원가입</h2>
+<!--            <p class="lead">Below is an example form built entirely with Bootstrap’s form controls. Each required form group has a validation state that can be triggered by attempting to submit the form without completing it.</p>-->
         </div>
 
         <div class="row g-3">
@@ -20,83 +28,75 @@
                 <h4 class="mb-3">회원정보</h4>
                 <form class="needs-validation" novalidate>
                     <div class="row g-3">
-                        <div class="col-sm-6">
-                            <label for="firstName" class="form-label">First name</label>
-                            <input type="text" class="form-control" id="firstName" placeholder="" value="" required>
+                        <div class="col-sm-12">
+                            <label for="username" class="form-label">사용자이름</label>
+                            <input type="text" class="form-control" id="username" placeholder="name" value="" required>
                             <div class="invalid-feedback">
-                                Valid first name is required.
-                            </div>
-                        </div>
-
-                        <div class="col-sm-6">
-                            <label for="lastName" class="form-label">Last name</label>
-                            <input type="text" class="form-control" id="lastName" placeholder="" value="" required>
-                            <div class="invalid-feedback">
-                                Valid last name is required.
+                                Your password is required.
                             </div>
                         </div>
 
                         <div class="col-12">
-                            <label for="username" class="form-label">Username</label>
-                            <div class="input-group">
-                                <span class="input-group-text">@</span>
-                                <input type="text" class="form-control" id="username" placeholder="Username" required>
-                                <div class="invalid-feedback">
-                                    Your username is required.
-                                </div>
+                            <label for="password" class="form-label">비밀번호</label>
+                            <input type="text" class="form-control" id="password" placeholder="password" required>
+                            <div class="invalid-feedback">
+                                Your password is required.
                             </div>
                         </div>
 
                         <div class="col-12">
-                            <label for="email" class="form-label">Email <span class="text-muted">(Optional)</span></label>
+                            <label for="email" class="form-label">Email</label>
                             <input type="email" class="form-control" id="email" placeholder="you@example.com">
                             <div class="invalid-feedback">
                                 Please enter a valid email address for shipping updates.
                             </div>
                         </div>
 
+                        <label class="form-label">Phone Number</label>
+
+                        <div class="col-4 mt-0">
+                            <input type="text" class="form-control" id="phoneNumber" placeholder="010">
+                        </div>
+
+                        <div class="col-4 mt-0">
+                            <input type="text" class="form-control" placeholder="010">
+                        </div>
+
+                        <div class="col-4 mt-0">
+                            <input type="text" class="form-control" placeholder="010">
+                        </div>
+
                         <div class="col-12">
                             <label for="address" class="form-label">Address</label>
-                            <input type="text" class="form-control" id="address" placeholder="1234 Main St" required>
+                            <div class="row g-3">
+                                <div class="col-auto">
+                                    <label for="postcode" class="visually-hidden">우편번호</label>
+                                    <input type="text" class="form-control" id="postcode" name="postcode" placeholder="우편번호">
+                                </div>
+                                <div class="col-auto">
+                                    <button type="button" class="btn btn-primary mb-3" onclick="execDaumPostcode()">우편번호</button>
+                                </div>
+                            </div>
+                            <input type="text" class="form-control" id="address" placeholder="" required>
                             <div class="invalid-feedback">
                                 Please enter your shipping address.
                             </div>
                         </div>
 
-                        <div class="col-12">
-                            <label for="address2" class="form-label">Address 2 <span class="text-muted">(Optional)</span></label>
-                            <input type="text" class="form-control" id="address2" placeholder="Apartment or suite">
-                        </div>
-
-                        <div class="col-md-5">
-                            <label for="country" class="form-label">Country</label>
-                            <select class="form-select" id="country" required>
-                                <option value="">Choose...</option>
-                                <option>United States</option>
-                            </select>
+                        <div class="col-md-6">
+                            <input type="text" class="form-control" id="detailAddress" name="detailAddress" required>
                             <div class="invalid-feedback">
                                 Please select a valid country.
                             </div>
                         </div>
 
-                        <div class="col-md-4">
-                            <label for="state" class="form-label">State</label>
-                            <select class="form-select" id="state" required>
-                                <option value="">Choose...</option>
-                                <option>California</option>
-                            </select>
+                        <div class="col-md-6">
+                            <input type="text" class="form-control" id="extraAddress" name="extraAddress" required>
                             <div class="invalid-feedback">
                                 Please provide a valid state.
                             </div>
                         </div>
 
-                        <div class="col-md-3">
-                            <label for="zip" class="form-label">Zip</label>
-                            <input type="text" class="form-control" id="zip" placeholder="" required>
-                            <div class="invalid-feedback">
-                                Zip code required.
-                            </div>
-                        </div>
                     </div>
 
                     <hr class="my-4">
@@ -173,13 +173,65 @@
         </div>
     </main>
 
-    <footer class="my-5 pt-5 text-muted text-center text-small">
+    <!--<footer class="my-5 pt-5 text-muted text-center text-small">
         <p class="mb-1">&copy; 2017–2021 Company Name</p>
         <ul class="list-inline">
             <li class="list-inline-item"><a href="#">Privacy</a></li>
             <li class="list-inline-item"><a href="#">Terms</a></li>
             <li class="list-inline-item"><a href="#">Support</a></li>
         </ul>
-    </footer>
+    </footer>-->
+
+    <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <script>
+        function execDaumPostcode() {
+            new daum.Postcode({
+                oncomplete: function(data) {
+                    // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+
+                    // 각 주소의 노출 규칙에 따라 주소를 조합한다.
+                    // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+                    var addr = ''; // 주소 변수
+                    var extraAddr = ''; // 참고항목 변수
+
+                    //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+                    if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+                        addr = data.roadAddress;
+                    } else { // 사용자가 지번 주소를 선택했을 경우(J)
+                        addr = data.jibunAddress;
+                    }
+
+                    // 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.
+                    if(data.userSelectedType === 'R'){
+                        // 법정동명이 있을 경우 추가한다. (법정리는 제외)
+                        // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+                        if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
+                            extraAddr += data.bname;
+                        }
+                        // 건물명이 있고, 공동주택일 경우 추가한다.
+                        if(data.buildingName !== '' && data.apartment === 'Y'){
+                            extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+                        }
+                        // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+                        if(extraAddr !== ''){
+                            extraAddr = ' (' + extraAddr + ')';
+                        }
+                        // 조합된 참고항목을 해당 필드에 넣는다.
+                        document.getElementById("extraAddress").value = extraAddr;
+
+                    } else {
+                        document.getElementById("extraAddress").value = '';
+                    }
+
+                    // 우편번호와 주소 정보를 해당 필드에 넣는다.
+                    document.getElementById('postcode').value = data.zonecode;
+                    document.getElementById("address").value = addr;
+                    // 커서를 상세주소 필드로 이동한다.
+                    document.getElementById("detailAddress").focus();
+                }
+            }).open();
+        }
+    </script>
+</div>
 </body>
 </html>
