@@ -38,24 +38,38 @@ public class TestController {
         return paginUser;
     }
 
-    @Transactional
+    @DeleteMapping("/dummy/user/{id}")
+    public String deleteUser(@PathVariable int id) {
+        try {
+            userRepository.deleteById(id);
+        } catch (Exception e) {
+            return "삭제할 대상이 없습니다.";
+        }
+
+        return "삭제되었습니다.";
+    }
+
+    @Transactional // 함수 종료시 자동 커밋
     @PutMapping("/dummy/user/{id}") // 업데이트
     public Users updateUser(@PathVariable int id, @RequestBody Users requestUser) {
         // Json데이터로 요청하면 MessageConverter가 자바 오브젝트로 변경해준다.
 
+        // 영속화
         Users user = userRepository.findById(id).orElseThrow(() -> {
             return new IllegalArgumentException("수정에 실패했습니다.");
         });
 
-        user.setEmailAddress(requestUser.getEmailAddress());
-        user.setPassword(requestUser.getPassword());
+        // 영속 컨텍스트에 내용을 바꿨기 때문에 @Transactional을 할 경우 변경을 감지해서 update가 이루어 진다.(더티 체킹)
+        //user.setEmailAddress(requestUser.getEmailAddress());
+        //user.setPassword(requestUser.getPassword());
+        user.setPhoneNumber(requestUser.getPhoneNumber());
 
 //        save함수는 id를 전달하지 않으면 Insert를 해주세고
 //        Id가 있으면 업데이트 있으면 insert
 //        userRepository.save(user);
 
         // 더티 체킹
-        return null;
+        return user;
     }
 
 //    {id} 주소로 파라미터를 받을 수 있다.
