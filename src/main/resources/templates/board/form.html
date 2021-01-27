@@ -30,34 +30,20 @@
         </div>
     </div>
 
-    <div>총 건수 : <span th:text="${#lists.size(boardList)}"></span></div>
-    <div class="table-responsive">
-        <table class="table table-striped table-sm">
-            <thead>
-            <tr>
-                <th>번호</th>
-                <th>제목</th>
-                <th>작성자</th>
-                <th>작성일자</th>
-                <th>수정자</th>
-                <th>수정일자</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="item : ${boardList}">
-                <td th:text="${item.id}">1,001</td>
-                <td th:text="${item.title}">Lorem</td>
-                <td>노종민</td>
-                <td>2021-01-27</td>
-                <td>노종민</td>
-                <td>2021-01-27</td>
-            </tr>
-            </tbody>
-        </table>
-
-        <div class="text-end">
-            <a class="btn btn-primary" href="#" th:href="@{/board/form}" role="button">Write</a>
+    <form action="@{/board/form}" method="post">
+        <div class="mb-3">
+            <label for="title" class="form-label">Title</label>
+            <input type="text" class="form-control" id="title">
         </div>
+        <div class="mb-3">
+            <label for="content" class="form-label">Example textarea</label>
+            <textarea class="form-control" id="content" rows="3"></textarea>
+        </div>
+    </form>
+
+    <div class="text-end">
+        <a class="btn btn-primary" href="#" th:href="@{/board/list}" role="button">취소</a>
+        <button type="submit" class="btn btn-primary">확인</button>
     </div>
 </main>
 </body>

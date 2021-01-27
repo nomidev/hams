@@ -1,6 +1,7 @@
 package com.huneth.hams.model;
 
 import lombok.Data;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,13 +15,18 @@ public class Board {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //strategy 전략
     private int id;
 
     private String title;
     private String content;
-    private int createdBy;
+
+    @ColumnDefault("-1")
+    private Integer createdBy;
     private Timestamp creationDate;
-    private int lastUpdatedBy;
+
+    @ColumnDefault("-1")
+    private Integer lastUpdatedBy;
     private Timestamp lastUpdateDate;
 
 }
