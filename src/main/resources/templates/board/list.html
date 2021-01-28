@@ -30,9 +30,22 @@
         </div>
     </div>
 
-    <!--    <div>총 건수 : <span th:text="${#lists.size(boardList)}"></span></div>-->
-    <!--페이징일 경우-->
-    <div>총 건수 : <span th:text="${boardList.totalElements}"></span></div>
+    <div class="d-flex justify-content-between">
+        <!--    <div>총 건수 : <span th:text="${#lists.size(boardList)}"></span></div>-->
+        <!--페이징일 경우-->
+        <div>총 건수 : <span th:text="${boardList.totalElements}"></span></div>
+
+        <form class="row g-3" th:action="@{/board/list}" method="GET">
+            <div class="col-auto">
+                <label for="searchText" class="visually-hidden">searchText</label>
+                <input type="text" class="form-control" id="searchText" name="searchText" th:value="${param.searchText}">
+            </div>
+            <div class="col-auto">
+                <button type="submit" class="btn btn-primary mb-3">search</button>
+            </div>
+        </form>
+    </div>
+
     <div class="table-responsive">
         <table class="table table-striped table-sm">
             <colgroup>

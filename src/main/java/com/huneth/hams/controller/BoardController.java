@@ -5,16 +5,18 @@ import com.huneth.hams.repository.BoardRepository;
 import com.huneth.hams.validator.BoardValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @Controller
 @RequestMapping("/board")
@@ -27,10 +29,13 @@ public class BoardController {
     private BoardValidator boardValidator;
 
     @GetMapping("/list")
-    public String list(Model model, @PageableDefault(size = 2) Pageable pageable) {
+    public String list(Model model, @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
+                       @RequestParam(required = false, defaultValue = "") String searchText) {
 //        Page<Board> boardList = boardRepository.findAll(PageRequest.of(0, 20)); // jpa page가 0부터 시작한다.
-        Page<Board> boardList = boardRepository.findAll(pageable); // jpa page가 0부터 시작한다.
+//        Page<Board> boardList = boardRepository.findAll(pageable); // jpa page가 0부터 시작한다.
+        Page<Board> boardList = boardRepository.findByTitleContainingOrContentContaining(searchText, searchText, pageable); // jpa page가 0부터 시작한다.
 //        boardList.getTotalElements();
+
         int startPage = Math.max(1, boardList.getPageable().getPageNumber() - 2);
         int endPage = Math.min(boardList.getTotalPages(), boardList.getPageable().getPageNumber() + 2);
         model.addAttribute("startPage", startPage);

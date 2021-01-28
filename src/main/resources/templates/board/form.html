@@ -30,7 +30,7 @@
         </div>
     </div>
 
-    <form th:action="@{/board/form}" method="post" th:object="${board}" >
+    <form th:action="@{/board/form}" th:object="${board}" method="POST">
         <input type="hidden" th:field="*{id}">
         <div class="mb-3">
             <label for="title" class="form-label">Title</label>
