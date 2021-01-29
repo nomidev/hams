@@ -1,20 +1,25 @@
 package com.huneth.hams.controller;
 
+import java.util.List;
+import java.util.function.Supplier;
+
 import com.huneth.hams.model.RoleType;
 import com.huneth.hams.model.Users;
 import com.huneth.hams.repository.UserRepository;
-import javassist.runtime.Desc;
-import org.hibernate.boot.model.naming.IllegalIdentifierException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.function.Supplier;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 // RestController는 뷰리졸버를 거치지 않고 데이터로 내려옴
 // html이 아닌 data를 리턴해주는 컨트롤러
@@ -31,9 +36,9 @@ public class TestController {
         return userRepository.findAll();
     }
 
-    public Page pageList(@PageableDefault(size = 2, sort = "id", direction = Sort.Direction.DESC) Pageable page) {
+    public Page<Users> pageList(@PageableDefault(size = 2, sort = "id", direction = Sort.Direction.DESC) Pageable page) {
 
-        Page paginUser = userRepository.findAll(page);
+        Page<Users> paginUser = userRepository.findAll(page);
 
         return paginUser;
     }

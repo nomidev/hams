@@ -31,10 +31,10 @@ public class BoardController {
     @GetMapping("/list")
     public String list(Model model, @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
                        @RequestParam(required = false, defaultValue = "") String searchText) {
-//        Page<Board> boardList = boardRepository.findAll(PageRequest.of(0, 20)); // jpa page가 0부터 시작한다.
-//        Page<Board> boardList = boardRepository.findAll(pageable); // jpa page가 0부터 시작한다.
+        // Page<Board> boardList = boardRepository.findAll(PageRequest.of(0, 20)); // jpa page가 0부터 시작한다.
+        // Page<Board> boardList = boardRepository.findAll(pageable); // jpa page가 0부터 시작한다.
         Page<Board> boardList = boardRepository.findByTitleContainingOrContentContaining(searchText, searchText, pageable); // jpa page가 0부터 시작한다.
-//        boardList.getTotalElements();
+        // boardList.getTotalElements();
 
         int startPage = Math.max(1, boardList.getPageable().getPageNumber() - 2);
         int endPage = Math.min(boardList.getTotalPages(), boardList.getPageable().getPageNumber() + 2);

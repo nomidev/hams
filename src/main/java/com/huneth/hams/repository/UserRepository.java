@@ -1,8 +1,8 @@
 package com.huneth.hams.repository;
 
 import com.huneth.hams.model.Users;
+
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
 //Users 모델에 Id를 제네렉으로 넣어준다.
 // Dao?
