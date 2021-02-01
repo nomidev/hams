@@ -35,7 +35,7 @@
         <div class="mb-3">
             <label for="title" class="form-label">Title</label>
             <input type="text" class="form-control" id="title" th:field="*{title}"
-                   th:classappend="${#fields.hasErrors('title')} ? 'is-invalid' : 'is-valid'">
+                   th:classappend="${#fields.hasErrors('title')} ? 'is-invalid'">
             <div class="invalid-feedback" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">
                 Looks good!
             </div>

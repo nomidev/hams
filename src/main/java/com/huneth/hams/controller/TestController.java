@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.function.Supplier;
 
 import com.huneth.hams.model.RoleType;
-import com.huneth.hams.model.Users;
+import com.huneth.hams.model.User;
 import com.huneth.hams.repository.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,13 +32,13 @@ public class TestController {
     private UserRepository userRepository;
 
     @GetMapping("/dummy/users")
-    public List<Users> usersList() {
+    public List<User> usersList() {
         return userRepository.findAll();
     }
 
-    public Page<Users> pageList(@PageableDefault(size = 2, sort = "id", direction = Sort.Direction.DESC) Pageable page) {
+    public Page<User> pageList(@PageableDefault(size = 2, sort = "id", direction = Sort.Direction.DESC) Pageable page) {
 
-        Page<Users> paginUser = userRepository.findAll(page);
+        Page<User> paginUser = userRepository.findAll(page);
 
         return paginUser;
     }
@@ -56,11 +56,11 @@ public class TestController {
 
     @Transactional // 함수 종료시 자동 커밋
     @PutMapping("/dummy/user/{id}") // 업데이트
-    public Users updateUser(@PathVariable int id, @RequestBody Users requestUser) {
+    public User updateUser(@PathVariable int id, @RequestBody User requestUser) {
         // Json데이터로 요청하면 MessageConverter가 자바 오브젝트로 변경해준다.
 
         // 영속화
-        Users user = userRepository.findById(id).orElseThrow(() -> {
+        User user = userRepository.findById(id).orElseThrow(() -> {
             return new IllegalArgumentException("수정에 실패했습니다.");
         });
 
@@ -79,7 +79,7 @@ public class TestController {
 
 //    {id} 주소로 파라미터를 받을 수 있다.
     @GetMapping("/dummy/user/{id}")
-    public Users detail(@PathVariable int id) {
+    public User detail(@PathVariable int id) {
 //        optional로 리턴을 한다. 조회했을때 null이 올수도 있기 때문에 null인지 판단해서 리턴해야 한다.
 //        Users user = userRepository.findById(id).get(); 절대 null이 없다고 판단되면 바로 get으로 뽑아온다
         /*null일 경우 객체를 만들어서 리턴해야 한다.
@@ -95,7 +95,7 @@ public class TestController {
             return new IllegalArgumentException("해당 사용자는 없습니다.");
         });*/
 
-        Users user = userRepository.findById(id).orElseThrow(new Supplier<IllegalArgumentException>() {
+        User user = userRepository.findById(id).orElseThrow(new Supplier<IllegalArgumentException>() {
             @Override
             public IllegalArgumentException get() {
                 return new IllegalArgumentException("해당유저는 없습니다.");
@@ -112,13 +112,13 @@ public class TestController {
     }
 
     @PostMapping("/dummy/join")
-    public String signUp(Users users) {
+    public String signUp(User user) {
 
-        if (users.getRole() == null) {
-            users.setRole(RoleType.USER);
+        if (user.getRole() == null) {
+            user.setRole("ROLE_USER");
         }
 
-        userRepository.save(users);
+        userRepository.save(user);
         return "회원가입이 완료되었습니다.";
     }
 }
