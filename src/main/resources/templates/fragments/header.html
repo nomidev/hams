@@ -1,5 +1,8 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
 <head>
     <meta charset="UTF-8">
     <title>Home</title>
@@ -40,18 +43,24 @@
                     </li>
                     -->
                 </ul>
-                <ul class="navbar-nav px-3">
+                <ul class="navbar-nav px-3" sec:authorize="!isAuthenticated()">
                     <li class="nav-item text-nowrap">
                         <a class="nav-link" th:href="@{/login}">Login</a>
                     </li>
                     <li class="nav-item text-nowrap">
-                        <a class="nav-link" th:href="@{/signup}">Sign Up</a>
+                        <a class="nav-link" th:href="@{/join}">Join</a>
                     </li>
                 </ul>
-                <!--<form class="d-flex">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success" type="submit">Search</button>
-                </form>-->
+                <div class="nav-item dropdown" sec:authorize="isAuthenticated()">
+                    <a class="nav-link text-light dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-user-circle"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end" aria-labelledby="navbarDarkDropdownMenuLink">
+                        <li><span class="dropdown-item" sec:authentication="name">name</span></li>
+                        <li><span class="dropdown-item" sec:authentication="principal.authorities">role</span></li>
+                        <li><a class="dropdown-item" href="#" th:href="@{/logout}">Logout <i class="fas fa-sign-out-alt"></i></a></li>
+                    </ul>
+                </div>
             </div>
         </div>
     </nav>

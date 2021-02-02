@@ -28,9 +28,4 @@ public class Bulletin {
     @CreationTimestamp
     private Timestamp creationDate;
 
-    private int lastUpdatedBy;
-
-    @CreationTimestamp
-    private Timestamp lastUpdateDate;
-
 }

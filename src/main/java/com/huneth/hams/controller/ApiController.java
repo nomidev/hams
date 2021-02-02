@@ -115,7 +115,7 @@ public class ApiController {
     public String signUp(User user) {
 
         if (user.getRole() == null) {
-            user.setRole("ROLE_USER");
+            user.setRole(RoleType.ROLE_USER);
         }
 
         userRepository.save(user);

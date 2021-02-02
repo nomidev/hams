@@ -35,10 +35,4 @@ public class Board {
     @CreationTimestamp
     private Timestamp creationDate;
 
-    @ColumnDefault("-1")
-    private Integer lastUpdatedBy;
-
-    @CreationTimestamp
-    private Timestamp lastUpdateDate;
-
 }

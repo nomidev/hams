@@ -70,6 +70,7 @@ public class BoardController {
             return "board/form";
         }
 
+        // 인증정보로 사용자를 가져와 저장한다.
         String username = authentication.getName();
         User user = userRepository.findByUsername(username);
 
