@@ -21,16 +21,26 @@ public class MemberController {
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    /**
+     * 로그인 화면
+     * @return
+     */
     @GetMapping("/login")
     public String login() {
         return "/member/login";
     }
 
+    /**
+     * 회원가입 화면
+     */
     @GetMapping("/join")
     public String join() {
         return "/member/join";
     }
 
+    /**
+     * 회원가입
+     */
     @PostMapping("/join")
     public String joinForm(User user) {
         System.out.println(user);

@@ -4,109 +4,88 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/default_layout}">
 <head>
-    <title>Sign Up</title>
+    <title>회원가입</title>
 </head>
 <body class="bg-light">
-<div class="container w-50" layout:fragment="content">
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item"><a href="#">Library</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Data</li>
-        </ol>
-    </nav>
-
-    <main>
+    <main class="container w-50" layout:fragment="content">
         <div class="py-5 text-center">
 <!--            <img class="d-block mx-auto mb-4" src="/docs/5.0/assets/brand/bootstrap-logo.svg" alt="" width="72" height="57">-->
             <h2>회원가입</h2>
 <!--            <p class="lead">Below is an example form built entirely with Bootstrap’s form controls. Each required form group has a validation state that can be triggered by attempting to submit the form without completing it.</p>-->
         </div>
 
-        <div class="row g-3">
-            <div class="col-12">
-                <h4 class="mb-3">회원정보</h4>
-                <form th:action="@{/join}" class="needs-validation" novalidate method="post">
-                    <div class="row g-3">
-                        <div class="col-sm-12">
-                            <label for="username" class="form-label">사용자이름</label>
-                            <input type="text" class="form-control" id="username" name="username" placeholder="username" required>
-                            <div class="invalid-feedback">
-                                Your username is required.
-                            </div>
-                        </div>
-
-                        <div class="col-12">
-                            <label for="password" class="form-label">비밀번호</label>
-                            <input type="password" class="form-control" id="password" name="password" placeholder="password" required>
-                            <div class="invalid-feedback">
-                                Your password is required.
-                            </div>
-                        </div>
-
-                        <div class="col-12">
-                            <label for="email" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="email" name="email" placeholder="you@example.com">
-                            <div class="invalid-feedback">
-                                Please enter a valid email address for shipping updates.
-                            </div>
-                        </div>
-
-                        <div class="col-12">
-                            <label for="address" class="form-label">Address</label>
-                            <div class="row g-3">
-                                <div class="col-auto">
-                                    <label for="postcode" class="visually-hidden">우편번호</label>
-                                    <input type="text" class="form-control" id="postcode" name="postcode" placeholder="우편번호">
-                                </div>
-                                <div class="col-auto">
-                                    <button type="button" class="btn btn-primary mb-3" onclick="execDaumPostcode()">우편번호</button>
-                                </div>
-                            </div>
-                            <input type="text" class="form-control" id="address" placeholder="" required>
-                            <div class="invalid-feedback">
-                                Please enter your shipping address.
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <input type="text" class="form-control" id="detailAddress" name="detailAddress" required>
-                            <div class="invalid-feedback">
-                                Please select a valid country.
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <input type="text" class="form-control" id="extraAddress" name="extraAddress" required>
-                            <div class="invalid-feedback">
-                                Please provide a valid state.
-                            </div>
-                        </div>
-                    </div>
-
-                    <hr class="my-4">
-
-                    <div>
-                        <label for="affiliation" class="form-label">소속</label>
-                        <input type="text" class="form-control" id="affiliation" name="affiliation" placeholder="소속">
-                    </div>
-
-                    <div>
-                        <label for="licenseNumber" class="form-label">면허번호</label>
-                        <input type="text" class="form-control" id="licenseNumber" name="licenseNumber" placeholder="면허번호">
-                    </div>
-
-                    <div>
-                        <label for="occupation" class="form-label">직업</label>
-                        <input type="text" class="form-control" id="occupation" name="occupation" placeholder="직업">
-                    </div>
-
-                    <hr class="my-4">
-
-                    <button class="w-100 btn btn-primary btn-lg" type="submit">회원가입</button>
-                </form>
+        <form th:action="@{/join}" class="needs-validation" method="post">
+            <h4 class="mb-3">기본정보</h4>
+            <div class="mb-3">
+                <label for="username" class="form-label">사용자이름</label>
+                <input type="text" class="form-control" id="username" name="username" placeholder="username" required>
+                <div class="invalid-feedback">
+                    Your username is required.
+                </div>
             </div>
-        </div>
+
+            <div class="mb-3">
+                <label for="password" class="form-label">비밀번호</label>
+                <input type="password" class="form-control" id="password" name="password" placeholder="비밀번호" required>
+                <div class="invalid-feedback">
+                    Your password is required.
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="confirmPassword" class="form-label">비밀번호 확인</label>
+                <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="비밀번호를 다시 입력해 주세요" required>
+                <div class="invalid-feedback">
+                    Your password is required.
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="phoneNumber" class="form-label">전화번호</label>
+                <input type="text" class="form-control" id="phoneNumber" name="phoneNumber" placeholder="01012345678">
+                <div class="invalid-feedback">
+                    Please enter a valid email address for shipping updates.
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="email" class="form-label">이메일</label>
+                <input type="email" class="form-control" id="email" name="email" placeholder="you@example.com">
+                <div class="invalid-feedback">
+                    Please enter a valid email address for shipping updates.
+                </div>
+            </div>
+
+            <hr class="my-4">
+
+            <h4 class="mb-3">추가정보</h4>
+
+            <div class="mb-3">
+                <label for="affiliation" class="form-label">소속</label>
+                <input type="text" class="form-control" id="affiliation" name="affiliation" placeholder="소속">
+            </div>
+
+            <div class="mb-3">
+                <label for="licenseNumber" class="form-label">면허번호</label>
+                <input type="text" class="form-control" id="licenseNumber" name="licenseNumber" placeholder="면허번호">
+            </div>
+
+            <div class="mb-3">
+                <label for="occupation" class="form-label">직업</label>
+                <input type="text" class="form-control" id="occupation" name="occupation" placeholder="직업">
+            </div>
+
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked">
+                <label class="form-check-label" for="flexCheckChecked">
+                  개인정보수집동의
+                </label>
+              </div>
+
+            <hr class="my-4">
+
+            <button class="w-100 btn btn-primary btn-lg" type="submit">회원가입</button>
+        </form>
     </main>
 
     <!--<footer class="my-5 pt-5 text-muted text-center text-small">
@@ -168,6 +147,5 @@
             }).open();
         }
     </script>
-</div>
 </body>
 </html>
