@@ -64,13 +64,16 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="item : ${boardList}">
+            <tr th:if="${not #lists.isEmpty(boardList)}" th:each="item : ${boardList}">
                 <td th:text="${item.id}">1,001</td>
                 <td><a th:href="@{/board/form(id=${item.id})}" th:text="${item.title}">Lorem</a></td>
                 <td>노종민</td>
                 <td>2021-01-27</td>
                 <td>노종민</td>
                 <td>2021-01-27</td>
+            </tr>
+            <tr th:if="${boardList.totalElements} == 0">
+                <td colspan="6" class="text-center">게시글이 없습니다.</td>
             </tr>
             </tbody>
         </table>
