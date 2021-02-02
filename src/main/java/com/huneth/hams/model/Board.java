@@ -18,6 +18,8 @@ public class Board {
     //strategy 전략
     private int id;
 
+    private int bulletinId;
+
     @NotNull
     @Size(min = 1, max = 30)
 //    @Size(min = 1, max = 30, message = "") 메세지도 입력가능
@@ -27,7 +29,7 @@ public class Board {
     private String content;
 
     @ManyToOne
-    @JoinColumn(name = "createdBy")
+    @JoinColumn(name = "createdBy", referencedColumnName = "userId")
     private User user;
 
     @CreationTimestamp
