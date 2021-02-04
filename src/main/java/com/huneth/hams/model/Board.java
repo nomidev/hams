@@ -18,7 +18,8 @@ public class Board {
     //strategy 전략
     private int id;
 
-    private int bulletinId;
+    @ManyToOne
+    private Bulletin bulletin;
 
     @NotNull
     @Size(min = 1, max = 30)
