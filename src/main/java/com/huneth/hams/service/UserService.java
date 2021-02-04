@@ -14,7 +14,7 @@ public class UserService {
     private UserRepository userRepository;
 
     @Autowired
-    BCryptPasswordEncoder bCryptPasswordEncoder;
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public User save(User user) {
         // 회원가입이 잘 되지만 스프링 시큐리티를 사용할 수 없다.

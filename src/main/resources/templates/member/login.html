@@ -11,7 +11,7 @@
     <form class="form-signin" th:action="@{/login}" method="post">
         <div class="text-center mb-4">
             <h1 class="h2 py-3 fw-normal"><a th:href="@{/}" class="nav-link">HAMS</a></h1>
-            <h2 class="h3 mb-3 font-weight-normal">로그인 해주세요!</h2>
+            <h2 class="h3 mb-3 font-weight-normal">Sign in to HAMS</h2>
             <!--<p>Build form controls with floating labels via the <code>:placeholder-shown</code> pseudo-element. <a href="https://caniuse.com/css-placeholder-shown">Works in latest Chrome, Safari, Firefox, and IE 10/11 (prefixed).</a></p>-->
 
             <div th:if="${param.error}" class="alert alert-danger" role="alert">
@@ -44,7 +44,9 @@
             </label>
         </div>
         <button class="btn btn-lg btn-primary btn-block mb-3" type="submit">Sign in</button>
-        <p class="mb-5 text-center"><a th:href="@{/join}">회원가입</a></p>
+        <div class="shadow-sm p-3 mb-5 bg-white rounded text-center">
+            새로 오셨습니까? <a th:href="@{/join}">계정만들기</a>
+        </div>
         <p class="text-muted text-center">&copy; [[${#dates.year(#dates.createNow())}]] Huneth, inc.</p>
     </form>
 

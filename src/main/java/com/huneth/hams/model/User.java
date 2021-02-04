@@ -1,11 +1,20 @@
 package com.huneth.hams.model;
 
-import lombok.Data;
+import java.sql.Timestamp;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
+
 import org.hibernate.annotations.CreationTimestamp;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import java.sql.Timestamp;
+import lombok.Data;
 
 //@Table(name = "users")
 @Data
@@ -24,15 +33,20 @@ public class User {
     private String username;
 
     @NotNull
-    @Column(nullable = false, length = 100)
+    @Column(length = 100)
     private String password;
 
     @NotNull
-    @Column(nullable = false, length = 50, unique = true)
-    private String email;
+    private String memberName;
 
+    @NotNull
     @Column(length = 30)
     private String phoneNumber;
+
+    @NotNull
+    @Email
+    @Column(length = 50, unique = true)
+    private String email;
 
     @Column(length = 50)
     private String affiliation; //소속

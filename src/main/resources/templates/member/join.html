@@ -14,45 +14,54 @@
             <p class="lead">Below is an example form built entirely with Bootstrap’s form controls. Each required form group has a validation state that can be triggered by attempting to submit the form without completing it.</p>
         </div>
 
-        <form th:action="@{/join}" class="needs-validation" method="post">
+        <form th:action="@{/join}" method="post">
             <h4 class="mb-3">기본정보</h4>
-            <div class="mb-3">
-                <label for="username" class="form-label">사용자이름</label>
-                <input type="text" class="form-control" id="username" name="username" placeholder="username" required>
+            <div class="form-group">
+                <label for="username">사용자 아이디</label>
+                <input type="text" class="form-control" id="username" name="username" placeholder="아이디" required>
                 <div class="invalid-feedback">
-                    Your username is required.
+                    아이디는 필수 입니다.
                 </div>
             </div>
 
-            <div class="mb-3">
-                <label for="password" class="form-label">비밀번호</label>
+            <div class="form-group">
+                <label for="password">비밀번호</label>
                 <input type="password" class="form-control" id="password" name="password" placeholder="비밀번호" required>
                 <div class="invalid-feedback">
-                    Your password is required.
+                    비밀번호는 필수 입니다.
                 </div>
             </div>
 
-            <div class="mb-3">
-                <label for="confirmPassword" class="form-label">비밀번호 확인</label>
+            <div class="form-group">
+                <label for="confirmPassword">비밀번호 확인</label>
                 <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="비밀번호를 다시 입력해 주세요" required>
                 <div class="invalid-feedback">
-                    Your password is required.
+                    비밀번호 확인을 해야 합니다.
                 </div>
             </div>
 
-            <div class="mb-3">
-                <label for="phoneNumber" class="form-label">전화번호</label>
-                <input type="text" class="form-control" id="phoneNumber" name="phoneNumber" placeholder="01012345678">
+            <div class="form-group">
+                <label for="memberName">사용자 이름</label>
+                <input type="text" class="form-control" id="memberName" name="memberName" placeholder="회원이름" required>
                 <div class="invalid-feedback">
-                    Please enter a valid email address for shipping updates.
+                    아이디는 필수 입니다.
                 </div>
             </div>
 
-            <div class="mb-3">
-                <label for="email" class="form-label">이메일</label>
+
+            <div class="form-group">
+                <label for="phoneNumber">전화번호 <span class="text-muted">("-없이 입력해주세요")</span></label>
+                <input type="text" class="form-control" id="phoneNumber" name="phoneNumber" placeholder="01012345678" required>
+                <div class="invalid-feedback">
+                    전화번호를 입력해주세요
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="email">이메일</label>
                 <input type="email" class="form-control" id="email" name="email" placeholder="you@example.com">
                 <div class="invalid-feedback">
-                    Please enter a valid email address for shipping updates.
+                    이메일 인증을 해주세요.
                 </div>
             </div>
 
@@ -60,27 +69,25 @@
 
             <h4 class="mb-3">추가정보</h4>
 
-            <div class="mb-3">
-                <label for="affiliation" class="form-label">소속</label>
+            <div class="form-group">
+                <label for="affiliation">소속</label>
                 <input type="text" class="form-control" id="affiliation" name="affiliation" placeholder="소속">
             </div>
 
-            <div class="mb-3">
-                <label for="licenseNumber" class="form-label">면허번호</label>
+            <div class="form-group">
+                <label for="licenseNumber">면허번호</label>
                 <input type="text" class="form-control" id="licenseNumber" name="licenseNumber" placeholder="면허번호">
             </div>
 
-            <div class="mb-3">
-                <label for="occupation" class="form-label">직업</label>
+            <div class="form-group">
+                <label for="occupation">직업</label>
                 <input type="text" class="form-control" id="occupation" name="occupation" placeholder="직업">
             </div>
 
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked">
-                <label class="form-check-label" for="flexCheckChecked">
-                  개인정보수집동의
-                </label>
-              </div>
+            <div class="form-group form-check">
+                <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                <label class="form-check-label" for="exampleCheck1">개인정보수집동의</label>
+            </div>
 
             <hr class="my-4">
 
