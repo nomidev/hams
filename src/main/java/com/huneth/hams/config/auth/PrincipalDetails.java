@@ -44,6 +44,14 @@ public class PrincipalDetails implements UserDetails {
         return collect;
     }
 
+    public int getUserId() {
+        return user.getUserId();
+    }
+
+    public String getEmail() {
+        return user.getEmail();
+    }
+
     @Override
     public String getPassword() {
         return user.getPassword();
@@ -69,8 +77,9 @@ public class PrincipalDetails implements UserDetails {
         return true;
     }
 
+    // 계정 활성화
     @Override
     public boolean isEnabled() {
-        return true;
+        return user.getEnabled();
     }
 }

@@ -4,7 +4,7 @@ import com.huneth.hams.model.Board;
 import com.huneth.hams.model.User;
 import com.huneth.hams.repository.BoardRepository;
 import com.huneth.hams.repository.UserRepository;
-import com.huneth.hams.validator.BoardValidator;
+import com.huneth.hams.config.validator.BoardValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -68,6 +68,10 @@ public class BoardController {
 
         if (bindingResult.hasErrors()) {
             return "board/form";
+        }
+
+        if (authentication == null) {
+            return "redirect:/login?needLogin";
         }
 
         // 인증정보로 사용자를 가져와 저장한다.

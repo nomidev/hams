@@ -41,8 +41,8 @@
             </div>
         </div>
         <div class="mb-3">
-            <label for="content" class="form-label">Content</label>
-            <textarea class="form-control" id="content" rows="3" th:field="*{content}"
+            <label for="summernote" class="form-label">Content</label>
+            <textarea class="form-control" id="summernote" rows="3" th:field="*{content}"
                       th:classappend="${#fields.hasErrors('content')} ? 'is-invalid'"></textarea>
             <div class="invalid-feedback" th:if="${#fields.hasErrors('content')}" th:errors="*{content}">
                 Looks good!
@@ -54,7 +54,15 @@
             <button type="submit" class="btn btn-primary">확인</button>
         </div>
     </form>
-
 </main>
+
+<th:block layout:fragment="script">
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#summernote').summernote();
+        });
+    </script>
+</th:block>
+
 </body>
 </html>

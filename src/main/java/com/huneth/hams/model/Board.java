@@ -1,8 +1,8 @@
 package com.huneth.hams.model;
 
 import lombok.Data;
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -33,6 +33,10 @@ public class Board {
     private User user;
 
     @CreationTimestamp
+    @Column(updatable = false)
     private Timestamp creationDate;
+
+    @UpdateTimestamp
+    private Timestamp lastUpdateDate;
 
 }

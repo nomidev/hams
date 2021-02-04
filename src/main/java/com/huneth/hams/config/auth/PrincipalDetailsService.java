@@ -21,11 +21,10 @@ public class PrincipalDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
         User userEntity = userRepository.findByUsername(s);
 
-        // 해당 유저가 있으면 UserDetails를 반환한다.
-        if (userEntity != null) {
-            return new PrincipalDetails(userEntity);
+        if (userEntity == null) {
+            throw new UsernameNotFoundException(s);
         }
-
-        return null;
+        // 해당 유저가 있으면 UserDetails를 반환한다.
+        return new PrincipalDetails(userEntity);
     }
 }
