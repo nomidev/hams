@@ -21,6 +21,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 @Controller
@@ -61,7 +62,9 @@ public class BoardController {
     }
 
     @GetMapping("/form")
-    public String boardForm(Model model, @RequestParam(required = false) Integer id) {
+    public String boardForm(Model model, @RequestParam(required = false) Integer id, HttpSession session) {
+        log.debug(session + "");
+
         if (id == null) {
             // id가 없을 경우 새로운 board를 생성해 화면으로 전달한다.
             model.addAttribute("board", new Board());
@@ -95,10 +98,10 @@ public class BoardController {
         return "redirect:/board/boardList";
     }
 
-    @ExceptionHandler({ Exception.class })
+    /*@ExceptionHandler({ Exception.class })
     public ResponseEntity<Object> handleAll(final Exception ex) {
         log.info(ex.getClass().getName());
         log.error("error", ex);
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+    }*/
 }
