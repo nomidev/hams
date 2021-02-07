@@ -13,7 +13,7 @@ public class ConferenceController {
      * @return
      */
     @GetMapping("/list")
-    public String list() {
-        return "conference/list";
+    public String ConferenceList() {
+        return "conference/confList";
     }
 }

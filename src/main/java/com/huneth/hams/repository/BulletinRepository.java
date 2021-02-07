@@ -7,5 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface BulletinRepository extends JpaRepository<Bulletin, Integer> {
 
-    Page<Bulletin> findByBoardTitle(String title, Pageable pageable);
+    // board_title like ''
+    Page<Bulletin> findByTitleContaining(String title, Pageable pageable);
+
 }

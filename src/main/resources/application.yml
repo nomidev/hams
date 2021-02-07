@@ -11,12 +11,13 @@ spring:
   jpa:
     open-in-view: false
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
       naming:
         physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
       use-new-id-generator-mappings: false
     show-sql: true
     properties:
-      hibernate.enable_lazy_load_no_trans: true # 형식화된 sql 문을 보여준다. Beautifier 기능이라고 생각하면 된다
-      hibernate.format_sql: true #Lazy Load 를 적용하기 위한 설정
+      hibernate:
+        enable_lazy_load_no_trans: true # 형식화된 sql 문을 보여준다. Beautifier 기능이라고 생각하면 된다
+        format_sql: true #Lazy Load 를 적용하기 위한 설정
 

@@ -9,13 +9,15 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.sql.Timestamp;
 
+/**
+ * Board
+ */
 @Data
 @Entity
 public class Board {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    //strategy 전략
+    @GeneratedValue(strategy = GenerationType.IDENTITY) //strategy 전략
     private int id;
 
     @ManyToOne
@@ -28,6 +30,9 @@ public class Board {
 
     @NotNull
     private String content;
+
+    private String attachedFile;
+    private int hits;
 
     @ManyToOne
     @JoinColumn(name = "createdBy", referencedColumnName = "userId")

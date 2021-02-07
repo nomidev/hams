@@ -9,6 +9,9 @@ import org.hibernate.annotations.CreationTimestamp;
 import lombok.Data;
 import org.hibernate.annotations.UpdateTimestamp;
 
+/**
+ * Bulletin
+ */
 @Data
 @Entity
 public class Bulletin {
@@ -17,11 +20,11 @@ public class Bulletin {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    private String boardId;
-    private String boardTitle;
-    private String boardTypeCode;
+    private String title;
+    private String type;
+    private Boolean useFlag;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "createdBy", referencedColumnName = "userId")
     private User user;
 

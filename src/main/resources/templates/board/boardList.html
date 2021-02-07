@@ -6,7 +6,7 @@
 <head>
     <title>게시판</title>
 </head>
-<body>
+<body th:with="currentPage = 'NOTICE'">
 <main class="container" layout:fragment="content">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
@@ -17,7 +17,7 @@
     </nav>
 
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h1 class="h2">게시판</h1>
+        <h1 class="h2">공지사항</h1>
         <!-- <div class="btn-toolbar mb-2 mb-md-0">
             <div class="btn-group mr-2">
                 <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
@@ -90,7 +90,7 @@
     </nav>
 
     <div class="text-right">
-        <a class="btn btn-primary" href="#" th:href="@{/board/form}" role="button">글쓰기</a>
+        <a class="btn btn-primary" href="#" th:href="@{/board/form(bulletin_id=1)}" role="button">글쓰기</a>
     </div>
 </main>
 </body>

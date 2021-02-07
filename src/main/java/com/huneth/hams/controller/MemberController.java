@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
-public class UserController {
+public class MemberController {
 
     @Autowired
     private UserService userService;
@@ -42,7 +42,7 @@ public class UserController {
      * 회원가입
      */
     @PostMapping("/join")
-    public String joinForm(@Valid User user, BindingResult bindingResult) {
+    public String joinSave(@Valid User user, BindingResult bindingResult) {
         System.out.println(user);
 
         if (bindingResult.hasErrors()) {

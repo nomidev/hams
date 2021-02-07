@@ -6,7 +6,7 @@
 <head>
     <title>게시판</title>
 </head>
-<body>
+<body th:with="currentPage = 'BULLETIN'">
 <main class="container" layout:fragment="content">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
@@ -30,27 +30,27 @@
         </div>
     </div>
 
-    <form th:action="@{/board/form}" th:object="${board}" method="POST">
+    <form th:action="@{/bulletin/form}" th:object="${bulletin}" method="POST">
         <input type="hidden" th:field="*{id}">
         <div class="form-group">
-            <label for="title" class="form-label">제목</label>
-            <input type="text" class="form-control" id="title" th:field="*{title}"
+            <label for="boardTitle" class="form-label">게시판제목</label>
+            <input type="text" class="form-control" id="boardTitle" th:field="*{title}"
                    th:classappend="${#fields.hasErrors('title')} ? 'is-invalid'">
             <div class="invalid-feedback" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">
                 Looks good!
             </div>
         </div>
         <div class="form-group">
-            <label for="summernote" class="form-label">내용</label>
-            <textarea class="form-control" id="summernote" rows="3" th:field="*{content}"
-                      th:classappend="${#fields.hasErrors('content')} ? 'is-invalid'"></textarea>
-            <div class="invalid-feedback" th:if="${#fields.hasErrors('content')}" th:errors="*{content}">
+            <label for="boardTypeCode" class="form-label">게시판유형</label>
+            <input type="text" class="form-control" id="boardTypeCode" th:field="*{type}"
+                   th:classappend="${#fields.hasErrors('type')} ? 'is-invalid'">
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('type')}" th:errors="*{type}">
                 Looks good!
             </div>
         </div>
 
         <div class="text-right">
-            <a class="btn btn-light" href="#" th:href="@{/board/list}" role="button">취소</a>
+            <a class="btn btn-light" href="#" th:href="@{/bulletin/list}" role="button">취소</a>
             <button type="submit" class="btn btn-primary">확인</button>
         </div>
     </form>

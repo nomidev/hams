@@ -13,7 +13,7 @@ public class AcademyController {
      * @return
      */
     @GetMapping("/list")
-    public String list() {
-        return "academy/list";
+    public String academyList() {
+        return "academy/academyList";
     }
 }

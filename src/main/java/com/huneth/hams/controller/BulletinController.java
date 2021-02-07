@@ -4,6 +4,7 @@ import com.huneth.hams.model.Bulletin;
 import com.huneth.hams.model.User;
 import com.huneth.hams.repository.BulletinRepository;
 import com.huneth.hams.repository.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,6 +23,7 @@ import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/bulletin")
+@Slf4j
 public class BulletinController {
 
     @Autowired
@@ -31,11 +33,11 @@ public class BulletinController {
     private UserRepository userRepository;
 
     @GetMapping("/list")
-    public String list(Model model, @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
+    public String bulletinlist(Model model, @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
                        @RequestParam(required = false, defaultValue = "") String searchText) {
         // Page<bulletin> bulletinList = bulletinRepository.findAll(PageRequest.of(0, 20)); // jpa page가 0부터 시작한다.
         // Page<bulletin> bulletinList = bulletinRepository.findAll(pageable); // jpa page가 0부터 시작한다.
-        Page<Bulletin> bulletinList = bulletinRepository.findByBoardTitle(searchText, pageable); // jpa page가 0부터 시작한다.
+        Page<Bulletin> bulletinList = bulletinRepository.findByTitleContaining(searchText, pageable); // jpa page가 0부터 시작한다.
         // bulletinList.getTotalElements();
 
         int startPage = Math.max(1, bulletinList.getPageable().getPageNumber() - 2);
@@ -43,27 +45,29 @@ public class BulletinController {
         model.addAttribute("startPage", startPage);
         model.addAttribute("endPage", endPage);
         model.addAttribute("bulletinList", bulletinList);
-        return "bulletin/list";
+        return "bulletin/bulletinList";
     }
 
     @GetMapping("/form")
     public String bulletinForm(Model model, @RequestParam(required = false) Integer id) {
+        // PathVariable이 넘어오지 않을경 우 에러가 난다.
+        // Optional을 사용할 수 있다.
         if (id == null) {
             // id가 없을 경우 새로운 bulletin를 생성해 화면으로 전달한다.
             model.addAttribute("bulletin", new Bulletin());
         } else {
-            Bulletin bulletin = bulletinRepository.findById(id).orElse(null);
+            Bulletin bulletin = bulletinRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("No data found"));
             model.addAttribute("bulletin", bulletin);
         }
-        return "bulletin/form";
+        return "bulletin/bulletinForm";
     }
 
     @PostMapping("/form")
-    public String bulletinSubmit(@Valid Bulletin bulletin, BindingResult bindingResult, Authentication authentication) {
+    public String bulletinSave(@Valid Bulletin bulletin, BindingResult bindingResult, Authentication authentication) {
 //        bulletinValidator.validate(bulletin, bindingResult);
 
         if (bindingResult.hasErrors()) {
-            return "bulletin/form";
+            return "bulletin/bulletinForm";
         }
 
         if (authentication == null) {
@@ -76,6 +80,7 @@ public class BulletinController {
 
         bulletin.setUser(user);
         bulletinRepository.save(bulletin);
-        return "redirect:/bulletin/list";
+        return "redirect:/bulletin/bulletinlist";
     }
+
 }

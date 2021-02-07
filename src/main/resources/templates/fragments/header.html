@@ -16,25 +16,25 @@
 
         <div class="collapse navbar-collapse" id="navbarsExampleDefault">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
+                <li class="nav-item" th:classappend="${currentPage == 'HOME'} ? 'active'">
                     <a class="nav-link" href="#" th:href="@{/}">Home <span class="sr-only">(current)</span></a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item" th:classappend="${currentPage == 'ABOUT'} ? 'active'">
                     <a class="nav-link" href="#" th:href="@{/about}">About</a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item" th:classappend="${currentPage == 'ACADEMY'} ? 'active'">
                     <a class="nav-link" href="#" th:href="@{/academy/list}">학회</a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item" th:classappend="${currentPage == 'CONF'} ? 'active'">
                     <a class="nav-link" href="#" th:href="@{/conf/list}">학술대회</a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item" th:classappend="${currentPage == 'BULLETIN'} ? 'active'">
                     <a class="nav-link" href="#" th:href="@{/bulletin/list}">게시판</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#" th:href="@{/board/list}">공지사항</a>
+                <li class="nav-item" th:classappend="${currentPage == 'NOTICE'} ? 'active'">
+                    <a class="nav-link" href="#" th:href="@{/board/list(bulletin_id=1)}">공지사항</a>
                 </li>
-                <li class="nav-item" sec:authorize="hasRole('ROLE_ADMIN')">
+                <li class="nav-item" sec:authorize="hasRole('ROLE_ADMIN')" th:classappend="${currentPage == 'ADMIN'} ? 'active'">
                     <a class="nav-link" href="#" th:href="@{/admin}">관리자</a>
                 </li>
             </ul>
@@ -42,7 +42,7 @@
                 <li class="nav-item text-nowrap">
                     <a class="nav-link" th:href="@{/login}">Login</a>
                 </li>
-                <li class="nav-item text-nowrap">
+                <li class="nav-item text-nowrap" th:classappend="${currentPage == 'JOIN'} ? 'active'">
                     <a class="nav-link" th:href="@{/join}">Join</a>
                 </li>
             </ul>
