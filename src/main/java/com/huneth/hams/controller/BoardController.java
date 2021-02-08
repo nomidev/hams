@@ -1,44 +1,40 @@
 package com.huneth.hams.controller;
 
+import javax.validation.Valid;
+
+import com.huneth.hams.config.validator.BoardValidator;
 import com.huneth.hams.model.Board;
 import com.huneth.hams.model.Bulletin;
 import com.huneth.hams.model.User;
 import com.huneth.hams.repository.BoardRepository;
 import com.huneth.hams.repository.BulletinRepository;
 import com.huneth.hams.repository.UserRepository;
-import com.huneth.hams.config.validator.BoardValidator;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.servlet.http.HttpSession;
-import javax.validation.Valid;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Controller
 @RequestMapping("/board")
+@AllArgsConstructor
 @Slf4j
 public class BoardController {
 
-    @Autowired
     private BoardRepository boardRepository;
-
-    @Autowired
     private BoardValidator boardValidator;
-
-    @Autowired
     private BulletinRepository bulletinRepository;
-
-    @Autowired
     private UserRepository userRepository;
 
     @GetMapping("/list")
@@ -62,9 +58,7 @@ public class BoardController {
     }
 
     @GetMapping("/form")
-    public String boardForm(Model model, @RequestParam(required = false) Integer id, HttpSession session) {
-        log.debug(session + "");
-
+    public String boardForm(Model model, @RequestParam(required = false) Integer id) {
         if (id == null) {
             // id가 없을 경우 새로운 board를 생성해 화면으로 전달한다.
             model.addAttribute("board", new Board());
