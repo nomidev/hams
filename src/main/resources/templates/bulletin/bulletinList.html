@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/default_layout}">
 <head>
@@ -31,7 +32,8 @@
         <form class="form-inline" th:action="@{/bulletin/list}" method="GET">
             <div class="form-group mx-sm-3 mb-2">
                 <label for="searchText" class="sr-only">searchText</label>
-                <input type="text" class="form-control" id="searchText" name="searchText" th:value="${param.searchText}">
+                <input type="text" class="form-control" id="searchText" name="searchText"
+                       th:value="${param.searchText}">
             </div>
             <button type="submit" class="btn btn-secondary mb-2">검색</button>
         </form>
@@ -78,15 +80,24 @@
                 th:each="i : ${#numbers.sequence(startPage, endPage)}">
                 <a class="page-link" href="#" th:href="@{/bulletin/list(page=${i - 1})}" th:text="${i}">1</a>
             </li>
-            <li class="page-item" th:classappend="${bulletinList.totalPages == (bulletinList.pageable.pageNumber + 1)} ? 'disabled'">
-                <a class="page-link" th:href="@{/board/bulletin(page=${bulletinList.pageable.pageNumber + 1})}" href="#">Next</a>
+            <li class="page-item"
+                th:classappend="${bulletinList.totalPages == (bulletinList.pageable.pageNumber + 1)} ? 'disabled'">
+                <a class="page-link" th:href="@{/board/bulletin(page=${bulletinList.pageable.pageNumber + 1})}"
+                   href="#">Next</a>
             </li>
         </ul>
     </nav>
 
+    <!--<div class="text-right" sec:authorize="hasRole('ROLE_ADMIN')">-->
     <div class="text-right">
         <a class="btn btn-primary" href="#" th:href="@{/bulletin/form}" role="button">글쓰기</a>
     </div>
 </main>
+
+
+<script th:inline="javascript" type="text/javascript" layout:fragment="script">
+
+</script>
+
 </body>
 </html>

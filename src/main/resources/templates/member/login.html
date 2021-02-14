@@ -8,7 +8,7 @@
 </head>
 <body>
 
-    <form class="form-signin" th:action="@{/login}" method="post">
+    <form class="form-signin" th:action="@{/login}" method="post" id="loginForm">
         <div class="text-center mb-4">
             <h1 class="h2 py-3 fw-normal"><a th:href="@{/}" class="nav-link">HAMS</a></h1>
             <h2 class="h3 mb-3 font-weight-normal">Sign in to HAMS</h2>
@@ -29,12 +29,14 @@
         </div>
 
         <div class="form-label-group">
-            <input type="text" id="username" name="username" class="form-control" placeholder="아이디" required autofocus>
+            <input type="text" id="username" name="username" class="form-control" placeholder="아이디" required autofocus
+                    v-model="param.username">
             <label for="username">아이디</label>
         </div>
 
         <div class="form-label-group">
-            <input type="password" id="password" name="password" class="form-control" placeholder="비밀번호" required>
+            <input type="password" id="password" name="password" class="form-control" placeholder="비밀번호" required
+                    v-model="param.password">
             <label for="password">비밀번호</label>
         </div>
 
@@ -43,12 +45,63 @@
                 <input type="checkbox" value="remember-me"> Remember me
             </label>
         </div>
-        <button class="btn btn-lg btn-primary btn-block mb-3" type="submit">Sign in</button>
+        <button class="btn btn-lg btn-primary btn-block mb-3" type="submit" @click.prevent="formSubmit">Sign in</button>
         <div class="shadow-sm p-3 mb-5 bg-white rounded text-center">
             새로 오셨습니까? <a th:href="@{/join}">계정만들기</a>
         </div>
         <p class="text-muted text-center">&copy; [[${#dates.year(#dates.createNow())}]] Huneth, inc.</p>
     </form>
 
+    <script th:inline="javascript" type="text/javascript">
+        /*<![CDATA[*/
+        var vue = new Vue({
+            el: "#loginForm",
+            data: {
+                csrf: [[${_csrf}]],
+                param: {
+                    username: null,
+                    password: null,
+                }
+            },
+            methods: {
+                formSubmit: function () {
+                    var that = this;
+                    console.log(this.param);
+                    $.ajax({
+                        type: 'POST',
+                        contentType: "application/json",
+                        url:'/login',
+                        data: JSON.stringify(that.param), // String -> json 형태로 변환
+                        beforeSend : function(xhr)
+                        {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+                            xhr.setRequestHeader(that.csrf.headerName, that.csrf.token);
+                        },
+                        dataType: 'json', // success 시 받아올 데이터 형
+                        async: true, //동기, 비동기 여부
+                        cache :false, // 캐시 여부
+                        success: function(data, textStatus, jqXhr){
+                            console.log(data);
+                            console.log(textStatus);
+                            console.log(jgXhr);
+                        },
+                        error:function(xhr,status,error){
+                            console.log(xhr)
+                            console.log(status)
+                            console.log(error)
+                            if (error != null) {
+                                bootbox.alert("에러가 발생했습니다.");
+                            }
+                        }
+                    });
+                }
+            },
+            mounted: function () {
+                $('#summernote').summernote({
+                    height: 250,
+                });
+            }
+        })
+        /*]]>*/
+    </script>
 </body>
 </html>

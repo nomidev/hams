@@ -1,6 +1,7 @@
 package com.huneth.hams.handler;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -15,10 +16,16 @@ public class GlobalExceptionHandler {
     public String handler(Model model, Exception e, HttpStatus httpStatus) {
         HttpStatus status = httpStatus.INTERNAL_SERVER_ERROR;
         log.error(e.getMessage());
-
+        e.printStackTrace();
         model.addAttribute("erroMessage", e.getMessage());
-        model.addAttribute("erroMessage", httpStatus.getClass();
 
+        return "error/error";
+    }
+
+    @ExceptionHandler(value = AccessDeniedException.class)
+    public String accessDeniedHandler(AccessDeniedException e) {
+        log.debug(e.getMessage());
+        e.printStackTrace();
         return "error/error";
     }
 }

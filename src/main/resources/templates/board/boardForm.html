@@ -7,7 +7,7 @@
     <title>게시판</title>
 </head>
 <body th:with="currentPage = 'NOTICE'">
-<main class="container" layout:fragment="content">
+<main class="container" layout:fragment="content" id="boardForm">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="#">Home</a></li>
@@ -52,18 +52,34 @@
 
         <div class="text-right">
             <a class="btn btn-light" href="#" th:href="@{/board/list}" role="button">취소</a>
-            <button type="submit" class="btn btn-primary">확인</button>
+            <button type="button" class="btn btn-primary" @click.prevent="submitForm">확인</button>
         </div>
     </form>
 </main>
 
 <th:block layout:fragment="script">
     <script type="text/javascript">
-        $(document).ready(function() {
+        var vue = new Vue({
+            el: "#boardForm",
+            methods: {
+                submitForm: function () {
+                    bootbox.alert('asfasfasdf');
+                }
+            },
+            mounted: function () {
+                $('#summernote').summernote({
+                   height: 250,
+                });
+           }
+        });
+
+        /*$(document).ready(function() {
             $('#summernote').summernote({
                 height: 250,
             });
-        });
+        });*/
+
+
     </script>
 </th:block>
 

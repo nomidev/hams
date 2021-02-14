@@ -7,7 +7,7 @@
     <title>게시판</title>
 </head>
 <body th:with="currentPage = 'BULLETIN'">
-<main class="container" layout:fragment="content">
+<main class="container" layout:fragment="content" id="bulletinForm">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="#">Home</a></li>
@@ -35,7 +35,7 @@
         <div class="form-group">
             <label for="boardTitle" class="form-label">게시판제목</label>
             <input type="text" class="form-control" id="boardTitle" th:field="*{title}"
-                   th:classappend="${#fields.hasErrors('title')} ? 'is-invalid'">
+                   th:classappend="${#fields.hasErrors('title')} ? 'is-invalid'" v-model="param.title">
             <div class="invalid-feedback" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">
                 Looks good!
             </div>
@@ -43,7 +43,7 @@
         <div class="form-group">
             <label for="boardTypeCode" class="form-label">게시판유형</label>
             <input type="text" class="form-control" id="boardTypeCode" th:field="*{type}"
-                   th:classappend="${#fields.hasErrors('type')} ? 'is-invalid'">
+                   th:classappend="${#fields.hasErrors('type')} ? 'is-invalid'" v-model="param.type">
             <div class="invalid-feedback" th:if="${#fields.hasErrors('type')}" th:errors="*{type}">
                 Looks good!
             </div>
@@ -51,20 +51,63 @@
 
         <div class="text-right">
             <a class="btn btn-light" href="#" th:href="@{/bulletin/list}" role="button">취소</a>
-            <button type="submit" class="btn btn-primary">확인</button>
+            <button type="submit" class="btn btn-primary" @click.prevent="formSubmit">확인</button>
         </div>
     </form>
 </main>
 
-<th:block layout:fragment="script">
-    <script type="text/javascript">
-        $(document).ready(function() {
+<script th:inline="javascript" type="text/javascript" layout:fragment="script">
+    /*<![CDATA[*/
+    var vue = new Vue({
+        el: "#bulletinForm",
+        data: {
+            csrf: [[${_csrf}]],
+            param: {
+                title: null,
+                type: null,
+                useFlag: true
+            }
+        },
+        methods: {
+            formSubmit: function () {
+                var that = this;
+                console.log(this.param);
+                $.ajax({
+                    type: 'POST',
+                    contentType: "application/json",
+                    url:'/bulletin/api',
+                    data: JSON.stringify(that.param), // String -> json 형태로 변환
+                    beforeSend : function(xhr)
+                    {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+                        xhr.setRequestHeader(that.csrf.headerName, that.csrf.token);
+                    },
+                    dataType: 'json', // success 시 받아올 데이터 형
+                    async: true, //동기, 비동기 여부
+                    cache :false, // 캐시 여부
+                    success: function(data, textStatus, jqXhr){
+                        console.log(data);
+                        console.log(textStatus);
+                        console.log(jgXhr);
+                    },
+                    error:function(xhr,status,error){
+                        console.log(xhr)
+                        console.log(status)
+                        console.log(error)
+                        if (error != null) {
+                            bootbox.alert("에러가 발생했습니다.");
+                        }
+                    }
+                });
+            }
+        },
+        mounted: function () {
             $('#summernote').summernote({
                 height: 250,
             });
-        });
-    </script>
-</th:block>
+        }
+    })
+    /*]]>*/
+</script>
 
 </body>
 </html>

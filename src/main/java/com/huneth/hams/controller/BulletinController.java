@@ -1,5 +1,6 @@
 package com.huneth.hams.controller;
 
+import com.huneth.hams.config.auth.PrincipalDetails;
 import com.huneth.hams.model.Bulletin;
 import com.huneth.hams.model.User;
 import com.huneth.hams.repository.BulletinRepository;
@@ -10,20 +11,21 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
 @Controller
-@RequestMapping("/bulletin")
 @Slf4j
+@RequestMapping("/bulletin")
 public class BulletinController {
 
     @Autowired
@@ -49,6 +51,7 @@ public class BulletinController {
     }
 
     @GetMapping("/form")
+    // @Secured(value = "hasRole('ROLE_ADMIN')")
     public String bulletinForm(Model model, @RequestParam(required = false) Integer id) {
         // PathVariable이 넘어오지 않을경 우 에러가 난다.
         // Optional을 사용할 수 있다.
@@ -81,6 +84,25 @@ public class BulletinController {
         bulletin.setUser(user);
         bulletinRepository.save(bulletin);
         return "redirect:/bulletin/bulletinlist";
+    }
+
+    @PostMapping("/api")
+    @ResponseBody
+    public ResponseEntity<Bulletin> apiTest(@Valid @RequestBody Bulletin bulletin,
+                                  @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        System.out.println(bulletin);
+
+        if (principalDetails != null) {
+            // return new ResponseEntity<>(bulletin, HttpStatus.INTERNAL_SERVER_ERROR);
+        } else {
+            String username = principalDetails.getUsername();
+            User user = userRepository.findByUsername(username);
+
+            bulletin.setUser(user);
+            bulletinRepository.save(bulletin);
+        }
+
+        return new ResponseEntity<>(bulletin, HttpStatus.OK);
     }
 
 }
