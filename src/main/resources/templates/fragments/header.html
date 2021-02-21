@@ -7,7 +7,7 @@
     <title>Home</title>
 </head>
 <body>
-    <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top" th:fragment="headerFragment">
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top shadow" th:fragment="headerFragment">
         <a class="navbar-brand" href="#" th:href="@{/}">HAMS</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault"
                 aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
@@ -34,8 +34,11 @@
                 <li class="nav-item" th:classappend="${currentPage == 'NOTICE'} ? 'active'">
                     <a class="nav-link" href="#" th:href="@{/board/list(bulletin_id=1)}">공지사항</a>
                 </li>
-                <li class="nav-item" sec:authorize="hasRole('ROLE_ADMIN')" th:classappend="${currentPage == 'ADMIN'} ? 'active'">
+                <!--<li class="nav-item" sec:authorize="hasRole('ROLE_ADMIN')" th:classappend="${currentPage == 'ADMIN'} ? 'active'">
                     <a class="nav-link" href="#" th:href="@{/admin}">관리자</a>
+                </li>-->
+                <li class="nav-item" th:classappend="${currentPage == 'ADMIN'} ? 'active'">
+                    <a class="nav-link" href="#" th:href="@{/admin/}">관리자</a>
                 </li>
             </ul>
             <ul class="navbar-nav px-3" sec:authorize="!isAuthenticated()">

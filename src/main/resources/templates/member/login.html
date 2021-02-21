@@ -45,7 +45,7 @@
                 <input type="checkbox" value="remember-me"> Remember me
             </label>
         </div>
-        <button class="btn btn-lg btn-primary btn-block mb-3" type="submit" @click.prevent="formSubmit">Sign in</button>
+        <button class="btn btn-lg btn-primary btn-block mb-3" type="submit">Sign in</button>
         <div class="shadow-sm p-3 mb-5 bg-white rounded text-center">
             새로 오셨습니까? <a th:href="@{/join}">계정만들기</a>
         </div>
@@ -69,9 +69,9 @@
                     console.log(this.param);
                     $.ajax({
                         type: 'POST',
-                        contentType: "application/json",
+                        contentType: "application/x-www-form-urlencoded",
                         url:'/login',
-                        data: JSON.stringify(that.param), // String -> json 형태로 변환
+                        data: that.param, // String -> json 형태로 변환
                         beforeSend : function(xhr)
                         {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
                             xhr.setRequestHeader(that.csrf.headerName, that.csrf.token);

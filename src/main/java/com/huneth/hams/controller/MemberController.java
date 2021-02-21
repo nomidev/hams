@@ -64,11 +64,11 @@ public class MemberController {
         return "user";
     }
 
-    @GetMapping("/admin")
+    /*@GetMapping("/admin")
     @ResponseBody
     public String admin() {
         return "user";
-    }
+    }*/
 
     @GetMapping("/info")
     @ResponseBody
