@@ -10,8 +10,9 @@ import javax.validation.constraints.Size;
 import java.sql.Timestamp;
 
 /**
- * Board
+ * 게시판 Entity
  */
+
 @Data
 @Entity
 public class Board {
@@ -25,7 +26,7 @@ public class Board {
 
     @NotNull
     @Size(min = 1, max = 30)
-//    @Size(min = 1, max = 30, message = "") 메세지도 입력가능
+    // @Size(min = 1, max = 30, message = "") 메세지도 입력가능
     private String title;
 
     @NotNull
@@ -35,7 +36,7 @@ public class Board {
     private int hits;
 
     @ManyToOne
-    @JoinColumn(name = "createdBy", referencedColumnName = "userId")
+    @JoinColumn(name = "createdBy")
     private User user;
 
     @CreationTimestamp

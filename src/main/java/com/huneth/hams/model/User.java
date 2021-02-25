@@ -7,6 +7,12 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * 사용자 Entity
+ */
 
 //@Table(name = "users")
 @Data
@@ -18,7 +24,7 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) //auto_increment
-    private int userId;
+    private int id;
 
 //    @NotNull // null 체크
 //    @NotEmpty // null, "" 체크
@@ -56,8 +62,8 @@ public class User {
     @ColumnDefault(value = "'ROLE_USER'")
     private RoleType role;*/
 
-    @Enumerated(EnumType.STRING)
-    private RoleType role;
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<UserRole> userRoles = new ArrayList<>();
 
     private Boolean enabled;
 

@@ -8,13 +8,14 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import lombok.extern.slf4j.Slf4j;
 
+import javax.servlet.http.HttpServletRequest;
+
 @Slf4j
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(IllegalArgumentException.class)
-    public String handler(Model model, Exception e, HttpStatus httpStatus) {
-        HttpStatus status = httpStatus.INTERNAL_SERVER_ERROR;
+    public String handler(HttpServletRequest request, IllegalArgumentException e, Model model) {
         log.debug("ExceptionHandler !!!!!!!!!!!!!!!!!!! ExceptionHandler");
         log.error(e.getMessage());
         e.printStackTrace();

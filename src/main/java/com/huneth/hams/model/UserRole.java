@@ -1,33 +1,30 @@
 package com.huneth.hams.model;
 
 import lombok.Data;
+import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.util.List;
 
 /**
- * 권한 관리 Entity
+ * 사용자/권한 관계 Entity
  */
 
 @Data
 @Entity
-public class Role {
+@ToString(exclude = {"user", "role"})
+public class UserRole {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    private String roleName;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private User user;
 
-    @Enumerated(EnumType.STRING)
-    private RoleType roleCode;
-
-    @OneToMany(mappedBy = "role")
-    private List<UserRole> userRoleList;
-
-    private int createdBy;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Role role;
 
     @CreationTimestamp
     private Timestamp creationDate;

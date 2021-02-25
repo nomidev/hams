@@ -9,12 +9,14 @@ package com.huneth.hams.config.auth;
 // Security Session <= Authentication <= UserDetails
 
 import com.huneth.hams.model.User;
+import com.huneth.hams.model.UserRole;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 public class PrincipalDetails implements UserDetails {
 
@@ -32,6 +34,12 @@ public class PrincipalDetails implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<GrantedAuthority> collect = new ArrayList<>();
+        List<UserRole> userRole = user.getUserRoles();
+
+        for (UserRole item : userRole) {
+            collect.add(new SimpleGrantedAuthority(item.getRole().getRoleCode().toString()));
+        }
+
         /*collect.add(new GrantedAuthority() {
 
             @Override
@@ -39,13 +47,17 @@ public class PrincipalDetails implements UserDetails {
                 return null;
             }
         });*/
-        collect.add(new SimpleGrantedAuthority(user.getRole().name()));
+        // collect.add(new SimpleGrantedAuthority(user.getRole().name()));
 
         return collect;
     }
 
-    public int getUserId() {
-        return user.getUserId();
+    public int getId() {
+        return user.getId();
+    }
+
+    public User getUser() {
+        return user;
     }
 
     public String getEmail() {

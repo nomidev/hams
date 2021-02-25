@@ -1,8 +1,12 @@
 package com.huneth.hams.service;
 
+import com.huneth.hams.model.Role;
 import com.huneth.hams.model.RoleType;
 import com.huneth.hams.model.User;
+import com.huneth.hams.model.UserRole;
+import com.huneth.hams.repository.RoleRepository;
 import com.huneth.hams.repository.UserRepository;
+import com.huneth.hams.repository.UserRoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -12,6 +16,12 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private RoleRepository roleRepository;
+
+    @Autowired
+    private UserRoleRepository userRoleRepository;
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -25,9 +35,16 @@ public class UserService {
 
         user.setPassword(encPassword);
         user.setEnabled(true);
+        User saveUser = userRepository.save(user);
+        // user.setRole(RoleType.ROLE_USER);
+        // 기본권한을 가져온다.
         // 기본 사용자 ROLE 부여
-        user.setRole(RoleType.ROLE_USER);
-        userRepository.save(user);
+        Role role = roleRepository.findById(1).orElseThrow(() -> new IllegalArgumentException("No date found"));
+        UserRole userRole = new UserRole();
+        userRole.setUser(saveUser);
+        userRole.setRole(role);
+
+        userRoleRepository.save(userRole);
 
         return userRepository.save(user);
     }

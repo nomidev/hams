@@ -10,8 +10,9 @@ import lombok.Data;
 import org.hibernate.annotations.UpdateTimestamp;
 
 /**
- * Bulletin
+ * 게시판 관리 Entity
  */
+
 @Data
 @Entity
 public class Bulletin {
@@ -25,7 +26,7 @@ public class Bulletin {
     private Boolean useFlag;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "createdBy", referencedColumnName = "userId")
+    @JoinColumn(name = "createdBy")
     private User user;
 
     @CreationTimestamp

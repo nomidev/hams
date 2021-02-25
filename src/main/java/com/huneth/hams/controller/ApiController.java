@@ -114,9 +114,9 @@ public class ApiController {
     @PostMapping("/dummy/join")
     public String signUp(User user) {
 
-        if (user.getRole() == null) {
-            user.setRole(RoleType.ROLE_USER);
-        }
+        // if (user.getRole() == null) {
+        //     user.setRole(RoleType.ROLE_USER);
+        // }
 
         userRepository.save(user);
         return "회원가입이 완료되었습니다.";

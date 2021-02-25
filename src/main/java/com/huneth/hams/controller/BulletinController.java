@@ -66,24 +66,27 @@ public class BulletinController {
     }
 
     @PostMapping("/form")
-    public String bulletinSave(@Valid Bulletin bulletin, BindingResult bindingResult, Authentication authentication) {
-//        bulletinValidator.validate(bulletin, bindingResult);
+    public String bulletinSave(@Valid Bulletin bulletin, BindingResult bindingResult,
+                               @AuthenticationPrincipal PrincipalDetails principalDetails) {
+
+        // Authentication authentication 파라미터로도 인증정보를 가져올 수 있다.
+        // bulletinValidator.validate(bulletin, bindingResult);
 
         if (bindingResult.hasErrors()) {
             return "bulletin/bulletinForm";
         }
 
-        if (authentication == null) {
+        if (principalDetails == null) {
             return "redirect:/login?needLogin";
         }
 
         // 인증정보로 사용자를 가져와 저장한다.
-        String username = authentication.getName();
-        User user = userRepository.findByUsername(username);
+        /*String username = authentication.getName();
+        User user = userRepository.findByUsername(username);*/
 
-        bulletin.setUser(user);
+        bulletin.setUser(principalDetails.getUser());
         bulletinRepository.save(bulletin);
-        return "redirect:/bulletin/bulletinlist";
+        return "redirect:/bulletin/list";
     }
 
     @PostMapping("/api")

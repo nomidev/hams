@@ -89,7 +89,7 @@ public class BoardController {
         board.setUser(user);
         board.setBulletin(bulletin);
         boardRepository.save(board);
-        return "redirect:/board/boardList";
+        return "redirect:/board/list?bulletin_id" + bulletin_id;
     }
 
     /*@ExceptionHandler({ Exception.class })
