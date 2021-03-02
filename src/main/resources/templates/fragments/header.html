@@ -7,58 +7,60 @@
     <title>Home</title>
 </head>
 <body>
-    <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top shadow" th:fragment="headerFragment">
-        <a class="navbar-brand" href="#" th:href="@{/}">Huneth</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault"
-                aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top shadow" th:fragment="headerFragment(layout)">
+        <div th:classappend="${layout == 'ADMIN'} ? 'container-fluid px-0' : 'container'">
+            <a class="navbar-brand" href="#" th:href="@{/}">Huneth</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault"
+                    aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-        <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item" th:classappend="${currentPage == 'HOME'} ? 'active'">
-                    <a class="nav-link" href="#" th:href="@{/}">Home <span class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item" th:classappend="${currentPage == 'ABOUT'} ? 'active'">
-                    <a class="nav-link" href="#" th:href="@{/about}">About</a>
-                </li>
-                <li class="nav-item" th:classappend="${currentPage == 'ACADEMY'} ? 'active'">
-                    <a class="nav-link" href="#" th:href="@{/academy/list}">학회</a>
-                </li>
-                <li class="nav-item" th:classappend="${currentPage == 'CONF'} ? 'active'">
-                    <a class="nav-link" href="#" th:href="@{/conf/list}">학술대회</a>
-                </li>
-                <li class="nav-item" th:classappend="${currentPage == 'BULLETIN'} ? 'active'">
-                    <a class="nav-link" href="#" th:href="@{/bulletin/list}">게시판</a>
-                </li>
-                <li class="nav-item" th:classappend="${currentPage == 'NOTICE'} ? 'active'">
-                    <a class="nav-link" href="#" th:href="@{/board/list(bulletin_id=1)}">공지사항</a>
-                </li>
-                <li class="nav-item" sec:authorize="hasRole('ROLE_ADMIN')" th:classappend="${currentPage == 'ADMIN'} ? 'active'">
-                    <a class="nav-link" href="#" th:href="@{/admin}">관리자</a>
-                </li>
-                <!--<li class="nav-item" th:classappend="${currentPage == 'ADMIN'} ? 'active'">
-                    <a class="nav-link" href="#" th:href="@{/admin/}">관리자</a>
-                </li>-->
-            </ul>
-            <ul class="navbar-nav ml-auto" sec:authorize="!isAuthenticated()">
-                <li class="nav-item">
-                    <a class="nav-link" th:href="@{/login}">Login</a>
-                </li>
-                <li class="nav-item" th:classappend="${currentPage == 'JOIN'} ? 'active'">
-                    <a class="nav-link" th:href="@{/join}">Join</a>
-                </li>
-            </ul>
-            <form th:action="@{/logout}" method="post" sec:authorize="isAuthenticated()">
-                <a class="nav-link text-light dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <i class="fas fa-user-circle"></i>
-                </a>
-                <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDarkDropdownMenuLink">
-                    <li><span class="dropdown-item" sec:authentication="name">name</span></li>
-                    <li><span class="dropdown-item" sec:authentication="principal.authorities">role</span></li>
-                    <li><button type="submit" class="dropdown-item">Logout <i class="fas fa-sign-out-alt"></i></button></li>
+            <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+                <ul class="navbar-nav mr-auto">
+                    <!--<li class="nav-item" th:classappend="${currentPage == 'HOME'} ? 'active'">
+                        <a class="nav-link" href="#" th:href="@{/}">Home <span class="sr-only">(current)</span></a>
+                    </li>-->
+                    <li class="nav-item" th:classappend="${currentPage == 'ABOUT'} ? 'active'">
+                        <a class="nav-link" href="#" th:href="@{/about}">About</a>
+                    </li>
+                    <li class="nav-item" th:classappend="${currentPage == 'ACADEMY'} ? 'active'">
+                        <a class="nav-link" href="#" th:href="@{/academy/list}">학회</a>
+                    </li>
+                    <li class="nav-item" th:classappend="${currentPage == 'CONF'} ? 'active'">
+                        <a class="nav-link" href="#" th:href="@{/conf/list}">학술대회</a>
+                    </li>
+                    <li class="nav-item" th:classappend="${currentPage == 'BULLETIN'} ? 'active'">
+                        <a class="nav-link" href="#" th:href="@{/bulletin/list}">게시판</a>
+                    </li>
+                    <li class="nav-item" th:classappend="${currentPage == 'NOTICE'} ? 'active'">
+                        <a class="nav-link" href="#" th:href="@{/board/list(bulletin_id=1)}">공지사항</a>
+                    </li>
+                    <li class="nav-item" sec:authorize="hasRole('ROLE_ADMIN')" th:classappend="${currentPage == 'ADMIN'} ? 'active'">
+                        <a class="nav-link" href="#" th:href="@{/admin/menu}">관리자</a>
+                    </li>
+                    <!--<li class="nav-item" th:classappend="${currentPage == 'ADMIN'} ? 'active'">
+                        <a class="nav-link" href="#" th:href="@{/admin/}">관리자</a>
+                    </li>-->
                 </ul>
-            </form>
+                <ul class="navbar-nav ml-auto" sec:authorize="!isAuthenticated()">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/login}">Login</a>
+                    </li>
+                    <li class="nav-item" th:classappend="${currentPage == 'JOIN'} ? 'active'">
+                        <a class="nav-link" th:href="@{/join}">Join</a>
+                    </li>
+                </ul>
+                <form class="dropdown" th:action="@{/logout}" method="post" sec:authorize="isAuthenticated()">
+                    <a class="nav-link text-light dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-user-circle"></i>
+                    </a>
+                    <div class="dropdown-menu" th:classappend="${layout == 'ADMIN'} ? 'dropdown-menu-right'" aria-labelledby="navbarDarkDropdownMenuLink">
+                        <span class="dropdown-item-text" sec:authentication="name">name</span>
+                        <span class="dropdown-item-text" sec:authentication="principal.authorities">role</span>
+                        <button type="submit" class="dropdown-item">Logout <i class="fas fa-sign-out-alt"></i></button>
+                    </div>
+                </form>
+            </div>
         </div>
     </nav>
 </body>

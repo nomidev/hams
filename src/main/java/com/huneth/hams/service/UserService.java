@@ -1,7 +1,6 @@
 package com.huneth.hams.service;
 
 import com.huneth.hams.model.Role;
-import com.huneth.hams.model.RoleType;
 import com.huneth.hams.model.User;
 import com.huneth.hams.model.UserRole;
 import com.huneth.hams.repository.RoleRepository;

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/admin_layout}">
+<head>
+    <title>Menu</title>
+</head>
+<body th:with="currentPage = 'ADMIN'">
+<main layout:fragment="content" role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4" id="menu">
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">MenuList</h1>
+        <div class="btn-toolbar mb-2 mb-md-0">
+            <div class="btn-group mr-2">
+                <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
+                <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
+            </div>
+            <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
+                <span data-feather="calendar"></span>
+                This week
+            </button>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-3 col-lg-3 d-md-block">
+                <div class="mb-3 text-right">
+                    <button type="button" class="btn btn-sm btn-primary createNode">추가</button>
+                    <button type="button" class="btn btn-sm btn-secondary">삭제</button>
+                </div>
+                <div id="menuTree">
+                    tree
+                </div>
+            </div>
+            <div class="col-md-9 ml-sm-auto col-lg-9 px-md-4">
+                content
+            </div>
+        </div>
+    </div>
+</main>
+
+<th:block layout:fragment="script">
+    <script th:inline="javascript" type="text/javascript">
+        $(".createNode").on("click", function () {
+            alert(1)
+            console.log($('#menuTree').jstree())
+            $('#menuTree').jstree().create_node('#', {
+                "id": "8",
+                "text": "Parent-3"
+            }, "last", function() {
+                alert("Parent created");
+            });
+
+            $('#menuTree').jstree().create_node('1', {
+                "id": "c3",
+                "text": "Child 3"
+            }, "last", function() {
+                alert("Child created");
+            });
+        });
+
+        $('#menuTree').jstree({
+            'core': {
+                "check_callback" : true,
+                'data': [
+                    {"id": "1", "parent": "#", "text": "About", "menuDesc": "휴네스 소개", "menuName": "about",
+                        "menuUrl": "/about", "programId": "about", "sortOrderNo": 0, "useFlag": true, "menuLevelNo": 0, "highMenuId": "#", "li_attr": {"class": "about"}},
+                    {"id": "2", "parent": "#", "text": "학회", "menuDesc": "학회목록", "menuName": "academy",
+                        "menuUrl": "/academy", "programId": "academy", "sortOrderNo": 1, "useFlag": true, "menuLevelNo": 0, "highMenuId": "#", "li_attr": {"class": "academy"}},
+                    {"id": "3", "parent": "#", "text": "Admin", "menuDesc": "관리자", "menuName": "Admin",
+                        "menuUrl": "/admin", "programId": "admin", "sortOrderNo": 2, "useFlag": true, "menuLevelNo": 0, "highMenuId": "#", "li_attr": {"class": "admin"}},
+                    {"id": "4", "parent": "3", "text": "메뉴관리", "menuDesc": "메뉴관리", "menuName": "Menu",
+                        "menuUrl": "/admin/menu", "programId": "menu", "sortOrderNo": 0, "useFlag": true, "menuLevelNo": 2, "highMenuId": "#", "li_attr": {"class": "menu"}},
+                    {"id": "5", "parent": "#", "text": "Root node 2", "a_attr": {"class": "bbb"}},
+                    {"id": "6", "parent": "3", "text": "Child 1"},
+                    {"id": "7", "parent": "3", "text": "Child 2"},
+                ]
+            },
+            "plugins" : [ "contextmenu" ],
+
+        }).on('select_node.jstree', function (evt, data, x) {
+            console.log(data)
+            /*$(data.event.target).closest('[id=jstree1]').find('li').removeClass('on');
+            $(data.event.target).closest('li').addClass("on");
+            data.instance.toggle_node(data.node);
+            var obj = data.node.data;
+            if (obj) { // jstree 노드 선택시 로직처리
+                console.log(obj)
+            }*/
+        }).on('loaded.jstree', function (evt, data) {
+        }).on('create_node.jstree', function (evt, data) {
+            console.log(data)
+        }).on('delete_node.jstree', function (evt, data) {
+            console.log(data)
+            console.log($(this).jstree())
+        }).on('rename_node.jstree', function (evt, data) {
+        }).on('edit_node.jstree', function (evt, data) {
+        }).on('move_node.jstree', function (evt, data) {
+        }).on('open_node.jstree', function (evt, data) {
+        })
+    </script>
+</th:block>
+</body>
+</html>

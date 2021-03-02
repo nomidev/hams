@@ -3,7 +3,6 @@ package com.huneth.hams.controller;
 import java.util.List;
 import java.util.function.Supplier;
 
-import com.huneth.hams.model.RoleType;
 import com.huneth.hams.model.User;
 import com.huneth.hams.repository.UserRepository;
 

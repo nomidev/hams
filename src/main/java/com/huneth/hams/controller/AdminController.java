@@ -12,4 +12,9 @@ public class AdminController {
     public String adminHome() {
         return "admin/home";
     }
+
+    @GetMapping("/calendar")
+    public String calendar() {
+        return "admin/calendar";
+    }
 }

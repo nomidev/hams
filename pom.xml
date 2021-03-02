@@ -5,13 +5,13 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.4.2</version>
+        <version>2.4.3</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.huneth.hams</groupId>
-    <artifactId>hams</artifactId>
+    <artifactId>huneth</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>hams</name>
+    <name>huneth</name>
     <description>Huneth Academy Management System</description>
 
     <properties>
