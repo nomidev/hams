@@ -19,8 +19,8 @@ public class CommonCode {
     private String codeName;
     private String codeDesc;
     private String parentCode;
-    private int sortNo;
     private Boolean userFlag;
+    private int sortNo;
 
     private String attribute1;
     private String attribute2;

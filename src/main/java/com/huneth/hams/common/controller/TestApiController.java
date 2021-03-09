@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 // RestController는 뷰리졸버를 거치지 않고 데이터로 내려옴
 // html이 아닌 data를 리턴해주는 컨트롤러
 @RestController
-public class ApiController {
+public class TestApiController {
 
     // RestController가 메모리에 올라올때 같이 올라온다.
     // 의존성 주입 DI

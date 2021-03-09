@@ -18,6 +18,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
             .authorizeRequests()
                 .antMatchers("/user/**").authenticated() // 인증만 되면 들어갈 수 있는 주소
+                .antMatchers("/api/auth/**").authenticated() // 인증된 사람만 받을 수 있는 api
                 .antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')")
                 .antMatchers("/").permitAll()
                 .and()
