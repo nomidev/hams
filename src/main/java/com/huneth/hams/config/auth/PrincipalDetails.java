@@ -8,8 +8,8 @@ package com.huneth.hams.config.auth;
 
 // Security Session <= Authentication <= UserDetails
 
-import com.huneth.hams.model.User;
-import com.huneth.hams.model.UserRole;
+import com.huneth.hams.member.model.User;
+import com.huneth.hams.member.model.UserRole;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

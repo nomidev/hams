@@ -1,6 +1,6 @@
 package com.huneth.hams.config.validator;
 
-import com.huneth.hams.model.User;
+import com.huneth.hams.member.model.User;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;

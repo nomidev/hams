@@ -1,7 +1,7 @@
 package com.huneth.hams.config.validator;
 
 
-import com.huneth.hams.model.Board;
+import com.huneth.hams.board.model.Board;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;

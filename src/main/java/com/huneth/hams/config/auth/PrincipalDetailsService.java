@@ -1,7 +1,7 @@
 package com.huneth.hams.config.auth;
 
-import com.huneth.hams.model.User;
-import com.huneth.hams.repository.UserRepository;
+import com.huneth.hams.member.model.User;
+import com.huneth.hams.member.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

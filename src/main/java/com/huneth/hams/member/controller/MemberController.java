@@ -1,0 +1,99 @@
+package com.huneth.hams.member.controller;
+
+import javax.validation.Valid;
+
+import com.huneth.hams.member.model.User;
+import com.huneth.hams.common.service.MailService;
+import com.huneth.hams.member.service.UserService;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+@Controller
+public class MemberController {
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private MailService mailService;
+
+    /**
+     * 로그인 화면
+     * @return
+     */
+    @GetMapping("/login")
+    public String login(Authentication authentication) {
+        if (authentication != null && authentication.isAuthenticated()) {
+            return "redirect:/";
+        }
+        return "/member/login";
+    }
+
+    /**
+     * 회원가입 화면
+     */
+    @GetMapping("/join")
+    public String join(Model model, User user) {
+        return "/member/join";
+    }
+
+    /**
+     * 회원가입
+     */
+    @PostMapping("/join")
+    public String joinSave(@Valid User user, BindingResult bindingResult) {
+        System.out.println(user);
+
+        if (bindingResult.hasErrors()) {
+            return "member/join";
+        }
+
+        userService.save(user);
+
+        return "redirect:/login?success";
+    }
+
+    @GetMapping("/emailCheck")
+    @ResponseBody
+    public ResponseEntity emailCheck() {
+        mailService.sendMail("nomigood@naver.com");
+        return new ResponseEntity("전송완료", HttpStatus.OK);
+    }
+
+    @GetMapping("/user")
+    @ResponseBody
+    public String user() {
+        return "user";
+    }
+
+    /*@GetMapping("/admin")
+    @ResponseBody
+    public String admin() {
+        return "user";
+    }*/
+
+    @GetMapping("/info")
+    @ResponseBody
+    @Secured("ROLE_USER") // 메소드 단위로 시큐리티 적용
+    public String info() {
+        return "개인정보";
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')")
+    @ResponseBody
+    @GetMapping("/date")
+    public String date() {
+        return "개인정보";
+    }
+}

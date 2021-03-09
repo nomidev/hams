@@ -51,7 +51,7 @@
         </div>
 
         <div class="text-right">
-            <a class="btn btn-light" href="#" th:href="@{/board/list(bulletin_id=${param.bulletin_id})}" role="button">취소</a>
+            <a class="btn btn-light" href="#" th:href="@{/board/list(bulletin_id=${param.bulletin_id}, page=${param.page})}" role="button">취소</a>
             <button type="button" class="btn btn-primary" @click.prevent="submitForm">확인</button>
         </div>
     </form>

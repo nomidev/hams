@@ -61,7 +61,7 @@
         <tbody>
         <tr th:if="${not #lists.isEmpty(boardList)}" th:each="item : ${boardList}">
             <td th:text="${item.id}">게시판 제목</td>
-            <td><a th:href="@{/board/form(id=${item.id})}" th:text="${item.title}">Lorem</a></td>
+            <td><a th:href="@{/board/form(bulletin_id=${param.bulletin_id}, page=${param.page}, id=${item.id})}" th:text="${item.title}">Lorem</a></td>
             <td th:text="${item.user.username}">노종민</td>
             <td th:text="${#dates.format(item.creationDate, 'yyyy-MM-dd')}">2021-01-27</td>
             <td th:text="${#dates.format(item.lastUpdateDate, 'yyyy-MM-dd')}">2021-02-03</td>
@@ -75,16 +75,15 @@
     <nav aria-label="Page navigation example" th:if="${boardList.totalElements} > 0">
         <ul class="pagination justify-content-center">
             <li class="page-item" th:classappend="${1 == (boardList.pageable.pageNumber + 1)} ? 'disabled'">
-                <a class="page-link" href="#" th:href="@{/board/list(page=${boardList.pageable.pageNumber - 1})}"
-                   tabindex="-1" aria-disabled="true">Previous</a>
+                <a class="page-link" th:href="@{/board/list(bulletin_id=${param.bulletin_id}, page=${boardList.pageable.pageNumber - 1})}">Previous</a>
             </li>
             <!--0번부터 이기 때문에 + 1을 해준다.-->
             <li class="page-item" th:classappend="${i == (boardList.pageable.pageNumber + 1)} ? 'disabled'"
                 th:each="i : ${#numbers.sequence(startPage, endPage)}">
-                <a class="page-link" href="#" th:href="@{/board/list(page=${i - 1})}" th:text="${i}">1</a>
+                <a class="page-link" th:href="@{/board/list(bulletin_id=${param.bulletin_id}, page=${i - 1})}" th:text="${i}">1</a>
             </li>
             <li class="page-item" th:classappend="${boardList.totalPages == (boardList.pageable.pageNumber + 1)} ? 'disabled'">
-                <a class="page-link" th:href="@{/board/list(page=${boardList.pageable.pageNumber + 1})}" href="#">Next</a>
+                <a class="page-link" th:href="@{/board/list(bulletin_id=${param.bulletin_id}, page=${boardList.pageable.pageNumber + 1})}" href="#">Next</a>
             </li>
         </ul>
     </nav>
