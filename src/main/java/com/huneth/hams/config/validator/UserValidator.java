@@ -17,14 +17,15 @@ public class UserValidator implements Validator {
         return UserDto.class.equals(aClass);
     }
 
+    /**
+     * 비밀번호와 확인 비밀번호 일치하지 않는지 확인.
+     * @param o
+     * @param errors
+     */
     @Override
     public void validate(Object o, Errors errors) {
         UserDto obj = (UserDto) o;
 
-        /**
-         * 비밀번호와 확인 비밀번호 일치하지 않는지 확인.
-         * @return
-         */
         if (!obj.getPassword().equals(obj.getPasswordChk())) {
             errors.rejectValue("passwordChk", "notEquals", "비밀번호가 다릅니다.");
         }

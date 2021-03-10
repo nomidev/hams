@@ -81,7 +81,7 @@ public class MemberController {
 
     @GetMapping("/emailCheck")
     @ResponseBody
-    public ResponseEntity<> emailCheck() {
+    public ResponseEntity<Object> emailCheck() {
         mailService.sendMail("nomigood@naver.com");
         return new ResponseEntity<>("전송완료", HttpStatus.OK);
     }

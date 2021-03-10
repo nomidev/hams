@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class ApiMessage {
+public class ResponseDto {
 
     // 빌더 기본값 정의
     @Builder.Default private StatusEnum statusCode = StatusEnum.BAD_REQUEST;

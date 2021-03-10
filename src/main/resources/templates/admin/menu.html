@@ -34,7 +34,40 @@
                 </div>
             </div>
             <div class="col-md-9 ml-sm-auto col-lg-9 px-md-4">
-                content
+                <form>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="menuName">Menu Name</label>
+                            <input type="text" class="form-control" id="menuName" v-model="params.menuName">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="menuDesc">Menu Desc</label>
+                            <input type="text" class="form-control" id="menuDesc" v-model="params.menuDesc">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="menuUrl">Menu Url</label>
+                        <input type="text" class="form-control" id="menuUrl" v-model="params.menuUrl">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="parent">Parent</label>
+                            <input type="text" class="form-control" id="parent" v-model="params.parent">
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="useFlag">Use Flag</label>
+                            <select id="useFlag" class="form-control" v-model="params.useFlag">
+                                <option value="1">Yes</option>
+                                <option value="0">No</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label for="sortNo">Sort No</label>
+                            <input type="text" class="form-control" id="sortNo" v-model="params.sortNo">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Sign in</button>
+                </form>
             </div>
         </div>
     </div>
@@ -42,6 +75,116 @@
 
 <th:block layout:fragment="script">
     <script th:inline="javascript" type="text/javascript">
+        /*<![CDATA[*/
+        var vue = new Vue({
+            el: "#menu",
+            data: {
+                params: {
+                    id: null,
+                    menuName: null,
+                    menuDesc: null,
+                    menuUrl: null,
+                    parent: null,
+                    useFlag: null,
+                    sortNo: null
+                }
+            },
+            methods: {
+                loadData: function () {
+                    $.ajax({
+                        type: 'get',
+                        contentType: "application/json",
+                        url:'/admin/menu/api',
+                        data: {}, // String -> json 형태로 변환
+                        beforeSend : function(xhr)
+                        {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+                            xhr.setRequestHeader([[${_csrf.headerName}]], [[${_csrf.token}]]);
+                        },
+                        dataType: 'json', // success 시 받아올 데이터 형
+                        async: true, //동기, 비동기 여부
+                        cache :false, // 캐시 여부
+                        success: function(data, textStatus, jqXhr){
+                            console.log(data);
+                            console.log(textStatus);
+                            console.log(jqXhr);
+                        },
+                        error:function(xhr,status,error){
+                            console.log(xhr)
+                            console.log(status)
+                            console.log(error)
+                            if (error != null) {
+                                bootbox.alert("에러가 발생했습니다.");
+                            }
+                        }
+                    });
+                },
+                setData: function (node) {
+                    console.log(node)
+                    var data;
+                    if (node.original) {
+                        data = node.original;
+                        this.params.id = data.id;
+                        this.params.menuDesc = data.menuDesc;
+                        this.params.menuName = data.menuName;
+                        this.params.menuUrl = data.menuUrl;
+                        this.params.parent = data.parent;
+                        this.params.sortNo = data.sortOrderNo;
+                        this.params.useFlag = data.useFlag ? 1 : 0;
+                    }
+                }
+            },
+            created: function () {
+                this.loadData();
+            },
+            mounted: function () {
+                var that = this;
+                bootbox.alert("load")
+                $('#menuTree').jstree({
+                    'core': {
+                        "check_callback" : true,
+                        'data': [
+                            {"id": "1", "parent": "#", "text": "About", "menuDesc": "휴네스 소개", "menuName": "about",
+                                "menuUrl": "/about", "programId": "about", "sortOrderNo": 1, "useFlag": true,
+                                "menuLevelNo": 0, "highMenuId": "#", "li_attr": {"class": "about"}},
+                            {"id": "2", "parent": "#", "text": "학회", "menuDesc": "학회목록", "menuName": "academy",
+                                "menuUrl": "/academy", "programId": "academy", "sortOrderNo": 0, "useFlag": true, "menuLevelNo": 0, "highMenuId": "#", "li_attr": {"class": "academy"}},
+                            {"id": "3", "parent": "#", "text": "Admin", "menuDesc": "관리자", "menuName": "Admin",
+                                "menuUrl": "/admin", "programId": "admin", "sortOrderNo": 2, "useFlag": true, "menuLevelNo": 0, "highMenuId": "#", "li_attr": {"class": "admin"}},
+                            {"id": "4", "parent": "3", "text": "메뉴관리", "menuDesc": "메뉴관리", "menuName": "Menu",
+                                "menuUrl": "/admin/menu", "programId": "menu", "sortOrderNo": 0, "useFlag": true, "menuLevelNo": 2, "highMenuId": "#", "li_attr": {"class": "menu"}},
+                            {"id": "5", "parent": "#", "text": "Root node 2", "a_attr": {"class": "bbb"}},
+                            {"id": "6", "parent": "3", "text": "Child 1"},
+                            {"id": "7", "parent": "3", "text": "Child 2"},
+                        ]
+                    },
+                    "plugins" : [ "contextmenu" ],
+
+                }).on('select_node.jstree', function (evt, data, x) {
+                    console.log(data)
+                    that.setData(data.node);
+                    /*$(data.event.target).closest('[id=jstree1]').find('li').removeClass('on');
+                    $(data.event.target).closest('li').addClass("on");
+                    data.instance.toggle_node(data.node);
+                    var obj = data.node.data;
+                    if (obj) { // jstree 노드 선택시 로직처리
+                        console.log(obj)
+                    }*/
+                }).on('loaded.jstree', function (evt, data) {
+                }).on('create_node.jstree', function (evt, data) {
+                    console.log(data)
+                }).on('delete_node.jstree', function (evt, data) {
+                    console.log(data)
+                    console.log($(this).jstree())
+                }).on('rename_node.jstree', function (evt, data) {
+                }).on('edit_node.jstree', function (evt, data) {
+                }).on('move_node.jstree', function (evt, data) {
+                }).on('open_node.jstree', function (evt, data) {
+                })
+            }
+        });
+
+
+
         $(".createNode").on("click", function () {
             alert(1)
             console.log($('#menuTree').jstree())
@@ -60,45 +203,8 @@
             });
         });
 
-        $('#menuTree').jstree({
-            'core': {
-                "check_callback" : true,
-                'data': [
-                    {"id": "1", "parent": "#", "text": "About", "menuDesc": "휴네스 소개", "menuName": "about",
-                        "menuUrl": "/about", "programId": "about", "sortOrderNo": 0, "useFlag": true, "menuLevelNo": 0, "highMenuId": "#", "li_attr": {"class": "about"}},
-                    {"id": "2", "parent": "#", "text": "학회", "menuDesc": "학회목록", "menuName": "academy",
-                        "menuUrl": "/academy", "programId": "academy", "sortOrderNo": 1, "useFlag": true, "menuLevelNo": 0, "highMenuId": "#", "li_attr": {"class": "academy"}},
-                    {"id": "3", "parent": "#", "text": "Admin", "menuDesc": "관리자", "menuName": "Admin",
-                        "menuUrl": "/admin", "programId": "admin", "sortOrderNo": 2, "useFlag": true, "menuLevelNo": 0, "highMenuId": "#", "li_attr": {"class": "admin"}},
-                    {"id": "4", "parent": "3", "text": "메뉴관리", "menuDesc": "메뉴관리", "menuName": "Menu",
-                        "menuUrl": "/admin/menu", "programId": "menu", "sortOrderNo": 0, "useFlag": true, "menuLevelNo": 2, "highMenuId": "#", "li_attr": {"class": "menu"}},
-                    {"id": "5", "parent": "#", "text": "Root node 2", "a_attr": {"class": "bbb"}},
-                    {"id": "6", "parent": "3", "text": "Child 1"},
-                    {"id": "7", "parent": "3", "text": "Child 2"},
-                ]
-            },
-            "plugins" : [ "contextmenu" ],
 
-        }).on('select_node.jstree', function (evt, data, x) {
-            console.log(data)
-            /*$(data.event.target).closest('[id=jstree1]').find('li').removeClass('on');
-            $(data.event.target).closest('li').addClass("on");
-            data.instance.toggle_node(data.node);
-            var obj = data.node.data;
-            if (obj) { // jstree 노드 선택시 로직처리
-                console.log(obj)
-            }*/
-        }).on('loaded.jstree', function (evt, data) {
-        }).on('create_node.jstree', function (evt, data) {
-            console.log(data)
-        }).on('delete_node.jstree', function (evt, data) {
-            console.log(data)
-            console.log($(this).jstree())
-        }).on('rename_node.jstree', function (evt, data) {
-        }).on('edit_node.jstree', function (evt, data) {
-        }).on('move_node.jstree', function (evt, data) {
-        }).on('open_node.jstree', function (evt, data) {
-        })
+        /*]]>*/
     </script>
 </th:block>
 </body>

@@ -43,7 +43,7 @@ public class UserService {
         // user.setRole(RoleType.ROLE_USER);
         // 기본 사용자 ROLE 부여
         // 기본권한을 가져온다.
-        Role role = roleRepository.findById(1).orElseThrow(() -> new IllegalArgumentException("No date found"));
+        Role role = roleRepository.findById(1).orElseThrow(() -> new IllegalArgumentException("There is no role set up."));
         UserRole userRole = new UserRole();
         userRole.setUser(saveUser);
         userRole.setRole(role);

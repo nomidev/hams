@@ -1,11 +1,13 @@
 package com.huneth.hams.admin.model;
 
 import lombok.Data;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedBy;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 
 /**
@@ -19,12 +21,20 @@ public class Menu {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private int highMenuId;
+
+    @NotBlank
     private String menuName;
     private String menuDesc;
+
+    @NotBlank
     private int programId;
+
+    @NotBlank
     private String menuUrl;
     private int menuLevelNo;
     private int sortOrderNo;
+
+    @Column(columnDefinition = "boolean default true")
     private Boolean useFlag;
 
     @CreatedBy

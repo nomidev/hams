@@ -56,15 +56,15 @@ public class BulletinController {
 
     @GetMapping("/bulletin/form")
     // @Secured(value = "hasRole('ROLE_ADMIN')")
-    public String bulletinForm(Model model, @RequestParam(required = false) Integer id) {
+    public String bulletinForm(Model model, @RequestParam(required = false) Integer id, Bulletin bulletin) {
         // PathVariable이 넘어오지 않을경 우 에러가 난다.
         // Optional을 사용할 수 있다.
         if (id == null) {
             // id가 없을 경우 새로운 bulletin를 생성해 화면으로 전달한다.
-            model.addAttribute("bulletin", new Bulletin());
+            // model.addAttribute("bulletin", new Bulletin());
         } else {
-            Bulletin bulletin = bulletinRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("No data found"));
-            model.addAttribute("bulletin", bulletin);
+            Bulletin bulletinResult = bulletinRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("No data found"));
+            model.addAttribute("bulletin", bulletinResult);
         }
 
         List<CommonCode> bulletinCodeType = commonCodeRepository.findByCodeTypeOrderBySortNoAsc("BULLETIN");
@@ -115,5 +115,6 @@ public class BulletinController {
 
         return new ResponseEntity<>(bulletin, HttpStatus.OK);
     }
+
 
 }

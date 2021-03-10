@@ -62,10 +62,10 @@ public class User {
     @Column(length = 30)
     private String occupation; //직업
 
-    //@ColumnDefault("USER") //널인 경우 들어가지 않고 jpa는 인서트를 시켜서 사용하지 않는다.
-    /*@Enumerated(EnumType.STRING)
+    // @ColumnDefault("USER") //널인 경우 들어가지 않고 jpa는 인서트를 시켜서 사용하지 않는다.
+    /* @Enumerated(EnumType.STRING)
     @ColumnDefault(value = "'ROLE_USER'")
-    private RoleType role;*/
+    private RoleType role; */
 
     // @ManyToOne, @OneToOne과 같이 @XXXToOne 어노테이션들은 기본이 즉시 로딩(EAGER) 이다.
     // 꼭 LAZY로 명시적으로 설정해서 사용하자
