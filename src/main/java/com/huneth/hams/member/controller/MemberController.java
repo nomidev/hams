@@ -2,10 +2,13 @@ package com.huneth.hams.member.controller;
 
 import javax.validation.Valid;
 
-import com.huneth.hams.member.model.User;
 import com.huneth.hams.common.service.MailService;
+import com.huneth.hams.config.validator.UserValidator;
+import com.huneth.hams.member.dto.UserDto;
+import com.huneth.hams.member.model.User;
 import com.huneth.hams.member.service.UserService;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +22,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Controller
+@Slf4j
 public class MemberController {
 
     @Autowired
@@ -27,6 +33,9 @@ public class MemberController {
 
     @Autowired
     private MailService mailService;
+
+    @Autowired
+    private UserValidator userValidator;
 
     /**
      * 로그인 화면
@@ -37,27 +46,33 @@ public class MemberController {
         if (authentication != null && authentication.isAuthenticated()) {
             return "redirect:/";
         }
-        return "/member/login";
+        return "member/login";
     }
 
     /**
      * 회원가입 화면
      */
     @GetMapping("/join")
-    public String join(Model model, User user) {
-        return "/member/join";
+    public String join(Model model, UserDto userDto) {
+        return "member/join";
     }
 
     /**
      * 회원가입
      */
     @PostMapping("/join")
-    public String joinSave(@Valid User user, BindingResult bindingResult) {
-        System.out.println(user);
+    public String joinSave(@Valid UserDto userDto, BindingResult bindingResult) {
+        System.out.println(userDto);
+
+        // Custom 유효성 검사(비밀번호 확인 검사)
+        userValidator.validate(userDto, bindingResult);
 
         if (bindingResult.hasErrors()) {
             return "member/join";
         }
+
+        ModelMapper modelMapper = new ModelMapper();
+        User user = modelMapper.map(userDto, User.class);
 
         userService.save(user);
 
@@ -66,9 +81,9 @@ public class MemberController {
 
     @GetMapping("/emailCheck")
     @ResponseBody
-    public ResponseEntity emailCheck() {
+    public ResponseEntity<> emailCheck() {
         mailService.sendMail("nomigood@naver.com");
-        return new ResponseEntity("전송완료", HttpStatus.OK);
+        return new ResponseEntity<>("전송완료", HttpStatus.OK);
     }
 
     @GetMapping("/user")

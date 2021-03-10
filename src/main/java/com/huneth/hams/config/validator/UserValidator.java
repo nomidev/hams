@@ -1,6 +1,7 @@
 package com.huneth.hams.config.validator;
 
-import com.huneth.hams.member.model.User;
+import com.huneth.hams.member.dto.UserDto;
+
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
@@ -13,11 +14,20 @@ public class UserValidator implements Validator {
 
     @Override
     public boolean supports(Class<?> aClass) {
-        return User.class.equals(aClass);
+        return UserDto.class.equals(aClass);
     }
 
     @Override
     public void validate(Object o, Errors errors) {
+        UserDto obj = (UserDto) o;
+
+        /**
+         * 비밀번호와 확인 비밀번호 일치하지 않는지 확인.
+         * @return
+         */
+        if (!obj.getPassword().equals(obj.getPasswordChk())) {
+            errors.rejectValue("passwordChk", "notEquals", "비밀번호가 다릅니다.");
+        }
 
     }
 }

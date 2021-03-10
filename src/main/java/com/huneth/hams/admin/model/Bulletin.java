@@ -2,13 +2,22 @@ package com.huneth.hams.admin.model;
 
 import java.sql.Timestamp;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotBlank;
 
 import com.huneth.hams.member.model.User;
+
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import lombok.Data;
-import org.hibernate.annotations.UpdateTimestamp;
 
 /**
  * 게시판 관리 Entity
@@ -22,8 +31,12 @@ public class Bulletin {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @NotBlank
     private String title;
+    
+    @NotBlank
     private String type;
+    
     private Boolean useFlag;
 
     @ManyToOne(fetch = FetchType.LAZY)

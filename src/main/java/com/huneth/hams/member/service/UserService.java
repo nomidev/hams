@@ -35,6 +35,7 @@ public class UserService {
         user.setPassword(encPassword);
         user.setEnabled(true);
         User saveUser = userRepository.save(user);
+        
         // user.setRole(RoleType.ROLE_USER);
         // 기본권한을 가져온다.
         // 기본 사용자 ROLE 부여
@@ -45,7 +46,7 @@ public class UserService {
 
         userRoleRepository.save(userRole);
 
-        return userRepository.save(user);
+        return saveUser;
     }
 
 }

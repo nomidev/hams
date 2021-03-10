@@ -1,18 +1,25 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layouts/default_layout}">
+
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Error</title>
 </head>
-<body>
-<div class="errorPage"><span class="errorHead">Error!</span><br/>
-    <p th:text="${'path: ' + path}"></p>
-    <p th:text="${'status: ' + status}"></p>
-    <p th:text="${'timestamp: ' + timestamp}"></p>
-    <p th:text="${'error: ' + error}"></p>
-    <p th:text="${'errors: ' + errors}"></p>
-    <p th:text="${'exception: ' + exception}"></p>
-    <p th:text="${'message: ' + message}"></p>
-    <p th:text="${'trace: ' + trace}"></p></div>
+
+<body th:with="currentPage = 'ACADEMY'">
+    <main class="container" layout:fragment="content">
+        <div class="errorPage">
+            <h1 class="errorHead">Error!</h1>
+            <h2 th:text="${'status: ' + status}"></h2>
+            <p th:text="${'path: ' + path}"></p>
+            <p th:text="${'timestamp: ' + timestamp}"></p>
+            <p th:text="${'error: ' + error}"></p>
+            <p th:text="${'errors: ' + errors}"></p>
+            <p th:text="${'exception: ' + exception}"></p>
+            <p th:text="${'message: ' + message}"></p>
+            <p th:text="${'trace: ' + trace}"></p>
+        </div>
+    </main>
 </body>
+
 </html>
