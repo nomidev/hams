@@ -1,7 +1,9 @@
 package com.huneth.hams.admin.controller;
 
+import com.huneth.hams.admin.dto.MenuDto;
 import com.huneth.hams.admin.model.Menu;
 import com.huneth.hams.admin.repository.MenuRepository;
+import com.huneth.hams.admin.service.MenuService;
 import com.huneth.hams.common.model.ResponseDto;
 import com.huneth.hams.common.model.StatusEnum;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +23,7 @@ import java.util.List;
 public class MenuController {
 
     @Autowired
-    private MenuRepository menuRepository;
+    private MenuService menuService;
 
     @GetMapping("/menu")
     public String menu() {
@@ -31,10 +33,10 @@ public class MenuController {
     @GetMapping("/menu/api")
     @ResponseBody
     public ResponseEntity<ResponseDto> getMenu() {
-        List<Menu> menus = menuRepository.findAll();
+        List<MenuDto> menuDtos = menuService.retrieveMenuList();
 
         ResponseDto responseDto = ResponseDto.builder()
-                                    .data(menus)
+                                    .data(menuDtos)
                                     .statusCode(StatusEnum.OK)
                                     .message("SUCCESS")
                                     .build();

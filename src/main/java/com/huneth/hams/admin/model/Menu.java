@@ -31,6 +31,8 @@ public class Menu {
     private int menuLevelNo;
     private int sortOrderNo;
 
+    private String menuIcon;
+
     @Column(columnDefinition = "boolean default true")
     private Boolean useFlag;
 
