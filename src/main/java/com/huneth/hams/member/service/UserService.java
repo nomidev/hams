@@ -14,6 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
+@Transactional
 public class UserService {
 
     @Autowired
@@ -28,7 +29,6 @@ public class UserService {
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    @Transactional
     public User save(User user) {
         // 회원가입이 잘 되지만 스프링 시큐리티를 사용할 수 없다.
         // 비밀번호가 암호화가 안되어 있기 때문!

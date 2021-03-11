@@ -20,14 +20,11 @@ public class Menu {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private int highMenuId;
+    private String parentId;
 
     @NotBlank
     private String menuName;
     private String menuDesc;
-
-    @NotBlank
-    private int programId;
 
     @NotBlank
     private String menuUrl;

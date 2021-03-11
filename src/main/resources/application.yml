@@ -21,6 +21,18 @@ spring:
         enable_lazy_load_no_trans: true # 형식화된 sql 문을 보여준다. Beautifier 기능이라고 생각하면 된다
         format_sql: true #Lazy Load 를 적용하기 위한 설정
 
+  mail:
+    host: smtp.daum.net
+    port: 465
+    username: hunethleejs
+    password: abio0801!
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.ssl.enable: true
+
 logging:
   level:
     root: info
+
+
+
