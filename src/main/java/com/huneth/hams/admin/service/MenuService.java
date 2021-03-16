@@ -30,7 +30,23 @@ public class MenuService {
     private MenuRepository menuRepository;
 
     public List<MenuDto> retrieveEnableMenuList() {
-        return null;
+
+        List<Menu> result = menuRepository.findByUseFlag(true);
+
+        PropertyMap<Menu, MenuDto> menuMap = new PropertyMap<Menu, MenuDto>() {
+            protected void configure() {
+                map().setText(source.getMenuName());
+            }
+        };
+
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.addMappings(menuMap);
+        List<MenuDto> menuDtos = result
+                .stream()
+                .map(menu -> modelMapper.map(menu, MenuDto.class))
+                .collect(Collectors.toList());
+
+        return menuDtos;
     }
 
     public List<MenuDto> retrieveMenuList() {

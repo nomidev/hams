@@ -67,7 +67,7 @@
                         </div>
                     </div>
                     <div class="text-right">
-                        <button type="button" class="btn btn-primary" @click="saveMenu">Save</button>
+                        <button type="button" class="btn btn-primary" @click="saveMenu('post')">Save</button>
                     </div>
                 </form>
             </div>
@@ -109,14 +109,11 @@
             methods: {
                 loadData: function () {
                     var that = this;
-                    $.ajax({
-                        type: 'get',
-                        contentType: "application/json",
+
+                    hams.ajax({
+                        type: "get",
                         url:'/admin/menu/api',
-                        data: {}, // String -> json 형태로 변환
-                        dataType: 'json', // success 시 받아올 데이터 형
                         success: function(data, textStatus, jqXhr){
-                            console.log(data);
                             that.createJstree(data);
                         },
                         error:function(xhr,status,error){
@@ -128,45 +125,40 @@
                             }
                         }
                     });
+
                 },
                 setData: function (node) {
                     console.log(node)
                     var data;
                     if (node.original) {
                         data = node.original;
-                        this.params.id = data.id;
+                        this.params.id = data.id ? data.id : node.id;
                         this.params.menuDesc = data.menuDesc;
                         this.params.menuName = node.text;
                         this.params.menuUrl = data.menuUrl;
                         this.params.parent = node.parent;
                         this.params.sortOrderNo = data.sortOrderNo;
-                        this.params.useFlag = data.useFlag == 1 ? true : false;
+                        this.params.useFlag = data.useFlag == 1 ? true : (data.useFlag ? false : true);
                         this.params.menuLevelNo = node.parents.length - 1;
                     }
                 },
-                saveMenu: function () {
-                    console.log(this.params)
+                saveMenu: function (type, node) {
                     var that = this;
                     var param = this.params;
 
-                    console.log(JSON.stringify(param))
+                    param.id = null;
 
-                    $.ajax({
-                        type: 'POST',
-                        contentType: "application/json",
+                    alert(1)
+
+                    hams.ajax({
+                        type: type ? type : "post",
                         url:'/admin/menu/api',
-                        data: JSON.stringify(param), // String -> json 형태로 변환
-                        // beforeSend : function(xhr)
-                        // {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
-                        //     xhr.setRequestHeader([[${_csrf.headerName}]], [[${_csrf.token}]]);
-                        // },
-                        dataType: 'json', // success 시 받아올 데이터 형
+                        data: JSON.stringify(param),
                         success: function(data, textStatus, jqXhr){
                             console.log(data);
                             bootbox.alert("저장되었습니다.", function () {
                                 that.loadData();
                             });
-                            // that.createJstree(that.treeData);
                         },
                         error:function(xhr,status,error){
                             console.log(xhr)
@@ -177,6 +169,7 @@
                             }
                         }
                     });
+
                 },
                 createJstree: function (data) {
                     console.log(data)
@@ -235,11 +228,10 @@
                         }
                     }).on('create_node.jstree', function (evt, data) {
                         data.status = "created";
-                        console.log(data)
+                        that.setData(data.node);
                     }).on('delete_node.jstree', function (evt, data) {
                         console.log(data)
-                        that.deleteMenu(data);
-                        console.log($(this).jstree())
+                        that.saveMenu("delete", data);
                     }).on('rename_node.jstree', function (evt, data) {
                         console.log("rename")
                         console.log(data)
