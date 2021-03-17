@@ -10,6 +10,7 @@ public class MenuDto {
     private String text;
     private String menuName;
     private String menuDesc;
+    private String menuRole;
     private String menuUrl;
     private String menuIcon;
     private int menuLevelNo;

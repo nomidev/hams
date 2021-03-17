@@ -45,24 +45,36 @@
                             <input type="text" class="form-control" id="menuDesc" v-model="params.menuDesc">
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label for="menuUrl">Menu Url</label>
-                        <input type="text" class="form-control" id="menuUrl" v-model="params.menuUrl">
-                    </div>
                     <div class="form-row">
                         <div class="form-group col-md-6">
+                            <label for="menuUrl">Menu Url</label>
+                            <input type="text" class="form-control" id="menuUrl" v-model="params.menuUrl">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="roleMenu">Menu Role</label>
+                            <select id="roleMenu" class="form-control" v-model="params.menuRole">
+                                <option th:each="item : ${roles}" th:value="${item.roleCode}" th:text="${item.roleName}">roleName</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-3">
                             <label for="parent">Parent</label>
                             <input type="text" class="form-control" id="parent" v-model="params.parent">
                         </div>
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-md-3">
                             <label for="sortNo">Sort No</label>
                             <input type="text" class="form-control" id="sortNo" v-model="params.sortOrderNo">
                         </div>
-                        <div class="form-group col-md-2">
+                        <div class="form-group col-md-3">
+                            <label for="sortNo">Menu Icon</label>
+                            <input type="text" class="form-control" id="sortNo" v-model="params.menuIcon">
+                        </div>
+                        <div class="form-group col-md-3">
                             <label for="useFlag">Use Flag</label>
                             <select id="useFlag" class="form-control" v-model="params.useFlag">
-                                <option value="true">Yes</option>
-                                <option value="false">No</option>
+                                <option :value="true">Yes</option>
+                                <option :value="false">No</option>
                             </select>
                         </div>
                     </div>
@@ -85,11 +97,14 @@
                     id: null,
                     menuName: null,
                     menuDesc: null,
+                    menuRole: null,
                     menuUrl: null,
+                    menuIcon: null,
                     parent: null,
                     useFlag: null,
                     sortOrderNo: null,
-                    menuLevelNo: 0
+                    menuLevelNo: 0,
+                    status: null
                 },
                 treeData: [],
                 menuTree: false
@@ -118,8 +133,6 @@
                         },
                         error:function(xhr,status,error){
                             console.log(xhr)
-                            console.log(status)
-                            console.log(error)
                             if (error != null) {
                                 bootbox.alert(xhr.responseJSON.error);
                             }
@@ -128,42 +141,48 @@
 
                 },
                 setData: function (node) {
-                    console.log(node)
+                    console.log("setData", node);
+
                     var data;
+                    
                     if (node.original) {
                         data = node.original;
                         this.params.id = data.id ? data.id : node.id;
                         this.params.menuDesc = data.menuDesc;
                         this.params.menuName = node.text;
                         this.params.menuUrl = data.menuUrl;
+                        this.params.menuRole = data.menuRole;
+                        this.params.menuIcon = data.menuIcon;
                         this.params.parent = node.parent;
                         this.params.sortOrderNo = data.sortOrderNo;
-                        this.params.useFlag = data.useFlag == 1 ? true : (data.useFlag ? false : true);
+                        this.params.useFlag = data.useFlag;
                         this.params.menuLevelNo = node.parents.length - 1;
+                        this.params.status = node.status;
                     }
                 },
                 saveMenu: function (type, node) {
                     var that = this;
                     var param = this.params;
 
-                    param.id = null;
+                    if (param.status == "create") {
+                        // 생성된 id는 j1_1과 같이 시작하기 때문에 null 처리함 
+                        // jpa strategy = GenerationType.IDENTITY로 신규 ID 생성
+                        param.id = null;
+                    }
 
-                    alert(1)
-
+                    console.log(param);
                     hams.ajax({
                         type: type ? type : "post",
                         url:'/admin/menu/api',
                         data: JSON.stringify(param),
                         success: function(data, textStatus, jqXhr){
-                            console.log(data);
+                            console.log("success", data);
                             bootbox.alert("저장되었습니다.", function () {
                                 that.loadData();
                             });
                         },
                         error:function(xhr,status,error){
-                            console.log(xhr)
-                            console.log(status)
-                            console.log(error)
+                            console.log("error", xhr);
                             if (error != null) {
                                 bootbox.alert(xhr.responseJSON.error);
                             }
@@ -172,7 +191,7 @@
 
                 },
                 createJstree: function (data) {
-                    console.log(data)
+                    // console.log("createJstree", data);
                     var that = this;
                     this.treeData = data.data;
 
@@ -190,34 +209,12 @@
                         'core': {
                             "check_callback" : true,
                             'data': that.treeData
-
-                                /*[
-                                {"id": "1", "parent": "#", "text": "About", "menuDesc": "휴네스 소개", "menuName": "about",
-                                    "menuUrl": "/about", "programId": "about", "sortOrderNo": 1, "useFlag": true,
-                                    "menuLevelNo": 0, "highMenuId": "#", "li_attr": {"class": "about"}},
-                                    {"id": "2", "parent": "#", "text": "학회", "menuDesc": "학회목록", "menuName": "academy",
-                                        "menuUrl": "/academy", "programId": "academy", "sortOrderNo": 0, "useFlag": true, "menuLevelNo": 0, "highMenuId": "#", "li_attr": {"class": "academy"}},
-                                    {"id": "3", "parent": "#", "text": "Admin", "menuDesc": "관리자", "menuName": "Admin",
-                                        "menuUrl": "/admin", "programId": "admin", "sortOrderNo": 2, "useFlag": true, "menuLevelNo": 0, "highMenuId": "#", "li_attr": {"class": "admin"}},
-                                    {"id": "4", "parent": "3", "text": "메뉴관리", "menuDesc": "메뉴관리", "menuName": "Menu",
-                                        "menuUrl": "/admin/menu", "programId": "menu", "sortOrderNo": 0, "useFlag": true, "menuLevelNo": 2, "highMenuId": "#", "li_attr": {"class": "menu"}},
-                                    {"id": "5", "parent": "#", "text": "Root node 2", "a_attr": {"class": "bbb"}},
-                                    {"id": "6", "parent": "3", "text": "Child 1"},
-                                    {"id": "7", "parent": "3", "text": "Child 2"},
-                                ]*/
                         },
                         "plugins" : [ "contextmenu" ],
 
                     }).on('select_node.jstree', function (evt, data, x) {
-                        console.log(data)
+                        console.log("select_node", data);
                         that.setData(data.node);
-                        /*$(data.event.target).closest('[id=jstree1]').find('li').removeClass('on');
-                        $(data.event.target).closest('li').addClass("on");
-                        data.instance.toggle_node(data.node);
-                        var obj = data.node.data;
-                        if (obj) { // jstree 노드 선택시 로직처리
-                            console.log(obj)
-                        }*/
                     }).on('loaded.jstree', function (evt, data) {
                         // $(this).jstree('open_all');
                         var rootNode = $(this).jstree(true).get_node("1");
@@ -227,21 +224,26 @@
                             $(this).jstree(true).open_node("1");
                         }
                     }).on('create_node.jstree', function (evt, data) {
-                        data.status = "created";
+                        console.log("create_node", data);
+                        var parent = data.parent;
+                        var childrenLength = $(this).jstree(true).get_node(parent).children.length;
+
+                        console.log(childrenLength)
+                        data.node.original.sortOrderNo = childrenLength;
+                        data.node.status = "create";
                         that.setData(data.node);
                     }).on('delete_node.jstree', function (evt, data) {
-                        console.log(data)
-                        that.saveMenu("delete", data);
+                        console.log("delete_node", data);
+
+                        if (data.node.status != "create") {
+                            that.saveMenu("delete", data);
+                        }
+                        
                     }).on('rename_node.jstree', function (evt, data) {
-                        console.log("rename")
-                        console.log(data)
                         var nodeId = data.node.id;
-                        console.log(nodeId);
                         $(this).jstree(true).deselect_all();
                         $(this).jstree(true).select_node(nodeId);
                     }).on('edit_node.jstree', function (evt, data) {
-                        console.log("edit")
-                        console.log(data)
                     }).on('move_node.jstree', function (evt, data) {
                     }).on('open_node.jstree', function (evt, data) {
                     });
@@ -252,25 +254,7 @@
             },
             mounted: function () {
                 var that = this;
-                
 
-                /*$(".createNode").on("click", function () {
-                    alert(1)
-                    console.log($('#menuTree').jstree())
-                    $('#menuTree').jstree().create_node('#', {
-                        "id": "8",
-                        "text": "Parent-3"
-                    }, "last", function() {
-                        alert("Parent created");
-                    });
-
-                    $('#menuTree').jstree().create_node('1', {
-                        "id": "c3",
-                        "text": "Child 3"
-                    }, "last", function() {
-                        alert("Child created");
-                    });
-                });*/
             }
         });
         /*]]>*/

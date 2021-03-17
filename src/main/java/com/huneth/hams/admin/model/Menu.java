@@ -25,6 +25,7 @@ public class Menu {
     @NotBlank
     private String menuName;
     private String menuDesc;
+    private String menuRole;
 
     @NotBlank
     private String menuUrl;

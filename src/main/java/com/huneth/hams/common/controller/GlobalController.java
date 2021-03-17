@@ -1,16 +1,17 @@
 package com.huneth.hams.common.controller;
 
+import java.util.List;
+import java.util.Map;
+
 import com.huneth.hams.admin.dto.MenuDto;
-import com.huneth.hams.admin.model.Menu;
 import com.huneth.hams.admin.service.MenuService;
-import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 
 @ControllerAdvice
 @Slf4j
@@ -27,7 +28,7 @@ public class GlobalController {
     public void retrieveMenu(Model model) {
         log.debug("retrieveMenu");
 
-        List<MenuDto> result = menuService.retrieveEnableMenuList();
+        Map<MenuDto, List<MenuDto>> result = menuService.retrieveEnableMenuList();
 
         log.debug("retrieveMenu" + result);
 
