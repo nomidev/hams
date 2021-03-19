@@ -23,23 +23,23 @@
                     
                     <th:block th:each="menu : ${menuList}">
                         <li class="nav-item" th:if="${menu.key.menuRole} == 'ROLE_USER'">
-                            <a class="nav-link" href="#" th:href="@{${menu.key.menuUrl}}" th:text="${menu.key.menuName}">About</a>
+                            <a class="nav-link" href="#" th:href="@{${menu.key.menuUrl}}" th:text="${menu.key.menuDesc}">About</a>
                             <ul th:if="${menu.value}" class="d-none">
                                 <li th:each="child : ${menu.value}">
-                                    <a href="#" th:href="@{${child.menuUrl}}" th:text="${child.menuName}">About</a>
+                                    <a href="#" th:href="@{${child.menuUrl}}" th:text="${child.menuDesc}">About</a>
                                 </li>
                             </ul>
                         </li>
                         <li class="nav-item" th:unless="${menu.key.menuRole} == 'ROLE_USER'" sec:authorize="hasRole('ROLE_ADMIN')">
-                            <a class="nav-link" href="#" th:href="@{${menu.key.menuUrl}}" th:text="${menu.key.menuName}">About</a>
+                            <a class="nav-link" href="#" th:href="@{${menu.key.menuUrl}}" th:text="${menu.key.menuDesc}">About</a>
                             <ul th:if="${menu.value}" class="d-none">
                                 <li th:each="child : ${menu.value}">
-                                    <a class="nav-link" href="#" th:href="@{${child.menuUrl}}" th:text="${child.menuName}">About</a>
+                                    <a class="nav-link" href="#" th:href="@{${child.menuUrl}}" th:text="${child.menuDesc}">About</a>
                                 </li>
                             </ul>
                         </li>
                     </th:block>
-                    <!-- <li class="nav-item" th:each="menu : ${menuList}">
+                    <!--/* <li class="nav-item" th:each="menu : ${menuList}">
                         <a class="nav-link" href="#" th:href="@{${menu.menuUrl}}" th:text="${menu.menuName}">About</a>
                     </li> -->
                     <!--<li class="nav-item" th:classappend="${currentPage == 'ABOUT'} ? 'active'">
@@ -59,7 +59,7 @@
                     </li>-->
                     <!--<li class="nav-item" th:classappend="${currentPage == 'ADMIN'} ? 'active'">
                         <a class="nav-link" href="#" th:href="@{/admin/}">관리자</a>
-                    </li>-->
+                    </li> */-->
                 </ul>
                 <ul class="navbar-nav ml-auto" sec:authorize="!isAuthenticated()">
                     <li class="nav-item">

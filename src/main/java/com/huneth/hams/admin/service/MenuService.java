@@ -1,6 +1,5 @@
 package com.huneth.hams.admin.service;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +10,7 @@ import javax.transaction.Transactional;
 import com.huneth.hams.admin.dto.MenuDto;
 import com.huneth.hams.admin.model.Menu;
 import com.huneth.hams.admin.repository.MenuRepository;
+import com.huneth.hams.common.util.CommonUtil;
 import com.huneth.hams.config.auth.PrincipalDetails;
 
 import org.modelmapper.ModelMapper;
@@ -31,7 +31,7 @@ public class MenuService {
     private MenuRepository menuRepository;
 
     /**
-     * 메뉴 조회
+     * 공통 메뉴 조회
      * @return
      */
     public Map<MenuDto, List<MenuDto>> retrieveEnableMenuList() {
@@ -46,34 +46,28 @@ public class MenuService {
 
         ModelMapper modelMapper = new ModelMapper();
         modelMapper.addMappings(menuMap);
-        List<MenuDto> menuDtos = menuList
-                .stream()
-                .map(menu -> modelMapper.map(menu, MenuDto.class))
-                .collect(Collectors.toList());
+        // List<MenuDto> menuDtos = menuList
+        //         .stream()
+        //         .map(menu -> modelMapper.map(menu, MenuDto.class))
+        //         .collect(Collectors.toList());
+        // CommonUtil.mapList는 위 내용과 같은 기능을 수행한다.
+        List<MenuDto> menuDtos = CommonUtil.mapList(modelMapper, menuList, MenuDto.class);
 
-
+        // MenuLevel1
         List<MenuDto> parentMenuList = menuDtos.stream()
                                     .filter(menu -> menu.getMenuLevelNo() == 1)
                                     .collect(Collectors.toList());
 
-        log.debug("parent = " + parentMenuList);
+        log.info("parent = " + parentMenuList);
 
-        List<MenuDto> childAMenuList = menuDtos.stream()
-                                    .filter(menu -> menu.getMenuLevelNo() > 1)
-                                    .collect(Collectors.toList());
-
+        // MenuLevel2
         Map<String, List<MenuDto>> childMenuMap = menuDtos.stream()
                                             .filter(menu -> menu.getMenuLevelNo() != 1)
                                             .collect(Collectors.groupingBy(MenuDto::getParent));
 
-                                    // Map<Long, List<Category>> childMenuMap = menuList.stream()
-                                    // .filter(category -> category.getIdParent() != CategoryConstant.PARENT_ROOT)
-                                    // .collect(Collectors.groupingBy(Category::getIdParent))
-                                    // ;
+        log.info("childMenuMap = " + childMenuMap);
 
-        log.debug("childMenuMap = " + childMenuMap);
-
-
+        // 순서를 보장하기 위해 LinkedHashMap을 사용한다.
         Map<MenuDto, List<MenuDto>> menuTree = new LinkedHashMap<>();
         for (MenuDto parent : parentMenuList) {
             String id = String.valueOf(parent.getId());
@@ -82,7 +76,7 @@ public class MenuService {
             menuTree.put(parent, child);
         }
 
-        log.debug("menuTree = " + menuTree);
+        log.info("menuTree = " + menuTree);
 
         // Map<MenuDto, List<MenuDto>> sortedMenuMap = 
         //     menuTree.entrySet().stream()
@@ -102,7 +96,6 @@ public class MenuService {
 
         // log.info("sortedMenuMap = " + sortedMenuMap);
        
-
         return menuTree;
     }
 
@@ -122,12 +115,7 @@ public class MenuService {
 
         ModelMapper modelMapper = new ModelMapper();
         modelMapper.addMappings(menuMap);
-        List<MenuDto> menuDtos = menus
-                                .stream()
-                                .map(menu -> modelMapper.map(menu, MenuDto.class))
-                                .collect(Collectors.toList());
-
-        log.debug(menuDtos.toString());
+        List<MenuDto> menuDtos = CommonUtil.mapList(modelMapper, menus, MenuDto.class);
 
         return menuDtos;
     }
@@ -137,7 +125,7 @@ public class MenuService {
      * @param menuDto
      */
     public void saveMenu(MenuDto menuDto) {
-        log.debug("menuDto = " + menuDto);
+        log.info("menuDto = " + menuDto);
 
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal(); 
         PrincipalDetails principalDetails = (PrincipalDetails) principal;
@@ -152,7 +140,7 @@ public class MenuService {
         modelMapper.addMappings(menuMap);
         Menu menu = modelMapper.map(menuDto, Menu.class);
 
-        log.debug("menu = " + menu);
+        log.info("menu = " + menu);
 
         menu.setCreatedBy(principalDetails.getId());
 
@@ -164,7 +152,7 @@ public class MenuService {
      * @param menuDto
      */
     public void deleteMenu(MenuDto menuDto) {
-        log.debug("menuDto = " + menuDto);
+        log.info("menuDto = " + menuDto);
 
         menuRepository.deleteById(menuDto.getId());
     }

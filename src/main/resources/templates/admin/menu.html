@@ -151,11 +151,11 @@
                         this.params.menuDesc = data.menuDesc;
                         this.params.menuName = node.text;
                         this.params.menuUrl = data.menuUrl;
-                        this.params.menuRole = data.menuRole;
+                        this.params.menuRole = data.menuRole || 'ROLE_USER';
                         this.params.menuIcon = data.menuIcon;
                         this.params.parent = node.parent;
                         this.params.sortOrderNo = data.sortOrderNo;
-                        this.params.useFlag = data.useFlag;
+                        this.params.useFlag = data.useFlag || true;
                         this.params.menuLevelNo = node.parents.length - 1;
                         this.params.status = node.status;
                     }
