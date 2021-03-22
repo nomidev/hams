@@ -12,7 +12,7 @@ public class ConferenceController {
      * 학술대회 목록화면
      * @return
      */
-    @GetMapping("/list")
+    @GetMapping("")
     public String ConferenceList() {
         return "conference/confList";
     }

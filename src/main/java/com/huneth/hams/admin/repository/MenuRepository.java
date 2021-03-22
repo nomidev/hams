@@ -10,4 +10,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface MenuRepository extends JpaRepository<Menu, Integer> {
 
     List<Menu> findByUseFlag(Boolean useFlag, Sort sort);
+
+    Menu findByMenuUrl(String menuUrl);
+
+    List<Menu> findByParentId(String parentId, Sort sort);
 }

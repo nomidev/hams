@@ -10,7 +10,7 @@
 <main layout:fragment="content" role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4" id="menu">
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2">메뉴관리</h1>
-        <div class="btn-toolbar mb-2 mb-md-0">
+        <!--<div class="btn-toolbar mb-2 mb-md-0">
             <div class="btn-group mr-2">
                 <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
                 <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
@@ -19,7 +19,7 @@
                 <span data-feather="calendar"></span>
                 This week
             </button>
-        </div>
+        </div>-->
     </div>
 
     <div class="container-fluid">
@@ -29,26 +29,29 @@
                     <button type="button" class="btn btn-sm btn-primary createNode">추가</button>
                     <button type="button" class="btn btn-sm btn-secondary">삭제</button>
                 </div>-->
-                <div ref="menuTree">
-                    tree
-                </div>
+                <div ref="menuTree"></div>
             </div>
             <div class="col-md-9 ml-sm-auto col-lg-9 px-md-4">
                 <form>
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             <label for="menuName">Menu Name</label>
-                            <input type="text" class="form-control" id="menuName" v-model="params.menuName">
+                            <input type="text" class="form-control" id="menuName" v-model="params.menuName"
+                                    @change="changeNodeName">
                         </div>
                         <div class="form-group col-md-6">
                             <label for="menuDesc">Menu Desc</label>
                             <input type="text" class="form-control" id="menuDesc" v-model="params.menuDesc">
                         </div>
                     </div>
+                    <div class="form-group">
+                        <label for="menuUrl">Menu Url</label>
+                        <input type="text" class="form-control" id="menuUrl" v-model="params.menuUrl">
+                    </div>
                     <div class="form-row">
                         <div class="form-group col-md-6">
-                            <label for="menuUrl">Menu Url</label>
-                            <input type="text" class="form-control" id="menuUrl" v-model="params.menuUrl">
+                            <label for="menuActiveCode">Menu Active Code</label>
+                            <input type="text" class="form-control" id="menuActiveCode" v-model="params.menuActiveCode">
                         </div>
                         <div class="form-group col-md-6">
                             <label for="roleMenu">Menu Role</label>
@@ -99,6 +102,7 @@
                     menuDesc: null,
                     menuRole: null,
                     menuUrl: null,
+                    menuActiveCode: null,
                     menuIcon: null,
                     parent: null,
                     useFlag: null,
@@ -110,16 +114,6 @@
                 menuTree: false
             },
             watch: {
-                'params.menuName': function (val) {
-                    this.$nextTick(function () {
-                        try {
-                            var node = $(this.$refs.menuTree).jstree(true).get_node(this.params.id);
-                            $(this.$refs.menuTree).jstree(true).rename_node(node, val);
-                        } catch (error) {
-                            console.log(error);
-                        };
-                    })
-                }
             },
             methods: {
                 loadData: function () {
@@ -138,27 +132,22 @@
                             }
                         }
                     });
-
                 },
                 setData: function (node) {
                     console.log("setData", node);
 
-                    var data;
-                    
-                    if (node.original) {
-                        data = node.original;
-                        this.params.id = data.id ? data.id : node.id;
-                        this.params.menuDesc = data.menuDesc;
-                        this.params.menuName = node.text;
-                        this.params.menuUrl = data.menuUrl;
-                        this.params.menuRole = data.menuRole || 'ROLE_USER';
-                        this.params.menuIcon = data.menuIcon;
-                        this.params.parent = node.parent;
-                        this.params.sortOrderNo = data.sortOrderNo;
-                        this.params.useFlag = data.useFlag || true;
-                        this.params.menuLevelNo = node.parents.length - 1;
-                        this.params.status = node.status;
-                    }
+                    this.params.id = node.original.id || node.id;
+                    this.params.menuDesc = node.original.menuDesc;
+                    this.params.menuName = node.text;
+                    this.params.menuUrl = node.original.menuUrl;
+                    this.params.menuRole = node.original.menuRole || 'ROLE_USER';
+                    this.params.menuIcon = node.original.menuIcon;
+                    this.params.menuActiveCode = node.original.menuActiveCode;
+                    this.params.parent = node.parent;
+                    this.params.sortOrderNo = node.original.sortOrderNo;
+                    this.params.useFlag = node.original.useFlag || true;
+                    this.params.menuLevelNo = node.parents.length - 1;
+                    this.params.status = node.status;
                 },
                 saveMenu: function (type, node) {
                     var that = this;
@@ -176,44 +165,44 @@
                         url:'/admin/menu/api',
                         data: JSON.stringify(param),
                         success: function(data, textStatus, jqXhr){
-                            console.log("success", data);
                             bootbox.alert("저장되었습니다.", function () {
                                 that.loadData();
                             });
                         },
                         error:function(xhr,status,error){
-                            console.log("error", xhr);
-                            if (error != null) {
-                                bootbox.alert(xhr.responseJSON.error);
-                            }
+                            bootbox.alert(xhr.responseJSON.error);
                         }
                     });
-
+                },
+                changeNodeName: function () {
+                    var node = $(this.$refs.menuTree).jstree(true).get_node(this.params.id);
+                    $(this.$refs.menuTree).jstree(true).rename_node(node, this.params.menuName);
                 },
                 createJstree: function (data) {
                     // console.log("createJstree", data);
                     var that = this;
                     this.treeData = data.data;
 
+                    console.log(this.treeData)
+
                     if (this.menuTree) {
                         $(this.$refs.menuTree).jstree(true).settings.core.data = this.treeData;
                         $(this.$refs.menuTree).jstree(true).refresh();
-
                         return;
                     }
 
+                    // 트리메뉴 초기화 여부
                     this.menuTree = true;
 
-                    // this.menuTree = $(this.$refs.menuTree);
                     $(this.$refs.menuTree).jstree({
-                        'core': {
-                            "check_callback" : true,
-                            'data': that.treeData
+                        core: {
+                            check_callback : true,
+                            data: that.treeData
                         },
-                        "plugins" : [ "contextmenu" ],
-
+                        plugins : [ "contextmenu" ],
                     }).on('select_node.jstree', function (evt, data, x) {
-                        console.log("select_node", data);
+                        // console.log("select_node", data);
+                        console.log("select_node");
                         that.setData(data.node);
                     }).on('loaded.jstree', function (evt, data) {
                         // $(this).jstree('open_all');
@@ -224,22 +213,22 @@
                             $(this).jstree(true).open_node("1");
                         }
                     }).on('create_node.jstree', function (evt, data) {
-                        console.log("create_node", data);
+                        // console.log("create_node", data);
+                        console.log("create_node");
                         var parent = data.parent;
                         var childrenLength = $(this).jstree(true).get_node(parent).children.length;
 
-                        console.log(childrenLength)
                         data.node.original.sortOrderNo = childrenLength;
                         data.node.status = "create";
                         that.setData(data.node);
                     }).on('delete_node.jstree', function (evt, data) {
-                        console.log("delete_node", data);
-
+                        // console.log("delete_node", data);
+                        // 신규행이 아니면 DB에서 삭제한다.
                         if (data.node.status != "create") {
                             that.saveMenu("delete", data);
                         }
-                        
                     }).on('rename_node.jstree', function (evt, data) {
+                        console.log('rename_node')
                         var nodeId = data.node.id;
                         $(this).jstree(true).deselect_all();
                         $(this).jstree(true).select_node(nodeId);

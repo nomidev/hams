@@ -12,7 +12,7 @@ public class AcademyController {
      * 학회 목록화면
      * @return
      */
-    @GetMapping("/list")
+    @GetMapping("")
     public String academyList() {
         return "academy/academyList";
     }

@@ -1,10 +1,12 @@
 package com.huneth.hams.admin.service;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 
 import com.huneth.hams.admin.dto.MenuDto;
@@ -97,6 +99,33 @@ public class MenuService {
         // log.info("sortedMenuMap = " + sortedMenuMap);
        
         return menuTree;
+    }
+
+    /**
+     * 서브메뉴 조회
+     * @param req
+     * @return
+     */
+    public List<MenuDto> retrieveSubMenu(HttpServletRequest req) {
+        String uri = req.getRequestURI();
+
+        if (uri.indexOf("/", 1) > 0) {
+            uri = uri.substring(0, uri.indexOf("/", 1));
+        }
+
+        Menu menu = menuRepository.findByMenuUrl(uri);
+
+        if (menu.getMenuLevelNo() == 0) {
+            return new ArrayList<MenuDto>();
+        }
+
+        String parentId = String.valueOf(menu.getId());
+        List<Menu> subMenu = menuRepository.findByParentId(parentId,  Sort.by("menuLevelNo").and(Sort.by("sortOrderNo")));
+
+        ModelMapper modelMapper = new ModelMapper();
+        List<MenuDto> subMenus = CommonUtil.mapList(modelMapper, subMenu, MenuDto.class);
+
+        return subMenus;
     }
 
     /**

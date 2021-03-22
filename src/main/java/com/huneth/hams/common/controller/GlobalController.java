@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 
 import lombok.extern.slf4j.Slf4j;
 
+import javax.servlet.http.HttpServletRequest;
+
 @ControllerAdvice
 @Slf4j
 public class GlobalController {
@@ -25,13 +27,20 @@ public class GlobalController {
     // 자동으로 @RequestMapping 어노테이션이 붙은 메소드의 Model에 저장이되고 그 이후에 .jsp(View)에서 @ModelAttribute 메소드가 반환한 데이터를 사용할수 있다.
     // Tiles? 타일즈?
     @ModelAttribute
-    public void retrieveMenu(Model model) {
-        log.debug("retrieveMenu");
+    public void retrieveMenu(HttpServletRequest req, Model model) {
+        String uri = req.getRequestURI();
+
+        // 로그인 페이지는 메뉴정보를 불러올 필요가 없다.
+        if ("/login".equals(uri)) {
+            return;
+        }
 
         Map<MenuDto, List<MenuDto>> result = menuService.retrieveEnableMenuList();
 
-        log.debug("retrieveMenu" + result);
+        List<MenuDto> subMenus = menuService.retrieveSubMenu(req);
 
+        log.info("retrieveMenu = " + result);
         model.addAttribute("menuList", result);
+        model.addAttribute("subMenuList", subMenus);
     }
 }

@@ -25,10 +25,14 @@ public class Menu {
     @NotBlank
     private String menuName;
     private String menuDesc;
+
+    @NotBlank
     private String menuRole;
 
     @NotBlank
     private String menuUrl;
+
+    private String menuActiveCode;
     private int menuLevelNo;
     private int sortOrderNo;
 
