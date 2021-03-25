@@ -2,6 +2,7 @@ package com.huneth.hams.member.model;
 
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -31,4 +32,7 @@ public class Role {
 
     @CreationTimestamp
     private Timestamp creationDate;
+
+    @UpdateTimestamp
+    private Timestamp lastUpdateDate;
 }

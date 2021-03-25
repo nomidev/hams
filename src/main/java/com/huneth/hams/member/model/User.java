@@ -15,6 +15,7 @@ import javax.persistence.OneToMany;
 import org.hibernate.annotations.CreationTimestamp;
 
 import lombok.Data;
+import org.hibernate.annotations.UpdateTimestamp;
 
 /**
  * 사용자 Entity
@@ -78,7 +79,11 @@ public class User {
     private Boolean enabled;
 
     @CreationTimestamp
+    @Column(updatable = false)
     private Timestamp creationDate;
+
+    @UpdateTimestamp
+    private Timestamp lastUpdateDate;
 
 }
 

@@ -8,7 +8,7 @@
 </head>
 <body>
     <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top shadow" th:fragment="headerFragment(layout)">
-        <div th:classappend="${layout == 'ADMIN'} ? 'container-fluid px-0' : 'container'">
+        <div class="align-items-md-start" th:classappend="${layout == 'ADMIN'} ? 'container-fluid px-0' : 'container'">
             <a class="navbar-brand" href="#" th:href="@{/}">Huneth</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault"
                     aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
@@ -16,7 +16,7 @@
             </button>
 
             <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-                <ul class="navbar-nav mr-auto">
+                <ul class="navbar-nav mr-auto gnb">
                     <!--<li class="nav-item" th:classappend="${currentPage == 'HOME'} ? 'active'">
                         <a class="nav-link" href="#" th:href="@{/}">Home <span class="sr-only">(current)</span></a>
                     </li>-->
@@ -25,7 +25,7 @@
                         <li class="nav-item" th:if="${menu.key.menuRole} == 'ROLE_USER'"
                             th:classappend="${currentPage ==  #strings.toUpperCase(menu.key.menuActiveCode)} ? 'active'">
                             <a class="nav-link" href="#" th:href="@{${menu.key.menuUrl}}" th:text="${menu.key.menuName}">About</a>
-                            <ul th:if="${menu.value}" class="d-none">
+                            <ul th:if="${menu.value}" class="d-none list-unstyled">
                                 <li th:each="child : ${menu.value}">
                                     <a href="#" th:href="@{${child.menuUrl}}" th:text="${child.menuName}">About</a>
                                 </li>
@@ -34,7 +34,7 @@
                         <li class="nav-item" th:unless="${menu.key.menuRole} == 'ROLE_USER'" sec:authorize="hasRole('ROLE_ADMIN')"
                             th:classappend="${currentPage ==  #strings.toUpperCase(menu.key.menuActiveCode)} ? 'active'">
                             <a class="nav-link" href="#" th:href="@{${menu.key.menuUrl}}" th:text="${menu.key.menuName}">About</a>
-                            <ul th:if="${menu.value}" class="d-none">
+                            <ul th:if="${menu.value}" class="d-none list-unstyled">
                                 <li th:each="child : ${menu.value}">
                                     <a class="nav-link" href="#" th:href="@{${child.menuUrl}}" th:text="${child.menuName}">About</a>
                                 </li>
@@ -62,26 +62,44 @@
                     <!--<li class="nav-item" th:classappend="${currentPage == 'ADMIN'} ? 'active'">
                         <a class="nav-link" href="#" th:href="@{/admin/}">관리자</a>
                     </li> */-->
+                    <th:block sec:authorize="!isAuthenticated()">
+                        <li class="nav-item gnb-member">
+                            <a class="nav-link" th:href="@{/login}">Login</a>
+                        </li>
+                        <li class="nav-item gnb-member" th:classappend="${currentPage == 'JOIN'} ? 'active'">
+                            <a class="nav-link" th:href="@{/join}">Join</a>
+                        </li>
+                    </th:block>
+                    <th:block sec:authorize="isAuthenticated()">
+                        <li class="nav-item gnb-member">
+                            <span class="nav-link" sec:authentication="name">name</span>
+                        </li>
+                        <li class="nav-item gnb-member">
+                            <form th:action="@{/logout}" method="post">
+                                <button type="submit" class="btn nav-link">Logout</button>
+                            </form>
+                        </li>
+                    </th:block>
                 </ul>
-                <ul class="navbar-nav ml-auto" sec:authorize="!isAuthenticated()">
-                    <li class="nav-item">
-                        <a class="nav-link" th:href="@{/login}">Login</a>
-                    </li>
-                    <li class="nav-item" th:classappend="${currentPage == 'JOIN'} ? 'active'">
-                        <a class="nav-link" th:href="@{/join}">Join</a>
-                    </li>
-                </ul>
-                <form class="dropdown" th:action="@{/logout}" method="post" sec:authorize="isAuthenticated()">
-                    <a class="nav-link text-light dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fas fa-user-circle"></i>
-                    </a>
-                    <div class="dropdown-menu" th:classappend="${layout == 'ADMIN'} ? 'dropdown-menu-right'" aria-labelledby="navbarDarkDropdownMenuLink">
-                        <span class="dropdown-item-text" sec:authentication="name">name</span>
-                        <span class="dropdown-item-text" sec:authentication="principal.authorities">role</span>
-                        <button type="submit" class="dropdown-item">Logout <i class="fas fa-sign-out-alt"></i></button>
-                    </div>
-                </form>
             </div>
+            <ul class="navbar-nav ml-auto member" sec:authorize="!isAuthenticated()">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/login}">Login</a>
+                </li>
+                <li class="nav-item" th:classappend="${currentPage == 'JOIN'} ? 'active'">
+                    <a class="nav-link" th:href="@{/join}">Join</a>
+                </li>
+            </ul>
+            <form class="dropdown user-info" th:action="@{/logout}" method="post" sec:authorize="isAuthenticated()">
+                <a class="nav-link text-light dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-user-circle"></i>
+                </a>
+                <div class="dropdown-menu" th:classappend="${layout == 'ADMIN'} ? 'dropdown-menu-right'" aria-labelledby="navbarDarkDropdownMenuLink">
+                    <span class="dropdown-item-text" sec:authentication="name">name</span>
+                    <span class="dropdown-item-text" sec:authentication="principal.authorities">role</span>
+                    <button type="submit" class="dropdown-item">Logout <i class="fas fa-sign-out-alt"></i></button>
+                </div>
+            </form>
         </div>
     </nav>
 </body>

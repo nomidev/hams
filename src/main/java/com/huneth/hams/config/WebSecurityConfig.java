@@ -25,7 +25,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .formLogin()
                 .loginPage("/login")
                 .loginProcessingUrl("/login") // loginForm이 호출되면 스프링 시큐리티가 낚아채서 대신 로그인을 해준다.
-                .defaultSuccessUrl("/");
+                .defaultSuccessUrl("/")
+                .and()
+            .logout(); //csrf와 사용할 경우 무조건 post 요청을 해야한다.
     }
 
     // 해당 메서드의 리턴되는 오브젝트를 IoC에 등록해준다.

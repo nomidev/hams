@@ -59,8 +59,14 @@
 
 <th:block layout:fragment="script">
     <script type="text/javascript">
-        var vue = new Vue({
-            el: "#boardForm",
+        /*<![CDATA[*/
+
+        var boardForm = {
+            data: function () {
+                return {
+
+                }
+            },
             methods: {
                 submitForm: function () {
                     bootbox.alert('asfasfasdf');
@@ -68,18 +74,14 @@
             },
             mounted: function () {
                 $('#summernote').summernote({
-                   height: 250,
+                    height: 250,
                 });
-           }
-        });
+            }
+        };
 
-        /*$(document).ready(function() {
-            $('#summernote').summernote({
-                height: 250,
-            });
-        });*/
+        Vue.createApp(boardForm).mount("#boardForm");
 
-
+        /*]]>*/
     </script>
 </th:block>
 

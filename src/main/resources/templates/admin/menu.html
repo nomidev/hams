@@ -93,25 +93,27 @@
 <th:block layout:fragment="script">
     <script th:inline="javascript" type="text/javascript">
         /*<![CDATA[*/
-        var vue = new Vue({
-            el: "#menu",
-            data: {
-                params: {
-                    id: null,
-                    menuName: null,
-                    menuDesc: null,
-                    menuRole: null,
-                    menuUrl: null,
-                    menuActiveCode: null,
-                    menuIcon: null,
-                    parent: null,
-                    useFlag: null,
-                    sortOrderNo: null,
-                    menuLevelNo: 0,
-                    status: null
-                },
-                treeData: [],
-                menuTree: false
+
+        var menu = {
+            data: function () {
+                return {
+                    params: {
+                        id: null,
+                        menuName: null,
+                        menuDesc: null,
+                        menuRole: null,
+                        menuUrl: null,
+                        menuActiveCode: null,
+                        menuIcon: null,
+                        parent: null,
+                        useFlag: null,
+                        sortOrderNo: null,
+                        menuLevelNo: 0,
+                        status: null
+                    },
+                    treeData: [],
+                    menuTree: false
+                }
             },
             watch: {
             },
@@ -154,7 +156,7 @@
                     var param = this.params;
 
                     if (param.status == "create") {
-                        // 생성된 id는 j1_1과 같이 시작하기 때문에 null 처리함 
+                        // 생성된 id는 j1_1과 같이 시작하기 때문에 null 처리함
                         // jpa strategy = GenerationType.IDENTITY로 신규 ID 생성
                         param.id = null;
                     }
@@ -245,7 +247,10 @@
                 var that = this;
 
             }
-        });
+        }
+
+        Vue.createApp(menu).mount('#menu');
+
         /*]]>*/
     </script>
 </th:block>

@@ -115,7 +115,7 @@ public class MenuService {
 
         Menu menu = menuRepository.findByMenuUrl(uri);
 
-        if (menu.getMenuLevelNo() == 0) {
+        if (menu == null || menu.getMenuLevelNo() == 0) {
             return new ArrayList<MenuDto>();
         }
 

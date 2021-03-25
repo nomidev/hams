@@ -32,6 +32,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class BoardController {
 
+    // Autowired 주입이 아닌 생성자 주입방식
     private BoardRepository boardRepository;
     private BoardValidator boardValidator;
     private BulletinRepository bulletinRepository;

@@ -1,0 +1,18 @@
+@charset "UTF-8";
+
+@media (max-width: 768px) {
+    .navbar-expand-md .user-info,
+    .navbar-expand-md .member {
+        display: none;
+    }
+
+    .navbar-expand-md .gnb-member {
+        display: block;
+    }
+}
+
+@media (min-width: 768px) {
+    .navbar-expand-md .gnb-member {
+        display: none;
+    }
+}
