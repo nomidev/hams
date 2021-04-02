@@ -147,7 +147,7 @@
                     this.params.menuActiveCode = node.original.menuActiveCode;
                     this.params.parent = node.parent;
                     this.params.sortOrderNo = node.original.sortOrderNo;
-                    this.params.useFlag = node.original.useFlag || true;
+                    this.params.useFlag = node.original.useFlag != null ?  node.original.useFlag : true;
                     this.params.menuLevelNo = node.parents.length - 1;
                     this.params.status = node.status;
                 },
@@ -164,15 +164,20 @@
                     console.log(param);
                     hams.ajax({
                         type: type ? type : "post",
-                        url:'/admin/menu/api',
+                        url: '/admin/menu/api',
                         data: JSON.stringify(param),
-                        success: function(data, textStatus, jqXhr){
+                        success: function (data, textStatus, jqXhr) {
                             bootbox.alert("저장되었습니다.", function () {
                                 that.loadData();
                             });
                         },
-                        error:function(xhr,status,error){
-                            bootbox.alert(xhr.responseJSON.error);
+                        error: function (xhr, status, error) {
+                            console.log(xhr);
+                            bootbox.alert(xhr.responseJSON.error, function () {
+                                if (xhr.status == 401) {
+                                    window.open("/login", "_self");
+                                }
+                            });
                         }
                     });
                 },
@@ -245,7 +250,6 @@
             },
             mounted: function () {
                 var that = this;
-
             }
         }
 

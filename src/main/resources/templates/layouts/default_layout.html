@@ -3,7 +3,7 @@
       xmlns:th="http://www.thymleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
-    <th:block layout:replace="~{fragments/common :: commonFragment}"></th:block>
+    <th:block th:replace="fragments/common :: commonFragment"></th:block>
     <title layout:title-pattern="$CONTENT_TITLE - $LAYOUT_TITLE">Huneth</title>
     <link rel="stylesheet" th:href="@{/css/main.css}">
 </head>

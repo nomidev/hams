@@ -1,4 +1,4 @@
-package com.huneth.hams.config.auth;
+package com.huneth.hams.common.config.auth;
 
 // 시큐리티가 /login 주소 요청이 오면 낚아채서 로그인을 시킨다.
 // 로그인 진행이 완료가 되면 Security session을 만들어준다. (SecurityContextHolder)

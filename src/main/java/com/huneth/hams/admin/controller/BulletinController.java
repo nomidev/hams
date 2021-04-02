@@ -1,8 +1,8 @@
 package com.huneth.hams.admin.controller;
 
-import com.huneth.hams.common.model.CommonCode;
-import com.huneth.hams.common.repository.CommonCodeRepository;
-import com.huneth.hams.config.auth.PrincipalDetails;
+import com.huneth.hams.admin.model.CommonCode;
+import com.huneth.hams.admin.repository.CommonCodeRepository;
+import com.huneth.hams.common.config.auth.PrincipalDetails;
 import com.huneth.hams.admin.model.Bulletin;
 import com.huneth.hams.member.model.User;
 import com.huneth.hams.admin.repository.BulletinRepository;

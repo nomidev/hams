@@ -4,22 +4,7 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/admin_layout}">
 <head>
-    <title>home</title>
-    <style>
-        .bd-placeholder-img {
-            font-size: 1.125rem;
-            text-anchor: middle;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            user-select: none;
-        }
-
-        @media (min-width: 768px) {
-            .bd-placeholder-img-lg {
-                font-size: 3.5rem;
-            }
-        }
-    </style>
+    <title>Admin</title>
 </head>
 <body th:with="currentPage = 'ADMIN'">
     <main layout:fragment="content" role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
@@ -36,9 +21,9 @@
                 </button>
             </div>
         </div>
-    </main>
 
-    <div class="container-fluid"></div>
+        <div class="container-fluid"></div>
+    </main>
 
     <th:block layout:fragment="script">
         <script th:inline="javascript" type="text/javascript">

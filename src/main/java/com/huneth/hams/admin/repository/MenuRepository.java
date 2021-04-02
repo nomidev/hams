@@ -11,7 +11,7 @@ public interface MenuRepository extends JpaRepository<Menu, Integer> {
 
     List<Menu> findByUseFlag(Boolean useFlag, Sort sort);
 
-    Menu findByMenuUrl(String menuUrl);
+    Menu findByMenuUrlAndUseFlag(String menuUrl, Boolean useFlag);
 
-    List<Menu> findByParentId(String parentId, Sort sort);
+    List<Menu> findByParentIdAndUseFlag(String parentId, Boolean useFlag, Sort sort);
 }

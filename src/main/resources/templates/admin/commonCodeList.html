@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/admin_layout}">
+<head>
+    <title>공통코드관리</title>
+</head>
+<body th:with="currentPage = 'COMMON_CODE'">
+<main layout:fragment="content" role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">공통코드관리</h1>
+        <div class="btn-toolbar mb-2 mb-md-0">
+            <button type="button" class="btn btn-sm btn-outline-secondary mr-1 appendRow">추가</button>
+            <button type="button" class="btn btn-sm btn-outline-secondary mr-1">삭제</button>
+            <button type="button" class="btn btn-sm btn-outline-secondary">저장</button>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <div id="grid"></div>
+        <!--<table class="table table-hover">-->
+        <!--    <tr th:each="item : ${commonCodeList}" th:object="${item}">-->
+        <!--        <td th:text="*{codeType}"></td>-->
+        <!--        <td th:text="*{code}"></td>-->
+        <!--        <td th:text="*{codeName}"></td>-->
+        <!--        <td th:text="*{codeDesc}"></td>-->
+        <!--        <td th:text="*{parentCode}"></td>-->
+        <!--        <td th:text="*{useFlag}"></td>-->
+        <!--    </tr>-->
+        <!--</table>-->
+
+        <!--<div th:text="${commonCodeList}"></div>-->
+    </div>
+</main>
+
+<th:block layout:fragment="script">
+    <script th:inline="javascript" type="text/javascript">
+        // bootbox.alert("111")
+        var grid = new tui.Grid({
+            el: document.getElementById('grid'),
+            data: {
+                contentType: 'application/json',
+                api: {
+                    readData: {url: '/admin/commonCode/api', method: 'GET'},
+                    modifyData: {url: '/admin/commonCode/api', method: 'PUT'},
+                }
+            },
+            rowHeaders: ['rowNum'],
+            scrollX: false,
+            scrollY: false,
+            columns: [
+                {
+                    header: 'Code Type',
+                    name: 'codeType',
+                    align: 'center',
+                    editor: "text",
+                },
+                {
+                    header: 'Code',
+                    name: 'code',
+                    align: 'center',
+                    editor: "text",
+                },
+                {
+                    header: 'Code Name',
+                    name: 'codeName',
+                    align: 'center',
+                    editor: "text",
+                },
+                {
+                    header: 'Code Desc',
+                    name: 'codeDesc',
+                    align: 'center',
+                    editor: "text",
+                },
+                {
+                    header: 'Parent Code',
+                    name: 'parentCode',
+                    align: 'center',
+                    editor: "text",
+                },
+                {
+                    header: 'Use Flag',
+                    name: 'useFlag',
+                    align: 'center',
+                    formatter: 'listItemText',
+                    editor: {
+                        type: 'select',
+                        options: {
+                            listItems: [
+                                {text: 'Yes', value: 'Y'},
+                                {text: 'No', value: 'N'},
+                            ]
+                        }
+                    }
+                },
+                {
+                    header: 'Sort Order No',
+                    name: 'sortNo',
+                    align: 'center',
+                    editor: "text",
+                },
+                {
+                    header: 'Attribute1',
+                    name: 'attribute1',
+                    align: 'center',
+                    editor: "text",
+                },
+                {
+                    header: 'Attribute2',
+                    name: 'attribute2',
+                    align: 'center',
+                    editor: "text",
+                },
+                {
+                    header: 'Attribute3',
+                    name: 'attribute3',
+                    align: 'center',
+                    editor: "text",
+                },
+                {
+                    header: 'Attribute4',
+                    name: 'attribute4',
+                    align: 'center',
+                    editor: "text",
+                },
+                {
+                    header: 'Attribute5',
+                    name: 'attribute5',
+                    align: 'center',
+                    editor: "text",
+                },
+
+            ]
+        });
+
+        $(".appendRow").on("click", function () {
+            grid.appendRow();
+        })
+    </script>
+</th:block>
+</body>
+</html>

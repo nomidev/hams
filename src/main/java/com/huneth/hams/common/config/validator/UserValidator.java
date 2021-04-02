@@ -1,4 +1,4 @@
-package com.huneth.hams.config.validator;
+package com.huneth.hams.common.config.validator;
 
 import com.huneth.hams.member.dto.UserDto;
 

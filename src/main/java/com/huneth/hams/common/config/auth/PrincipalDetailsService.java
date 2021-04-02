@@ -1,4 +1,4 @@
-package com.huneth.hams.config.auth;
+package com.huneth.hams.common.config.auth;
 
 import com.huneth.hams.member.model.User;
 import com.huneth.hams.member.repository.UserRepository;

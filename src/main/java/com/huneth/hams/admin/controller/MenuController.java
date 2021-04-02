@@ -4,8 +4,8 @@ import java.util.List;
 
 import com.huneth.hams.admin.dto.MenuDto;
 import com.huneth.hams.admin.service.MenuService;
-import com.huneth.hams.common.model.ResponseDto;
-import com.huneth.hams.common.model.StatusEnum;
+import com.huneth.hams.common.dto.ResponseDto;
+import com.huneth.hams.common.commonEnum.StatusEnum;
 import com.huneth.hams.member.model.Role;
 import com.huneth.hams.member.repository.RoleRepository;
 
@@ -17,7 +17,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;

@@ -1,4 +1,4 @@
-package com.huneth.hams.common.model;
+package com.huneth.hams.common.commonEnum;
 
 import lombok.AllArgsConstructor;
 

@@ -1,13 +1,11 @@
 package com.huneth.hams.member.controller;
 
-import javax.validation.Valid;
-
+import com.huneth.hams.common.config.validator.UserValidator;
 import com.huneth.hams.common.service.MailService;
-import com.huneth.hams.config.validator.UserValidator;
 import com.huneth.hams.member.dto.UserDto;
 import com.huneth.hams.member.model.User;
 import com.huneth.hams.member.service.UserService;
-
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,7 +20,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import lombok.extern.slf4j.Slf4j;
+import javax.validation.Valid;
 
 @Controller
 @Slf4j
@@ -36,6 +34,9 @@ public class MemberController {
 
     @Autowired
     private UserValidator userValidator;
+
+    @Autowired
+    private ModelMapper modelMapper;
 
     /**
      * 로그인 화면
@@ -71,7 +72,6 @@ public class MemberController {
             return "member/join";
         }
 
-        ModelMapper modelMapper = new ModelMapper();
         User user = modelMapper.map(userDto, User.class);
 
         userService.save(user);

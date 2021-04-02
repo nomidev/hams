@@ -3,7 +3,7 @@
       xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Login</title>
-    <th:block layout:replace="~{fragments/common :: commonFragment}"></th:block>
+    <th:block th:replace="fragments/common :: commonFragment"></th:block>
     <link rel="stylesheet" th:href="@{/css/signin.css}">
 </head>
 <body>

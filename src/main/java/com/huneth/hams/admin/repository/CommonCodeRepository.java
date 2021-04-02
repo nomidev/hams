@@ -1,6 +1,6 @@
-package com.huneth.hams.common.repository;
+package com.huneth.hams.admin.repository;
 
-import com.huneth.hams.common.model.CommonCode;
+import com.huneth.hams.admin.model.CommonCode;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -10,6 +10,6 @@ public interface CommonCodeRepository extends JpaRepository<CommonCode, Integer>
 
     List<CommonCode> findByCodeTypeOrderBySortNoAsc(String codeType);
 
-    List<CommonCode> findByCodeDescOrCodeTypeOrCommonCodeOrderByCommonCodeAsc(
+    List<CommonCode> findByCodeDescOrCodeTypeOrCodeOrderByCodeAsc(
             String codeDesc, String codeType, String commonCode, Pageable pageable);
 }

@@ -1,28 +1,26 @@
 package com.huneth.hams.admin.service;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.transaction.Transactional;
-
 import com.huneth.hams.admin.dto.MenuDto;
 import com.huneth.hams.admin.model.Menu;
 import com.huneth.hams.admin.repository.MenuRepository;
+import com.huneth.hams.common.config.auth.PrincipalDetails;
 import com.huneth.hams.common.util.CommonUtil;
-import com.huneth.hams.config.auth.PrincipalDetails;
-
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;
+import org.modelmapper.TypeMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import lombok.extern.slf4j.Slf4j;
+import javax.servlet.http.HttpServletRequest;
+import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -31,6 +29,9 @@ public class MenuService {
 
     @Autowired
     private MenuRepository menuRepository;
+
+    @Autowired
+    private ModelMapper modelMapper;
 
     /**
      * 공통 메뉴 조회
@@ -45,9 +46,12 @@ public class MenuService {
                 map().setText(source.getMenuName());
             }
         };
+        TypeMap<Menu, MenuDto> typeMap = modelMapper.getTypeMap(Menu.class, MenuDto.class);
 
-        ModelMapper modelMapper = new ModelMapper();
-        modelMapper.addMappings(menuMap);
+        if (typeMap == null) {
+            modelMapper.addMappings(menuMap);
+        }
+
         // List<MenuDto> menuDtos = menuList
         //         .stream()
         //         .map(menu -> modelMapper.map(menu, MenuDto.class))
@@ -113,16 +117,15 @@ public class MenuService {
             uri = uri.substring(0, uri.indexOf("/", 1));
         }
 
-        Menu menu = menuRepository.findByMenuUrl(uri);
+        Menu menu = menuRepository.findByMenuUrlAndUseFlag(uri, true);
 
         if (menu == null || menu.getMenuLevelNo() == 0) {
             return new ArrayList<MenuDto>();
         }
 
         String parentId = String.valueOf(menu.getId());
-        List<Menu> subMenu = menuRepository.findByParentId(parentId,  Sort.by("menuLevelNo").and(Sort.by("sortOrderNo")));
+        List<Menu> subMenu = menuRepository.findByParentIdAndUseFlag(parentId, true, Sort.by("menuLevelNo").and(Sort.by("sortOrderNo")));
 
-        ModelMapper modelMapper = new ModelMapper();
         List<MenuDto> subMenus = CommonUtil.mapList(modelMapper, subMenu, MenuDto.class);
 
         return subMenus;
@@ -141,9 +144,12 @@ public class MenuService {
                 map().setText(source.getMenuName());
             }
         };
+        TypeMap<Menu, MenuDto> typeMap = modelMapper.getTypeMap(Menu.class, MenuDto.class);
 
-        ModelMapper modelMapper = new ModelMapper();
-        modelMapper.addMappings(menuMap);
+        if (typeMap == null) {
+            modelMapper.addMappings(menuMap);
+        }
+
         List<MenuDto> menuDtos = CommonUtil.mapList(modelMapper, menus, MenuDto.class);
 
         return menuDtos;
@@ -165,8 +171,11 @@ public class MenuService {
             }
         };
 
-        ModelMapper modelMapper = new ModelMapper();
-        modelMapper.addMappings(menuMap);
+        TypeMap<MenuDto, Menu> typeMap = modelMapper.getTypeMap(MenuDto.class, Menu.class);
+        if (typeMap == null) {
+            modelMapper.addMappings(menuMap);
+        }
+
         Menu menu = modelMapper.map(menuDto, Menu.class);
 
         log.info("menu = " + menu);

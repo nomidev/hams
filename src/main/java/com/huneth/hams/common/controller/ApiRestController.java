@@ -15,19 +15,6 @@ import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @Slf4j
-public class CommonApiController {
+public class ApiRestController {
 
-    @Autowired
-    private MenuService menuService;
-
-    @GetMapping("/api/menu")
-    public ResponseEntity<Object> getMenu(@RequestBody Map param) {
-        log.debug("menu");
-        log.debug("param = " + param);
-
-        menuService.retrieveEnableMenuList();
-
-        return new ResponseEntity<Object>(HttpStatus.OK);
-    }
-    
 }

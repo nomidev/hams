@@ -2,7 +2,7 @@ package com.huneth.hams.board.controller;
 
 import javax.validation.Valid;
 
-import com.huneth.hams.config.validator.BoardValidator;
+import com.huneth.hams.common.config.validator.BoardValidator;
 import com.huneth.hams.board.model.Board;
 import com.huneth.hams.admin.model.Bulletin;
 import com.huneth.hams.member.model.User;

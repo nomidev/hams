@@ -1,8 +1,7 @@
-package com.huneth.hams.handler;
+package com.huneth.hams.common.handler;
 
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import lombok.extern.slf4j.Slf4j;
