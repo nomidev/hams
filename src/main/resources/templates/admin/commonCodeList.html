@@ -10,11 +10,26 @@
 <main layout:fragment="content" role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2">공통코드관리</h1>
-        <div class="btn-toolbar mb-2 mb-md-0">
-            <button type="button" class="btn btn-sm btn-outline-secondary mr-1 appendRow">추가</button>
-            <button type="button" class="btn btn-sm btn-outline-secondary mr-1">삭제</button>
-            <button type="button" class="btn btn-sm btn-outline-secondary">저장</button>
+        <div class="mb-2 mb-md-0">
+            <button type="button" class="btn btn-sm btn-outline-secondary appendRow">추가</button>
+            <button type="button" class="btn btn-sm btn-outline-dark deleteRow">삭제</button>
+            <button type="button" class="btn btn-sm btn-outline-primary saveGrid">저장</button>
         </div>
+    </div>
+
+    <div>
+        <table class="table table-active">
+            <tbody>
+            <tr>
+                <th>Code Type</th>
+                <td><input type="text" name="codeType" class="form-control form-control-sm"></td>
+                <th>Code</th>
+                <td><input type="text" name="code" class="form-control form-control-sm"></td>
+                <th>Code Name</th>
+                <td><input type="text" name="codeName" class="form-control form-control-sm"></td>
+            </tr>
+            </tbody>
+        </table>
     </div>
 
     <div class="container-fluid">
@@ -37,13 +52,17 @@
 <th:block layout:fragment="script">
     <script th:inline="javascript" type="text/javascript">
         // bootbox.alert("111")
+        console.log("header", header);
+        console.log("token", token);
+
         var grid = new tui.Grid({
             el: document.getElementById('grid'),
             data: {
                 contentType: 'application/json',
+                headers: {"X-CSRF-TOKEN": token},
                 api: {
                     readData: {url: '/admin/commonCode/api', method: 'GET'},
-                    modifyData: {url: '/admin/commonCode/api', method: 'PUT'},
+                    modifyData: {url: '/admin/commonCode/api', method: 'POST'},
                 }
             },
             rowHeaders: ['rowNum'],
@@ -137,7 +156,26 @@
 
         $(".appendRow").on("click", function () {
             grid.appendRow();
-        })
+        });
+
+        $(".deleteRow").on("click", function () {
+            var row = grid.getFocusedCell();
+            console.log(row);
+
+            if (_.isNull(row.rowKey)) {
+                bootbox.alert("No Data Found");
+            } else {
+                bootbox.confirm("삭제하시겠습니까?", function (result) {
+                    if (result) {
+                        grid.removeRow(row.rowKey);
+                    }
+                });
+            }
+        });
+
+        $(".saveGrid").on("click", function () {
+            grid.request("modifyData");
+        });
     </script>
 </th:block>
 </body>
