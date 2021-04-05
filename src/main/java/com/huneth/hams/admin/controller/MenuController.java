@@ -49,10 +49,10 @@ public class MenuController {
         List<MenuDto> menuDtos = menuService.retrieveMenuList();
 
         ResponseDto responseDto = ResponseDto.builder()
-                                    .data(menuDtos)
-                                    .statusCode(StatusEnum.OK)
-                                    .message("SUCCESS")
-                                    .build();
+                .data(menuDtos)
+                .statusCode(StatusEnum.OK)
+                .message("SUCCESS")
+                .build();
 
         return new ResponseEntity<ResponseDto>(responseDto, HttpStatus.OK);
     }
@@ -65,9 +65,9 @@ public class MenuController {
         menuService.saveMenu(menuDto);
 
         ResponseDto responseDto = ResponseDto.builder()
-                                    .statusCode(StatusEnum.OK)
-                                    .message("SUCCESS")
-                                    .build();
+                .statusCode(StatusEnum.OK)
+                .message("SUCCESS")
+                .build();
 
         return new ResponseEntity<ResponseDto>(responseDto, HttpStatus.OK);
     }
@@ -80,9 +80,9 @@ public class MenuController {
         menuService.deleteMenu(menuDto);
 
         ResponseDto responseDto = ResponseDto.builder()
-                                    .statusCode(StatusEnum.OK)
-                                    .message("SUCCESS")
-                                    .build();
+                .statusCode(StatusEnum.OK)
+                .message("SUCCESS")
+                .build();
 
         return new ResponseEntity<ResponseDto>(responseDto, HttpStatus.OK);
     }

@@ -36,7 +36,7 @@
             <label for="boardTypeCode" class="form-label">게시판유형</label>
             <select class="form-control" id="boardTypeCode" th:field="*{type}"
                    th:classappend="${#fields.hasErrors('type')} ? 'is-invalid'" v-model="param.type">
-                <option th:each="item : ${bulletinCodeType}" th:value="${item.commonCode}" th:text="${item.codeName}"></option>
+                <option th:each="item : ${bulletinCodeType}" th:value="${item.code}" th:text="${item.codeName}"></option>
             </select>
             <div class="invalid-feedback" th:if="${#fields.hasErrors('type')}" th:errors="*{type}">
                 Looks good!

@@ -51,15 +51,15 @@
 
 <th:block layout:fragment="script">
     <script th:inline="javascript" type="text/javascript">
-        // bootbox.alert("111")
-        console.log("header", header);
-        console.log("token", token);
+        /*<![CDATA[*/
+        var dataHeader = {};
+        dataHeader[header] = token;
 
         var grid = new tui.Grid({
             el: document.getElementById('grid'),
             data: {
                 contentType: 'application/json',
-                headers: {"X-CSRF-TOKEN": token},
+                headers: dataHeader,
                 api: {
                     readData: {url: '/admin/commonCode/api', method: 'GET'},
                     modifyData: {url: '/admin/commonCode/api', method: 'POST'},
@@ -176,6 +176,7 @@
         $(".saveGrid").on("click", function () {
             grid.request("modifyData");
         });
+        /*]]>*/
     </script>
 </th:block>
 </body>
