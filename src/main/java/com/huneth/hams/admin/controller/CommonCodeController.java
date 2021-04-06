@@ -62,17 +62,23 @@ public class CommonCodeController {
 
         // insert
         if (createdRows.size() > 0) {
-
+            for (CommonCode cRow : createdRows) {
+                commonCodeService.saveCommonCode(cRow);
+            }
         }
 
         // update
         if (updatedRows.size() > 0) {
-
+            for (CommonCode uRow : updatedRows) {
+                commonCodeService.updateCommonCode(uRow);
+            }
         }
 
         // delete
         if (deletedRows.size() > 0) {
-
+            for (CommonCode dRow : deletedRows) {
+                commonCodeService.deleteCommonCode(dRow);
+            }
         }
 
         ResponseDto responseDto = ResponseDto.builder()
