@@ -58,6 +58,7 @@
         var grid = new tui.Grid({
             el: document.getElementById('grid'),
             data: {
+                withCredentials: true,
                 contentType: 'application/json',
                 headers: dataHeader,
                 api: {
@@ -65,27 +66,48 @@
                     modifyData: {url: '/admin/commonCode/api', method: 'POST'},
                 }
             },
-            rowHeaders: ['rowNum'],
+            rowHeaders: ['checkbox'],
             scrollX: false,
             scrollY: false,
+            pageOptions: {
+                perPage: 5
+            },
             columns: [
+                {
+                    header: 'ID',
+                    name: 'id',
+                    align: 'center',
+                    width: 50,
+                    _attribute: {
+                        disabled: true
+                    }
+                },
                 {
                     header: 'Code Type',
                     name: 'codeType',
                     align: 'center',
                     editor: "text",
+                    validation: {
+                        required: true
+                    }
                 },
                 {
                     header: 'Code',
                     name: 'code',
                     align: 'center',
                     editor: "text",
+                    validation: {
+                        required: true
+                    }
                 },
                 {
                     header: 'Code Name',
                     name: 'codeName',
                     align: 'center',
                     editor: "text",
+                    validation: {
+                        required: true
+                    }
                 },
                 {
                     header: 'Code Desc',
@@ -155,26 +177,74 @@
         });
 
         $(".appendRow").on("click", function () {
+            grid.finishEditing();
             grid.appendRow();
         });
 
         $(".deleteRow").on("click", function () {
-            var row = grid.getFocusedCell();
-            console.log(row);
+            var rows = grid.getCheckedRowKeys();
 
-            if (_.isNull(row.rowKey)) {
-                bootbox.alert("No Data Found");
+            if (rows.length <= 0) {
+                bootbox.alert("대상을 선택하세요");
             } else {
                 bootbox.confirm("삭제하시겠습니까?", function (result) {
                     if (result) {
-                        grid.removeRow(row.rowKey);
+                        var isRemove = grid.removeCheckedRows(false);
+                        if (isRemove) {
+                            grid.request("modifyData", {showConfirm: false});
+                        }
                     }
                 });
             }
         });
 
         $(".saveGrid").on("click", function () {
-            grid.request("modifyData");
+            // 저장 전 Editing을 끝낸다.
+            grid.finishEditing();
+
+            if (grid.isModified()) {
+                var isValid = grid.validate();
+                console.log(isValid);
+
+                if (isValid.length) {
+                    var message = isValid[0].errors[0].columnName;
+                    bootbox.alert(message + "은(는) 필수입니다.");
+                } else {
+                    bootbox.confirm("저장 하시겠습니까?", function (result) {
+                        if (result) {
+                            grid.request("modifyData", {showConfirm: false});
+                        }
+                    });
+                }
+            } else {
+                bootbox.alert("변경 된 내용이 없습니다.");
+            }
+        });
+
+        grid.on('beforeRequest', function(ev) {
+            // 요청을 보내기 전
+            // bootbox.alert("beforeRequest");
+        });
+
+        /*grid.on("response", function (ev) {
+            // 성공/실패와 관계 없이 응답을 받았을 경우
+        });*/
+
+        grid.on('successResponse', function(ev) {
+            // 결과가 true인 경우
+            // console.log(ev)
+            // bootbox.alert("저장 되었습니다.");
+        });
+
+        grid.on('failResponse', function(ev) {
+            // 결과가 false인 경우
+            // bootbox.alert("저장에 실패 했습니다.");
+        });
+
+        grid.on('errorResponse', function(ev) {
+            // 오류가 발생한 경우
+            // console.log(ev)
+            // bootbox.alert("에러가 발생했습니다.");
         });
         /*]]>*/
     </script>
