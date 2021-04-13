@@ -5,22 +5,15 @@ import com.huneth.hams.admin.service.CommonCodeService;
 import com.huneth.hams.common.commonEnum.StatusEnum;
 import com.huneth.hams.common.dto.ResponseDto;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -39,18 +32,19 @@ public class CommonCodeController {
 
     @RequestMapping("/commonCode/api")
     @ResponseBody
-    public ResponseEntity<ResponseDto> list(@PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
-        log.info("pageable" + pageable);
-
-
-        List<CommonCode> commonCodeList = commonCodeService.retrieveCommonCodeList();
+    public ResponseEntity<ResponseDto> list(@RequestParam int page, @RequestParam int perPage,
+                                            @ModelAttribute CommonCode param) {
+        // 페이징 설정
+        Pageable pageable = PageRequest.of(page, perPage);
+        List<CommonCode> commonCodeList = commonCodeService.retrieveCommonCodeList(param, pageable);
 
         // Toast UI Grid는 contents에 데이터를 담아야 한다.
         Map result = new HashMap();
         Map pageMap = new HashMap();
 
-        pageMap.put("page", 1);
-        pageMap.put("totalCount", 6);
+        // Toast UI Grid pageOptions 설정
+        pageMap.put("page", pageable.getPageNumber());
+        pageMap.put("totalCount", commonCodeService.retrieveTotalCount());
 
         result.put("contents", commonCodeList);
         result.put("pagination", pageMap);
