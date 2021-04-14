@@ -44,7 +44,7 @@ public class CommonCodeController {
 
         // Toast UI Grid pageOptions 설정
         pageMap.put("page", pageable.getPageNumber());
-        pageMap.put("totalCount", commonCodeService.retrieveTotalCount());
+        pageMap.put("totalCount", commonCodeService.retrieveTotalCount(param));
 
         result.put("contents", commonCodeList);
         result.put("pagination", pageMap);

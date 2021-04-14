@@ -71,11 +71,12 @@ public class CommonCodeService {
         return qCommonCode.codeName.eq(codeName);
     }
 
-    public Long retrieveTotalCount() {
-        QCommonCode qCommonCode = QCommonCode.commonCode;
-
+    public Long retrieveTotalCount(CommonCode param) {
         JPAQuery<CommonCode> jpaQuery = jpaQueryFactory.selectFrom(qCommonCode)
-                .where(qCommonCode.useFlag.eq(YnFlag.Y));
+                .where(eqUseFlag(param.getUseFlag())
+                        ,eqCodeType(param.getCodeType())
+                        ,eqCode(param.getCode())
+                        ,eqCodeName(param.getCodeName()));
 
         return jpaQuery.fetchCount();
     }
