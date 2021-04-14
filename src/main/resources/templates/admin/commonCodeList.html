@@ -18,45 +18,35 @@
     </div>
 
     <div>
-        <table class="table table-active">
-            <tbody>
-            <tr>
-                <th>Code Type</th>
-                <td><input type="text" v-model="params.codeType" class="form-control form-control-sm"></td>
-                <th>Code</th>
-                <td><input type="text" v-model="params.code" class="form-control form-control-sm"></td>
-                <th>Code Name</th>
-                <td><input type="text" v-model="params.codeName" class="form-control form-control-sm"></td>
-                <th>Use Flag</th>
-                <td>
-                    <select class="form-control form-control-sm" v-model="params.useFlag">
-                        <option value="Y">Yes</option>
-                        <option value="N">No</option>
-                    </select>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-        <div class="mb-3 text-center">
-            <button type="button" class="btn btn-sm btn-primary search" @click="search">
-                <i class="fa fa-search"></i> 검색</button>
-        </div>
+        <form @keyup.enter="search">
+            <table class="table table-active">
+                <tbody>
+                <tr>
+                    <th>Code Type</th>
+                    <td><input type="text" v-model="params.codeType" class="form-control form-control-sm"></td>
+                    <th>Code</th>
+                    <td><input type="text" v-model="params.code" class="form-control form-control-sm"></td>
+                    <th>Code Name</th>
+                    <td><input type="text" v-model="params.codeName" class="form-control form-control-sm"></td>
+                    <th>Use Flag</th>
+                    <td>
+                        <select class="form-control form-control-sm" v-model="params.useFlag">
+                            <option value="Y">Yes</option>
+                            <option value="N">No</option>
+                        </select>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="mb-3 text-center">
+                <button type="button" class="btn btn-sm btn-primary search" @click="search">
+                    <i class="fa fa-search"></i> 검색</button>
+            </div>
+        </form>
     </div>
 
     <div class="container-fluid">
         <div id="grid"></div>
-        <!--<table class="table table-hover">-->
-        <!--    <tr th:each="item : ${commonCodeList}" th:object="${item}">-->
-        <!--        <td th:text="*{codeType}"></td>-->
-        <!--        <td th:text="*{code}"></td>-->
-        <!--        <td th:text="*{codeName}"></td>-->
-        <!--        <td th:text="*{codeDesc}"></td>-->
-        <!--        <td th:text="*{parentCode}"></td>-->
-        <!--        <td th:text="*{useFlag}"></td>-->
-        <!--    </tr>-->
-        <!--</table>-->
-
-        <!--<div th:text="${commonCodeList}"></div>-->
     </div>
 </main>
 
