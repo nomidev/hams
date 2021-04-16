@@ -3,14 +3,16 @@ package com.huneth.hams.admin.controller;
 import com.huneth.hams.admin.model.CommonCode;
 import com.huneth.hams.admin.service.CommonCodeService;
 import com.huneth.hams.common.commonEnum.StatusEnum;
+import com.huneth.hams.common.config.auth.PrincipalDetails;
 import com.huneth.hams.common.dto.ResponseDto;
+import com.huneth.hams.member.model.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -18,20 +20,14 @@ import java.util.List;
 import java.util.Map;
 
 @Slf4j
-@Controller
+@RestController
 @RequestMapping("/admin")
 public class CommonCodeController {
 
     @Autowired
     private CommonCodeService commonCodeService;
 
-    @RequestMapping("/commonCode")
-    public String cmmcList() {
-        return "admin/commonCodeList";
-    }
-
     @RequestMapping("/commonCode/api")
-    @ResponseBody
     public ResponseEntity<ResponseDto> list(@RequestParam int page, @RequestParam int perPage,
                                             @ModelAttribute CommonCode param) {
         // 페이징 설정
@@ -60,7 +56,6 @@ public class CommonCodeController {
     }
 
     @PostMapping("/commonCode/api")
-    @ResponseBody
     public ResponseEntity<ResponseDto> save(@RequestBody Map<String, List<CommonCode>> param) {
         // Map<String, List<HashMap>> param => Generic 을 명시하지 않으면 LinkedHashMap으로 넘어온다.
         log.info("param = " + param);

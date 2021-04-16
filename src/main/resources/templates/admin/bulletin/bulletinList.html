@@ -31,60 +31,58 @@
         </form>
     </div>
 
-    <div class="container-fluid">
-        <!-- <div>총 건수 : <span th:text="${#lists.size(bulletinList)}"></span></div> -->
-        <!--페이징일 경우-->
-        <div class="mb-2">총 건수 : <span th:text="${bulletinList.totalElements}"></span></div>
+    <!-- <div>총 건수 : <span th:text="${#lists.size(bulletinList)}"></span></div> -->
+    <!--페이징일 경우-->
+    <div class="mb-2">총 건수 : <span th:text="${bulletinList.totalElements}"></span></div>
 
-        <table class="table table-hover">
-            <thead>
-            <tr>
-                <th>번호</th>
-                <th>게시판제목</th>
-                <th>게시판유형</th>
-                <th>작성자</th>
-                <th>작성일자</th>
-                <th>수정일자</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:if="${not #lists.isEmpty(bulletinList)}" th:each="item : ${bulletinList}">
-                <td th:text="${item.id}">번호</td>
-                <td><a th:href="@{/admin/bulletin/form(id=${item.id})}" th:text="${item.title}">Lorem</a></td>
-                <td th:text="${item.type}">노종민</td>
-                <td th:text="${item.user.username}">노종민</td>
-                <td th:text="${#dates.format(item.creationDate, 'yyyy-MM-dd')}">2021-01-27</td>
-                <td th:text="${#dates.format(item.lastUpdateDate, 'yyyy-MM-dd')}">2021-02-03</td>
-            </tr>
-            <tr th:if="${bulletinList.totalElements} == 0">
-                <td colspan="6" class="text-center">게시글이 없습니다.</td>
-            </tr>
-            </tbody>
-        </table>
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th>번호</th>
+            <th>게시판제목</th>
+            <th>게시판유형</th>
+            <th>작성자</th>
+            <th>작성일자</th>
+            <th>수정일자</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:if="${not #lists.isEmpty(bulletinList)}" th:each="item : ${bulletinList}">
+            <td th:text="${item.id}">번호</td>
+            <td><a th:href="@{/admin/bulletin/form(id=${item.id})}" th:text="${item.title}">Lorem</a></td>
+            <td th:text="${item.type}">노종민</td>
+            <td th:text="${item.user.username}">노종민</td>
+            <td th:text="${#dates.format(item.creationDate, 'yyyy-MM-dd')}">2021-01-27</td>
+            <td th:text="${#dates.format(item.lastUpdateDate, 'yyyy-MM-dd')}">2021-02-03</td>
+        </tr>
+        <tr th:if="${bulletinList.totalElements} == 0">
+            <td colspan="6" class="text-center">게시글이 없습니다.</td>
+        </tr>
+        </tbody>
+    </table>
 
-        <nav aria-label="Page navigation example" th:if="${bulletinList.totalElements} > 0">
-            <ul class="pagination justify-content-center">
-                <li class="page-item" th:classappend="${1 == (bulletinList.pageable.pageNumber + 1)} ? 'disabled'">
-                    <a class="page-link" href="#" th:href="@{/admin/bulletin/list(page=${bulletinList.pageable.pageNumber - 1})}"
-                       tabindex="-1" aria-disabled="true">Previous</a>
-                </li>
-                <!--0번부터 이기 때문에 + 1을 해준다.-->
-                <li class="page-item" th:classappend="${i == (bulletinList.pageable.pageNumber + 1)} ? 'disabled'"
-                    th:each="i : ${#numbers.sequence(startPage, endPage)}">
-                    <a class="page-link" href="#" th:href="@{/admin/bulletin/list(page=${i - 1})}" th:text="${i}">1</a>
-                </li>
-                <li class="page-item"
-                    th:classappend="${bulletinList.totalPages == (bulletinList.pageable.pageNumber + 1)} ? 'disabled'">
-                    <a class="page-link" th:href="@{/admin/bulletin/list(page=${bulletinList.pageable.pageNumber + 1})}"
-                       href="#">Next</a>
-                </li>
-            </ul>
-        </nav>
+    <nav aria-label="Page navigation example" th:if="${bulletinList.totalElements} > 0">
+        <ul class="pagination justify-content-center">
+            <li class="page-item" th:classappend="${1 == (bulletinList.pageable.pageNumber + 1)} ? 'disabled'">
+                <a class="page-link" href="#" th:href="@{/admin/bulletin/list(page=${bulletinList.pageable.pageNumber - 1})}"
+                   tabindex="-1" aria-disabled="true">Previous</a>
+            </li>
+            <!--0번부터 이기 때문에 + 1을 해준다.-->
+            <li class="page-item" th:classappend="${i == (bulletinList.pageable.pageNumber + 1)} ? 'disabled'"
+                th:each="i : ${#numbers.sequence(startPage, endPage)}">
+                <a class="page-link" href="#" th:href="@{/admin/bulletin/list(page=${i - 1})}" th:text="${i}">1</a>
+            </li>
+            <li class="page-item"
+                th:classappend="${bulletinList.totalPages == (bulletinList.pageable.pageNumber + 1)} ? 'disabled'">
+                <a class="page-link" th:href="@{/admin/bulletin/list(page=${bulletinList.pageable.pageNumber + 1})}"
+                   href="#">Next</a>
+            </li>
+        </ul>
+    </nav>
 
-        <!--<div class="text-right" sec:authorize="hasRole('ROLE_ADMIN')">-->
-        <div class="text-right">
-            <a class="btn btn-primary" href="#" th:href="@{/admin/bulletin/form}" role="button">글쓰기</a>
-        </div>
+    <!--<div class="text-right" sec:authorize="hasRole('ROLE_ADMIN')">-->
+    <div class="text-right">
+        <a class="btn btn-primary" href="#" th:href="@{/admin/bulletin/form}" role="button">글쓰기</a>
     </div>
 </main>
 

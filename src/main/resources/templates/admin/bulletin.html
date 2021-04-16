@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/admin_layout}">
+<head>
+    <title>게시판관리</title>
+</head>
+<body th:with="currentPage = 'COMMON_CODE'">
+<main layout:fragment="content" role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4" id="bulletin">
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">게시판관리</h1>
+    </div>
+
+    <form @keyup.enter="search">
+        <table class="table table-active">
+            <tbody>
+            <tr>
+                <th>Title</th>
+                <td><input type="text" v-model="params.title" class="form-control form-control-sm"></td>
+                <th>Type</th>
+                <td><input type="text" v-model="params.type" class="form-control form-control-sm"></td>
+                <th>Use Flag</th>
+                <td>
+                    <select class="form-control form-control-sm" v-model="params.useFlag">
+                        <option value="">All</option>
+                        <option value="Y">Yes</option>
+                        <option value="N">No</option>
+                    </select>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <div class="mb-3 text-center">
+            <button type="button" class="btn btn-sm btn-primary search" @click="search">
+                <i class="fa fa-search"></i> 검색</button>
+        </div>
+    </form>
+
+    <div class="d-flex justify-content-between align-items-end mb-2">
+        <p class="mb-0">Total: {{pageOptions.totalItems}}</p>
+        <div>
+            <button type="button" class="btn btn-sm btn-outline-secondary" @click="appendRow">추가</button>
+            <button type="button" class="btn btn-sm btn-outline-dark" @click="deleteRow">삭제</button>
+            <button type="button" class="btn btn-sm btn-outline-primary" @click="save">저장</button>
+        </div>
+    </div>
+
+    <div id="grid"></div>
+</main>
+
+<th:block layout:fragment="script">
+    <script th:inline="javascript" type="text/javascript">
+        /*<![CDATA[*/
+        var bulletin = {
+            el: "#bulletin",
+            data: function () {
+                return {
+                    params: {
+                        title: null,
+                        type: null,
+                        useFlag: 'Y'
+                    },
+                    grid: null,
+                    pageOptions: 0,
+                    bulletinType: [],
+                }
+            },
+            methods: {
+                search: function () {
+                    console.log(this.params)
+                    this.grid.finishEditing();
+                    this.grid.readData(1, this.params);
+                },
+                appendRow: function () {
+                    this.grid.finishEditing();
+                    this.grid.appendRow();
+                },
+                deleteRow: function () {
+                    var that = this;
+                    var rows = this.grid.getCheckedRowKeys();
+
+                    if (rows.length <= 0) {
+                        bootbox.alert("대상을 선택하세요");
+                    } else {
+                        bootbox.confirm("삭제하시겠습니까?", function (result) {
+                            if (result) {
+                                var isRemove = that.grid.removeCheckedRows(false);
+                                if (isRemove) {
+                                    that.grid.request("modifyData", {showConfirm: false});
+                                }
+                            }
+                        });
+                    }
+                },
+                save: function () {
+                    var that = this;
+                    // 저장 전 Editing을 끝낸다.
+                    this.grid.finishEditing();
+
+                    if (this.grid.isModified()) {
+                        var isValid = this.grid.validate();
+                        console.log(isValid);
+
+                        if (isValid.length) {
+                            var message = isValid[0].errors[0].columnName;
+                            bootbox.alert(message + "은(는) 필수입니다.");
+                        } else {
+                            bootbox.confirm("저장 하시겠습니까?", function (result) {
+                                if (result) {
+                                    that.grid.request("modifyData", {showConfirm: false});
+                                }
+                            });
+                        }
+                    } else {
+                        bootbox.alert("변경 된 내용이 없습니다.");
+                    }
+                }
+            },
+            created: function () {
+                var that = this;
+                this.bulletinType = [];
+                _.forEach([[${bulletinType}]], function (a,b) {
+                    console.log(a, b)
+                    that.bulletinType.push({text: a.codeName, value: a.code});
+                });
+            },
+            mounted: function () {
+                var that = this;
+                var dataHeader = {};
+                dataHeader[header] = token;
+
+                this.grid = new tui.Grid({
+                    el: document.getElementById('grid'),
+                    data: {
+                        withCredentials: true,
+                        contentType: 'application/json',
+                        headers: dataHeader,
+                        api: {
+                            readData: {url: '/admin/bulletin/api', method: 'GET', initParams: that.params},
+                            modifyData: {url: '/admin/bulletin/api', method: 'POST'},
+                        }
+                    },
+                    rowHeaders: ['checkbox'],
+                    scrollX: true,
+                    scrollY: false,
+                    pageOptions: {
+                        perPage: 10
+                    },
+                    columns: [
+                        {
+                            header: 'ID',
+                            name: 'id',
+                            align: 'center',
+                            width: 50,
+                            _attribute: {
+                                disabled: true
+                            }
+                        },
+                        {
+                            header: 'Title',
+                            name: 'title',
+                            align: 'center',
+                            editor: "text",
+                            validation: {
+                                required: true
+                            }
+                        },
+                        {
+                            header: 'Type',
+                            name: 'type',
+                            align: 'center',
+                            formatter: 'listItemText',
+                            editor: {
+                                type: 'select',
+                                options: {
+                                    listItems: that.bulletinType
+                                }
+                            },
+                            validation: {
+                                required: true
+                            }
+                        },
+                        {
+                            header: 'Use Flag',
+                            name: 'useFlag',
+                            align: 'center',
+                            formatter: 'listItemText',
+                            editor: {
+                                type: 'select',
+                                options: {
+                                    listItems: [
+                                        {text: 'Yes', value: 'Y'},
+                                        {text: 'No', value: 'N'},
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            header: 'Created By',
+                            name: 'createdBy',
+                            align: 'center',
+                        },
+                        {
+                            header: 'creation Date',
+                            name: 'creationDate',
+                            align: 'center',
+                            width: 150
+                        },
+                        {
+                            header: "lastModifiedBy",
+                            name: "lastModifiedBy",
+                            align: 'center',
+                        },
+                        {
+                            header: 'Last Update Date',
+                            name: 'lastUpdateDate',
+                            align: 'center',
+                            width: 150,
+                        },
+                    ],
+                    columnOptions: {
+                        resizable: true
+                    }
+                });
+
+                // Grid Event
+                /*this.grid.on('beforeRequest', function(ev) {
+                    // 요청을 보내기 전
+                }).on('successResponse', function(ev) {
+                    // 결과가 true인 경우
+                }).on('failResponse', function(ev) {
+                    // 결과가 false인 경우
+                }).on('errorResponse', function(ev) {
+                    // 오류가 발생한 경우
+                });*/
+
+                /*this.grid.on('beforeRequest', function(ev) {
+                    // 요청을 보내기 전
+                    // bootbox.alert("beforeRequest");
+                });
+
+                this.grid.on("response", function (ev) {
+                    // 성공/실패와 관계 없이 응답을 받았을 경우
+                });
+
+                this.grid.on('successResponse', function(ev) {
+                    // 결과가 true인 경우
+                    // console.log(ev)
+                    // bootbox.alert("저장 되었습니다.");
+                });
+
+                this.grid.on('failResponse', function(ev) {
+                    // 결과가 false인 경우
+                    // bootbox.alert("저장에 실패 했습니다.");
+                });
+
+                this.grid.on('errorResponse', function(ev) {
+                    // 오류가 발생한 경우
+                    // console.log(ev)
+                    // bootbox.alert("에러가 발생했습니다.");
+                });*/
+                this.grid.on('successResponse', function(ev) {
+                    // 결과가 true인 경우
+                    console.log(ev)
+
+                    var page = ev.instance.paginationManager.getPagination()
+                    that.pageOptions = page._options;
+                    // bootbox.alert("저장 되었습니다.");
+                });
+
+                this.grid.on('errorResponse', function(ev) {
+                    // 오류가 발생한 경우
+                    console.log(ev)
+                    bootbox.alert("에러가 발생했습니다.");
+                });
+            }
+        }
+
+        new Vue(bulletin);
+        /*]]>*/
+    </script>
+</th:block>
+</body>
+</html>

@@ -1,5 +1,7 @@
 package com.huneth.hams.admin.model;
 
+import com.huneth.hams.common.commonEnum.YnFlag;
+import com.huneth.hams.common.model.BaseEntity;
 import lombok.Data;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
@@ -16,7 +18,7 @@ import java.time.LocalDateTime;
 
 @Data
 @Entity
-public class Menu {
+public class Menu extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -38,16 +40,7 @@ public class Menu {
 
     private String menuIcon;
 
-    @Column(columnDefinition = "boolean default true")
-    private Boolean useFlag;
+    @Enumerated(EnumType.ORDINAL)
+    private YnFlag useFlag;
 
-    @CreatedBy
-    private int createdBy;
-
-    @CreationTimestamp
-    @Column(updatable = false)
-    private LocalDateTime creationDate;
-
-    @UpdateTimestamp
-    private LocalDateTime lastUpdateDate;
 }

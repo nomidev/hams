@@ -22,70 +22,68 @@
         </div>-->
     </div>
 
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-3 col-lg-3 d-md-block">
-                <!--<div class="mb-3 text-right">
-                    <button type="button" class="btn btn-sm btn-primary createNode">추가</button>
-                    <button type="button" class="btn btn-sm btn-secondary">삭제</button>
-                </div>-->
-                <div ref="menuTree"></div>
-            </div>
-            <div class="col-md-9 ml-sm-auto col-lg-9 px-md-4">
-                <form>
-                    <div class="form-row">
-                        <div class="form-group col-md-6">
-                            <label for="menuName">Menu Name</label>
-                            <input type="text" class="form-control" id="menuName" v-model="params.menuName"
-                                    @change="changeNodeName">
-                        </div>
-                        <div class="form-group col-md-6">
-                            <label for="menuDesc">Menu Desc</label>
-                            <input type="text" class="form-control" id="menuDesc" v-model="params.menuDesc">
-                        </div>
+    <div class="row">
+        <div class="col-md-3 col-lg-3 d-md-block">
+            <!--<div class="mb-3 text-right">
+                <button type="button" class="btn btn-sm btn-primary createNode">추가</button>
+                <button type="button" class="btn btn-sm btn-secondary">삭제</button>
+            </div>-->
+            <div ref="menuTree"></div>
+        </div>
+        <div class="col-md-9 ml-sm-auto col-lg-9 px-md-4">
+            <form>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="menuName">Menu Name</label>
+                        <input type="text" class="form-control" id="menuName" v-model="params.menuName"
+                               @change="changeNodeName">
                     </div>
-                    <div class="form-group">
-                        <label for="menuUrl">Menu Url</label>
-                        <input type="text" class="form-control" id="menuUrl" v-model="params.menuUrl">
+                    <div class="form-group col-md-6">
+                        <label for="menuDesc">Menu Desc</label>
+                        <input type="text" class="form-control" id="menuDesc" v-model="params.menuDesc">
                     </div>
-                    <div class="form-row">
-                        <div class="form-group col-md-6">
-                            <label for="menuActiveCode">Menu Active Code</label>
-                            <input type="text" class="form-control" id="menuActiveCode" v-model="params.menuActiveCode">
-                        </div>
-                        <div class="form-group col-md-6">
-                            <label for="roleMenu">Menu Role</label>
-                            <select id="roleMenu" class="form-control" v-model="params.menuRole">
-                                <option th:each="item : ${roles}" th:value="${item.roleCode}" th:text="${item.roleName}">roleName</option>
-                            </select>
-                        </div>
+                </div>
+                <div class="form-group">
+                    <label for="menuUrl">Menu Url</label>
+                    <input type="text" class="form-control" id="menuUrl" v-model="params.menuUrl">
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="menuActiveCode">Menu Active Code</label>
+                        <input type="text" class="form-control" id="menuActiveCode" v-model="params.menuActiveCode">
                     </div>
-                    <div class="form-row">
-                        <div class="form-group col-md-3">
-                            <label for="parent">Parent</label>
-                            <input type="text" class="form-control" id="parent" v-model="params.parent">
-                        </div>
-                        <div class="form-group col-md-3">
-                            <label for="sortNo">Sort No</label>
-                            <input type="text" class="form-control" id="sortNo" v-model="params.sortOrderNo">
-                        </div>
-                        <div class="form-group col-md-3">
-                            <label for="menuIcon">Menu Icon</label>
-                            <input type="text" class="form-control" id="menuIcon" v-model="params.menuIcon">
-                        </div>
-                        <div class="form-group col-md-3">
-                            <label for="useFlag">Use Flag</label>
-                            <select id="useFlag" class="form-control" v-model="params.useFlag">
-                                <option :value="true">Yes</option>
-                                <option :value="false">No</option>
-                            </select>
-                        </div>
+                    <div class="form-group col-md-6">
+                        <label for="roleMenu">Menu Role</label>
+                        <select id="roleMenu" class="form-control" v-model="params.menuRole">
+                            <option th:each="item : ${roles}" th:value="${item.roleCode}" th:text="${item.roleName}">roleName</option>
+                        </select>
                     </div>
-                    <div class="text-right">
-                        <button type="button" class="btn btn-primary" @click="saveMenu('post')">Save</button>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-3">
+                        <label for="parent">Parent</label>
+                        <input type="text" class="form-control" id="parent" v-model="params.parent">
                     </div>
-                </form>
-            </div>
+                    <div class="form-group col-md-3">
+                        <label for="sortNo">Sort No</label>
+                        <input type="text" class="form-control" id="sortNo" v-model="params.sortOrderNo">
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="menuIcon">Menu Icon</label>
+                        <input type="text" class="form-control" id="menuIcon" v-model="params.menuIcon">
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="useFlag">Use Flag</label>
+                        <select id="useFlag" class="form-control" v-model="params.useFlag">
+                            <option value="Y">Yes</option>
+                            <option value="N">No</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="text-right">
+                    <button type="button" class="btn btn-primary" @click="saveMenu('post')">Save</button>
+                </div>
+            </form>
         </div>
     </div>
 </main>
@@ -93,8 +91,8 @@
 <th:block layout:fragment="script">
     <script th:inline="javascript" type="text/javascript">
         /*<![CDATA[*/
-
         var menu = {
+            el: "#menu",
             data: function () {
                 return {
                     params: {
@@ -106,7 +104,7 @@
                         menuActiveCode: null,
                         menuIcon: null,
                         parent: null,
-                        useFlag: null,
+                        useFlag: "Y",
                         sortOrderNo: null,
                         menuLevelNo: 0,
                         status: null
@@ -147,7 +145,7 @@
                     this.params.menuActiveCode = node.original.menuActiveCode;
                     this.params.parent = node.parent;
                     this.params.sortOrderNo = node.original.sortOrderNo;
-                    this.params.useFlag = node.original.useFlag != null ?  node.original.useFlag : true;
+                    this.params.useFlag = node.original.useFlag != null ?  node.original.useFlag : "Y";
                     this.params.menuLevelNo = node.parents.length - 1;
                     this.params.status = node.status;
                 },
@@ -253,8 +251,7 @@
             }
         }
 
-        Vue.createApp(menu).mount('#menu');
-
+        new Vue(menu);
         /*]]>*/
     </script>
 </th:block>

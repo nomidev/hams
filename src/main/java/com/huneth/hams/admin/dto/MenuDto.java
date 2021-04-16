@@ -1,6 +1,10 @@
 package com.huneth.hams.admin.dto;
 
+import com.huneth.hams.common.commonEnum.YnFlag;
 import lombok.Data;
+
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 
 @Data
 public class MenuDto {
@@ -16,5 +20,5 @@ public class MenuDto {
     private String menuIcon;
     private int menuLevelNo;
     private int sortOrderNo;
-    private Boolean useFlag;
+    private YnFlag useFlag;
 }

@@ -1,5 +1,7 @@
 package com.huneth.hams.admin.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.huneth.hams.common.commonEnum.YnFlag;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,10 +14,12 @@ public class BulletinDto {
     private int id;
     private String title;
     private String type;
-    private Boolean useFlag;
+    private YnFlag useFlag;
     private int userId;
     private String userMemberName;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private Timestamp creationDate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private Timestamp lastUpdateDate;
 
 }

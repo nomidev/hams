@@ -27,21 +27,7 @@ public class CommonCodeService {
     @Autowired
     private CommonCodeRepository commonCodeRepository;
 
-    QCommonCode qCommonCode = QCommonCode.commonCode;
-
-    public List<CommonCode> retrieveCommonCodeList(CommonCode param, Pageable pageable) {
-        List<CommonCode> commonCodeList = jpaQueryFactory.selectFrom(qCommonCode)
-                        .where(eqUseFlag(param.getUseFlag())
-                                ,eqCodeType(param.getCodeType())
-                                ,eqCode(param.getCode())
-                                ,eqCodeName(param.getCodeName()))
-                        .orderBy(qCommonCode.codeType.asc(), qCommonCode.sortNo.asc())
-                        .limit(pageable.getPageSize())
-                        .offset(pageable.getOffset() - pageable.getPageSize()) // 0부터 시작하기 때문에...?
-                        .fetch();
-
-        return commonCodeList;
-    }
+    private final QCommonCode qCommonCode = QCommonCode.commonCode;
 
     private BooleanExpression eqUseFlag(YnFlag ynFlag) {
         if (ynFlag == null) {
@@ -71,6 +57,35 @@ public class CommonCodeService {
         return qCommonCode.codeName.eq(codeName);
     }
 
+    public List<CommonCode> retrieveCommonCode(CommonCode param) {
+        List<CommonCode> commonCodeList = jpaQueryFactory.selectFrom(qCommonCode)
+                .where(eqUseFlag(param.getUseFlag())
+                        ,eqCodeType(param.getCodeType()))
+                .orderBy(qCommonCode.codeType.asc(), qCommonCode.sortNo.asc())
+                .fetch();
+
+        return commonCodeList;
+    }
+
+    public List<CommonCode> retrieveCommonCodeList(CommonCode param, Pageable pageable) {
+        List<CommonCode> commonCodeList = jpaQueryFactory.selectFrom(qCommonCode)
+                        .where(eqUseFlag(param.getUseFlag())
+                                ,eqCodeType(param.getCodeType())
+                                ,eqCode(param.getCode())
+                                ,eqCodeName(param.getCodeName()))
+                        .orderBy(qCommonCode.codeType.asc(), qCommonCode.sortNo.asc())
+                        .limit(pageable.getPageSize())
+                        .offset(pageable.getOffset() - pageable.getPageSize()) // 0부터 시작하기 때문에...?
+                        .fetch();
+
+        return commonCodeList;
+    }
+
+    /**
+     * Total count
+     * @param param
+     * @return
+     */
     public Long retrieveTotalCount(CommonCode param) {
         JPAQuery<CommonCode> jpaQuery = jpaQueryFactory.selectFrom(qCommonCode)
                 .where(eqUseFlag(param.getUseFlag())

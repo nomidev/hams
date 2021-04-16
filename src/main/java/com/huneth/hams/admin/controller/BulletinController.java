@@ -1,44 +1,104 @@
 package com.huneth.hams.admin.controller;
 
-import com.huneth.hams.admin.model.CommonCode;
-import com.huneth.hams.admin.repository.CommonCodeRepository;
-import com.huneth.hams.common.config.auth.PrincipalDetails;
+import com.huneth.hams.admin.dto.BulletinDto;
 import com.huneth.hams.admin.model.Bulletin;
+import com.huneth.hams.admin.service.BulletinService;
+import com.huneth.hams.common.commonEnum.StatusEnum;
+import com.huneth.hams.common.config.auth.PrincipalDetails;
+import com.huneth.hams.common.dto.ResponseDto;
 import com.huneth.hams.member.model.User;
-import com.huneth.hams.admin.repository.BulletinRepository;
-import com.huneth.hams.member.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-@Controller
+@RestController
 @Slf4j
 @RequestMapping("/admin")
 public class BulletinController {
 
     @Autowired
-    private BulletinRepository bulletinRepository;
+    private BulletinService bulletinService;
 
-    @Autowired
-    private UserRepository userRepository;
+    @RequestMapping("/bulletin/api")
+    public ResponseEntity<ResponseDto> list(@RequestParam int page, @RequestParam int perPage,
+                                            @ModelAttribute Bulletin param) {
+        // 페이징 설정
+        Pageable pageable = PageRequest.of(page, perPage);
+        List<Bulletin> bulletinList = bulletinService.retrieveBulletinList(param, pageable);
 
-    @Autowired
-    private CommonCodeRepository commonCodeRepository;
+        // Toast UI Grid는 contents에 데이터를 담아야 한다.
+        Map result = new HashMap();
+        Map pageMap = new HashMap();
 
-    @GetMapping("/bulletin/list")
+        // Toast UI Grid pageOptions 설정
+        pageMap.put("page", pageable.getPageNumber());
+        pageMap.put("totalCount", bulletinService.retrieveTotalCount(param));
+
+        result.put("contents", bulletinList);
+        result.put("pagination", pageMap);
+
+        ResponseDto responseDto = ResponseDto.builder()
+                .data(result)
+                .message("SUCCESS")
+                .statusCode(StatusEnum.OK)
+                .result(true)
+                .build();
+
+        return new ResponseEntity<ResponseDto>(responseDto, HttpStatus.OK);
+    }
+
+    @PostMapping("/bulletin/api")
+    public ResponseEntity<ResponseDto> save(@RequestBody Map<String, List<Bulletin>> param,
+                                            @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        // Map<String, List<HashMap>> param => Generic 을 명시하지 않으면 LinkedHashMap으로 넘어온다.
+        log.info("param = " + param);
+
+        List<Bulletin> createdRows = (List<Bulletin>) param.get("createdRows");
+        List<Bulletin> updatedRows = (List<Bulletin>) param.get("updatedRows");
+        List<Bulletin> deletedRows = (List<Bulletin>) param.get("deletedRows");
+
+        User user = principalDetails.getUser();
+
+        // insert
+        if (createdRows.size() > 0) {
+            for (Bulletin cRow : createdRows) {
+                bulletinService.saveBulletin(cRow);
+            }
+        }
+
+        // update
+        if (updatedRows.size() > 0) {
+            for (Bulletin uRow : updatedRows) {
+                bulletinService.updateBulletin(uRow);
+            }
+        }
+
+        // delete
+        if (deletedRows.size() > 0) {
+            for (Bulletin dRow : deletedRows) {
+                bulletinService.deleteBulletin(dRow);
+            }
+        }
+
+        ResponseDto responseDto = ResponseDto.builder()
+                .message("SUCCESS")
+                .statusCode(StatusEnum.OK)
+                .result(true)
+                .build();
+
+        return new ResponseEntity<ResponseDto>(responseDto, HttpStatus.OK);
+    }
+
+    /*@GetMapping("/bulletin/list")
     public String bulletinlist(Model model, @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
                        @RequestParam(required = false, defaultValue = "") String searchText) {
         // Page<bulletin> bulletinList = bulletinRepository.findAll(PageRequest.of(0, 20)); // jpa page가 0부터 시작한다.
@@ -89,16 +149,14 @@ public class BulletinController {
         }
 
         // 인증정보로 사용자를 가져와 저장한다.
-        /*String username = authentication.getName();
-        User user = userRepository.findByUsername(username);*/
+        *//*String username = authentication.getName();
+        User user = userRepository.findByUsername(username);*//*
 
         bulletin.setUser(principalDetails.getUser());
         bulletinRepository.save(bulletin);
         return "redirect:/admin/bulletin/list";
     }
 
-    @PostMapping("/bulletin/api")
-    @ResponseBody
     public ResponseEntity<Bulletin> apiTest(@Valid @RequestBody Bulletin bulletin,
                                   @AuthenticationPrincipal PrincipalDetails principalDetails) {
         System.out.println(bulletin);
@@ -114,7 +172,6 @@ public class BulletinController {
         }
 
         return new ResponseEntity<>(bulletin, HttpStatus.OK);
-    }
-
+    }*/
 
 }

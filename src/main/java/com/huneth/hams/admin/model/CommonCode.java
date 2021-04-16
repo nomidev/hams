@@ -1,16 +1,14 @@
 package com.huneth.hams.admin.model;
 
 import com.huneth.hams.common.commonEnum.YnFlag;
+import com.huneth.hams.common.model.BaseEntity;
 import lombok.Data;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 
 @Data
 @Entity
-public class CommonCode {
+public class CommonCode extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,12 +29,4 @@ public class CommonCode {
     private String attribute4;
     private String attribute5;
 
-    private int createdBy;
-
-    @CreationTimestamp
-    @Column(updatable = false)
-    private Timestamp creationDate;
-
-    @UpdateTimestamp
-    private Timestamp lastUpdateDate;
 }

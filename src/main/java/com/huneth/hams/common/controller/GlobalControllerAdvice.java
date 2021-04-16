@@ -7,6 +7,7 @@ import com.huneth.hams.admin.dto.MenuDto;
 import com.huneth.hams.admin.service.MenuService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -15,9 +16,9 @@ import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.http.HttpServletRequest;
 
-@ControllerAdvice
 @Slf4j
-public class GlobalController {
+@ControllerAdvice
+public class GlobalControllerAdvice {
 
     @Autowired
     private MenuService menuService;
@@ -32,6 +33,10 @@ public class GlobalController {
 
         // 로그인 페이지는 메뉴정보를 불러올 필요가 없다.
         if ("/login".equals(uri)) {
+            return;
+        }
+
+        if (uri.contains("api")) {
             return;
         }
 

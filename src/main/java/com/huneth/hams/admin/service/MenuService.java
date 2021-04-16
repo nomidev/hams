@@ -3,6 +3,7 @@ package com.huneth.hams.admin.service;
 import com.huneth.hams.admin.dto.MenuDto;
 import com.huneth.hams.admin.model.Menu;
 import com.huneth.hams.admin.repository.MenuRepository;
+import com.huneth.hams.common.commonEnum.YnFlag;
 import com.huneth.hams.common.config.auth.PrincipalDetails;
 import com.huneth.hams.common.util.CommonUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -39,7 +40,7 @@ public class MenuService {
      */
     public Map<MenuDto, List<MenuDto>> retrieveEnableMenuList() {
 
-        List<Menu> menuList = menuRepository.findByUseFlag(true, Sort.by("menuLevelNo").and(Sort.by("sortOrderNo")));
+        List<Menu> menuList = menuRepository.findByUseFlag(YnFlag.Y, Sort.by("menuLevelNo").and(Sort.by("sortOrderNo")));
 
         PropertyMap<Menu, MenuDto> menuMap = new PropertyMap<Menu, MenuDto>() {
             protected void configure() {
@@ -117,14 +118,14 @@ public class MenuService {
             uri = uri.substring(0, uri.indexOf("/", 1));
         }
 
-        Menu menu = menuRepository.findByMenuUrlAndUseFlag(uri, true);
+        Menu menu = menuRepository.findByMenuUrlAndUseFlag(uri, YnFlag.Y);
 
         if (menu == null || menu.getMenuLevelNo() == 0) {
             return new ArrayList<MenuDto>();
         }
 
         String parentId = String.valueOf(menu.getId());
-        List<Menu> subMenu = menuRepository.findByParentIdAndUseFlag(parentId, true, Sort.by("menuLevelNo").and(Sort.by("sortOrderNo")));
+        List<Menu> subMenu = menuRepository.findByParentIdAndUseFlag(parentId, YnFlag.Y, Sort.by("menuLevelNo").and(Sort.by("sortOrderNo")));
 
         List<MenuDto> subMenus = CommonUtil.mapList(modelMapper, subMenu, MenuDto.class);
 
@@ -179,8 +180,6 @@ public class MenuService {
         Menu menu = modelMapper.map(menuDto, Menu.class);
 
         log.info("menu = " + menu);
-
-        menu.setCreatedBy(principalDetails.getId());
 
         menuRepository.save(menu);
     }
