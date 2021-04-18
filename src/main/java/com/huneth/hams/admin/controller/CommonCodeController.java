@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -33,6 +34,7 @@ public class CommonCodeController {
         // 페이징 설정
         Pageable pageable = PageRequest.of(page, perPage);
         List<CommonCode> commonCodeList = commonCodeService.retrieveCommonCodeList(param, pageable);
+        Long totalCount = commonCodeService.retrieveTotalCount(param);
 
         // Toast UI Grid는 contents에 데이터를 담아야 한다.
         Map result = new HashMap();
@@ -40,7 +42,7 @@ public class CommonCodeController {
 
         // Toast UI Grid pageOptions 설정
         pageMap.put("page", pageable.getPageNumber());
-        pageMap.put("totalCount", commonCodeService.retrieveTotalCount(param));
+        pageMap.put("totalCount", totalCount);
 
         result.put("contents", commonCodeList);
         result.put("pagination", pageMap);
