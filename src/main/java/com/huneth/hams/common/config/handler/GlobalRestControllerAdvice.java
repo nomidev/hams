@@ -1,4 +1,4 @@
-package com.huneth.hams.common.handler;
+package com.huneth.hams.common.config.handler;
 
 import com.huneth.hams.common.commonEnum.StatusEnum;
 import com.huneth.hams.common.dto.ResponseDto;
@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 
 @Slf4j
 @RestControllerAdvice
-public class GlobalApiExceptionHandler {
+public class GlobalRestControllerAdvice {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ResponseDto> handler(HttpServletRequest request, Exception e, HttpStatus status) {

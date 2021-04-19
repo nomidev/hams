@@ -1,5 +1,6 @@
 package com.huneth.hams.common.config;
 
+import com.huneth.hams.common.config.handler.LoginSuccessHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -33,6 +34,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginPage("/login")
                 .loginProcessingUrl("/login") // loginForm이 호출되면 스프링 시큐리티가 낚아채서 대신 로그인을 해준다.
                 .defaultSuccessUrl("/")
+                .successHandler(loginSuccessHandler())
                 .and()
             .logout()//csrf와 사용할 경우 무조건 post 요청을 해야한다.
                 .and()
@@ -64,6 +66,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             }
         };
         return entry;
+    }
+
+    @Bean
+    public LoginSuccessHandler loginSuccessHandler() {
+        return new LoginSuccessHandler();
     }
 
     /*@Autowired

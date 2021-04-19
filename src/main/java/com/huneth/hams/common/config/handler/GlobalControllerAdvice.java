@@ -1,4 +1,4 @@
-package com.huneth.hams.common.controller;
+package com.huneth.hams.common.config.handler;
 
 import java.util.List;
 import java.util.Map;
@@ -7,9 +7,11 @@ import com.huneth.hams.admin.dto.MenuDto;
 import com.huneth.hams.admin.service.MenuService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 import lombok.extern.slf4j.Slf4j;
@@ -48,4 +50,21 @@ public class GlobalControllerAdvice {
         model.addAttribute("menuList", result);
         model.addAttribute("subMenuList", subMenus);
     }
+
+    /*@ExceptionHandler(IllegalArgumentException.class)
+    public String handler(HttpServletRequest request, IllegalArgumentException e, Model model) {
+        log.debug("ExceptionHandler !!!!!!!!!!!!!!!!!!! ExceptionHandler");
+        log.error(e.getMessage());
+        e.printStackTrace();
+        model.addAttribute("erroMessage", e.getMessage());
+
+        return "error/error";
+    }
+
+    @ExceptionHandler(value = AccessDeniedException.class)
+    public String accessDeniedHandler(AccessDeniedException e) {
+        log.debug(e.getMessage());
+        e.printStackTrace();
+        return "error/error";
+    }*/
 }

@@ -7,24 +7,24 @@
     <title>공통코드관리</title>
 </head>
 <body th:with="currentPage = 'COMMON_CODE'">
-<main layout:fragment="content" role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
+<main layout:fragment="content" role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4" id="commonCode">
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2">공통코드관리</h1>
     </div>
 
-    <form class="form">
+    <form class="form" @keyup.enter="search">
         <table class="table table-active">
             <tbody>
             <tr>
                 <th>Code Type</th>
-                <td><input type="text" name="codeType" class="form-control form-control-sm"></td>
+                <td><input type="text" v-model="params.codeType" class="form-control form-control-sm"></td>
                 <th>Code</th>
-                <td><input type="text" name="code" class="form-control form-control-sm"></td>
+                <td><input type="text" v-model="params.code" class="form-control form-control-sm"></td>
                 <th>Code Name</th>
-                <td><input type="text" name="codeName" class="form-control form-control-sm"></td>
+                <td><input type="text" v-model="params.codeName" class="form-control form-control-sm"></td>
                 <th>Use Flag</th>
                 <td>
-                    <select class="form-control form-control-sm" name="useFlag">
+                    <select class="form-control form-control-sm" v-model="params.useFlag">
                         <option value="">All</option>
                         <option value="Y">Yes</option>
                         <option value="N">No</option>
@@ -34,17 +34,17 @@
             </tbody>
         </table>
         <div class="mb-3 text-center">
-            <button type="button" class="btn btn-sm btn-primary search">
+            <button type="button" class="btn btn-sm btn-primary search" @click="search">
                 <i class="fa fa-search"></i> 검색</button>
         </div>
     </form>
 
     <div class="d-flex justify-content-between align-items-end mb-2">
-        <p class="mb-0">Total: <span class="totalCount"></span></p>
+        <p class="mb-0">Total: {{totalCount}}</p>
         <div>
-            <button type="button" class="btn btn-sm btn-outline-secondary appendRow">추가</button>
-            <button type="button" class="btn btn-sm btn-outline-dark deleteRow">삭제</button>
-            <button type="button" class="btn btn-sm btn-outline-primary save">저장</button>
+            <button type="button" class="btn btn-sm btn-outline-secondary" @click="appendRow">추가</button>
+            <button type="button" class="btn btn-sm btn-outline-dark" @click="deleteRow">삭제</button>
+            <button type="button" class="btn btn-sm btn-outline-primary" @click="save">저장</button>
         </div>
     </div>
 
@@ -54,242 +54,260 @@
 <th:block layout:fragment="script">
     <script th:inline="javascript" type="text/javascript">
         /*<![CDATA[*/
-        var dataHeader = {};
-        dataHeader[header] = token;
-        var param = $(".form").serializeObject();
-
-        var grid = new tui.Grid({
-            el: document.getElementById("grid"),
+        var bulletin = new Vue({
+            el: "#commonCode",
             data: {
-                withCredentials: true,
-                contentType: 'application/json',
-                headers: dataHeader,
-                api: {
-                    readData: {url: '/admin/commonCode/api', method: 'GET', initParams: param},
-                    modifyData: {url: '/admin/commonCode/api', method: 'POST'},
+                params: {
+                    codeType: null,
+                    code: null,
+                    codeName: null,
+                    useFlag: 'Y'
+                },
+                dataHeader: {},
+                totalCount: 0,
+            },
+            methods: {
+                search: function () {
+                    console.log(this.params)
+                    grid.finishEditing();
+                    grid.readData(1, this.params);
+                },
+                appendRow: function () {
+                    grid.finishEditing();
+                    grid.appendRow();
+                },
+                deleteRow: function () {
+                    var that = this;
+                    var rows = grid.getCheckedRowKeys();
+
+                    if (rows.length <= 0) {
+                        bootbox.alert("대상을 선택하세요");
+                    } else {
+                        bootbox.confirm("삭제하시겠습니까?", function (result) {
+                            if (result) {
+                                var isRemove = grid.removeCheckedRows(false);
+                                if (isRemove) {
+                                    grid.request("modifyData", {showConfirm: false});
+                                }
+                            }
+                        });
+                    }
+                },
+                save: function () {
+                    var that = this;
+                    // 저장 전 Editing을 끝낸다.
+                    grid.finishEditing();
+
+                    if (grid.isModified()) {
+                        var isValid = grid.validate();
+                        console.log(isValid);
+
+                        if (isValid.length) {
+                            var message = isValid[0].errors[0].columnName;
+                            bootbox.alert(message + "은(는) 필수입니다.");
+                        } else {
+                            bootbox.confirm("저장 하시겠습니까?", function (result) {
+                                if (result) {
+                                    grid.request("modifyData", {showConfirm: false});
+                                }
+                            });
+                        }
+                    } else {
+                        bootbox.alert("변경 된 내용이 없습니다.");
+                    }
                 }
             },
-            rowHeaders: ['checkbox'],
-            scrollX: true,
-            scrollY: false,
-            pageOptions: {
-                perPage: 10
+            created: function () {
+                var that = this;
+                this.dataHeader[header] = token;
             },
-            columns: [
-                {
-                    header: 'ID',
-                    name: 'id',
-                    align: 'center',
-                    width: 50,
-                    _attribute: {
-                        disabled: true
-                    }
-                },
-                {
-                    header: 'Code Type',
-                    name: 'codeType',
-                    align: 'center',
-                    editor: "text",
-                    width: 120,
-                    validation: {
-                        required: true
-                    }
-                },
-                {
-                    header: 'Code',
-                    name: 'code',
-                    align: 'center',
-                    editor: "text",
-                    width: 120,
-                    validation: {
-                        required: true
-                    }
-                },
-                {
-                    header: 'Code Name',
-                    name: 'codeName',
-                    align: 'center',
-                    editor: "text",
-                    width: 120,
-                    validation: {
-                        required: true
-                    }
-                },
-                {
-                    header: 'Code Desc',
-                    name: 'codeDesc',
-                    editor: "text",
-                    width: 200,
-                },
-                {
-                    header: 'Parent Code',
-                    name: 'parentCode',
-                    align: 'center',
-                    editor: "text",
-                    width: 120,
-                },
-                {
-                    header: 'Use Flag',
-                    name: 'useFlag',
-                    align: 'center',
-                    width: 80,
-                    formatter: 'listItemText',
-                    editor: {
-                        type: 'select',
-                        options: {
-                            listItems: [
-                                {text: 'Yes', value: 'Y'},
-                                {text: 'No', value: 'N'},
-                            ]
+            mounted: function () {
+                var that = this;
+
+                grid = new tui.Grid({
+                    el: document.getElementById("grid"),
+                    data: {
+                        withCredentials: true,
+                        contentType: 'application/json',
+                        headers: this.dataHeader,
+                        api: {
+                            readData: {url: '/admin/commonCode/api', method: 'GET', initParams: this.params},
+                            modifyData: {url: '/admin/commonCode/api', method: 'POST'},
                         }
-                    }
-                },
-                {
-                    header: 'Sort No',
-                    name: 'sortNo',
-                    align: 'center',
-                    editor: "text",
-                    width: 70,
-                },
-                {
-                    header: 'Attribute1',
-                    name: 'attribute1',
-                    align: 'center',
-                    editor: "text",
-                    width: 100,
-                },
-                {
-                    header: 'Attribute2',
-                    name: 'attribute2',
-                    align: 'center',
-                    editor: "text",
-                    width: 100,
-                },
-                {
-                    header: 'Attribute3',
-                    name: 'attribute3',
-                    align: 'center',
-                    editor: "text",
-                    width: 100,
-                },
-                {
-                    header: 'Attribute4',
-                    name: 'attribute4',
-                    align: 'center',
-                    editor: "text",
-                    width: 100,
-                },
-                {
-                    header: 'Attribute5',
-                    name: 'attribute5',
-                    align: 'center',
-                    editor: "text",
-                    width: 100,
-                },
-                {
-                    header: "Created By",
-                    name: "createdBy",
-                    align: 'center',
-                    width: 70,
-                },
-                {
-                    header: 'creationDate',
-                    name: 'creationDate',
-                    align: 'center',
-                    width: 150
-                },
-                {
-                    header: "Modified By",
-                    name: "lastModifiedBy",
-                    align: 'center',
-                    width: 70,
-                },
-                {
-                    header: 'lastUpdateDate',
-                    name: 'lastUpdateDate',
-                    align: 'center',
-                    width: 150,
-                },
-            ],
-            columnOptions: {
-                resizable: true
-            }
-        });
-
-        console.log(grid)
-
-        // Grid Event
-        grid.on('beforeRequest', function (ev) {
-            // 요청을 보내기 전
-            console.log("beforeRequest");
-        });
-        grid.on('response', function (ev) {
-            // 성공/실패와 관계 없이 응답을 받았을 경우
-            console.log("response");
-            console.log(grid.getPaginationTotalCount())
-            var totalCount = grid.getPaginationTotalCount();
-            $(".totalCount").text(totalCount);
-        });
-
-        grid.on('failResponse', function (ev) {
-            // 결과가 false인 경우
-            console.log("failResponse");
-        });
-        grid.on('errorResponse', function (ev) {
-            // 오류가 발생한 경우
-            console.log("errorResponse");
-        });
-
-        $(".search").on("click", function () {
-            console.log()
-            var param = $(".form").serializeObject();
-
-            console.log(param)
-            grid.readData(1, param);
-        });
-
-        $(".appendRow").on("click", function () {
-            grid.finishEditing();
-            grid.appendRow();
-        });
-
-        $(".deleteRow").on("click", function () {
-            var rows = grid.getCheckedRowKeys();
-
-            if (rows.length <= 0) {
-                bootbox.alert("대상을 선택하세요");
-            } else {
-                bootbox.confirm("삭제하시겠습니까?", function (result) {
-                    if (result) {
-                        var isRemove = grid.removeCheckedRows(false);
-                        if (isRemove) {
-                            grid.request("modifyData", {showConfirm: false});
-                        }
+                    },
+                    rowHeaders: ['checkbox'],
+                    scrollX: true,
+                    scrollY: false,
+                    pageOptions: {
+                        perPage: 10
+                    },
+                    columns: [
+                        {
+                            header: 'ID',
+                            name: 'id',
+                            align: 'center',
+                            width: 50,
+                            _attribute: {
+                                disabled: true
+                            }
+                        },
+                        {
+                            header: 'Code Type',
+                            name: 'codeType',
+                            align: 'center',
+                            editor: "text",
+                            width: 120,
+                            validation: {
+                                required: true
+                            }
+                        },
+                        {
+                            header: 'Code',
+                            name: 'code',
+                            align: 'center',
+                            editor: "text",
+                            width: 120,
+                            validation: {
+                                required: true
+                            }
+                        },
+                        {
+                            header: 'Code Name',
+                            name: 'codeName',
+                            align: 'center',
+                            editor: "text",
+                            width: 120,
+                            validation: {
+                                required: true
+                            }
+                        },
+                        {
+                            header: 'Code Desc',
+                            name: 'codeDesc',
+                            editor: "text",
+                            width: 200,
+                        },
+                        {
+                            header: 'Parent Code',
+                            name: 'parentCode',
+                            align: 'center',
+                            editor: "text",
+                            width: 120,
+                        },
+                        {
+                            header: 'Use Flag',
+                            name: 'useFlag',
+                            align: 'center',
+                            width: 80,
+                            formatter: 'listItemText',
+                            editor: {
+                                type: 'select',
+                                options: {
+                                    listItems: [
+                                        {text: 'Yes', value: 'Y'},
+                                        {text: 'No', value: 'N'},
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            header: 'Sort No',
+                            name: 'sortNo',
+                            align: 'center',
+                            editor: "text",
+                            width: 70,
+                        },
+                        {
+                            header: 'Attribute1',
+                            name: 'attribute1',
+                            align: 'center',
+                            editor: "text",
+                            width: 100,
+                        },
+                        {
+                            header: 'Attribute2',
+                            name: 'attribute2',
+                            align: 'center',
+                            editor: "text",
+                            width: 100,
+                        },
+                        {
+                            header: 'Attribute3',
+                            name: 'attribute3',
+                            align: 'center',
+                            editor: "text",
+                            width: 100,
+                        },
+                        {
+                            header: 'Attribute4',
+                            name: 'attribute4',
+                            align: 'center',
+                            editor: "text",
+                            width: 100,
+                        },
+                        {
+                            header: 'Attribute5',
+                            name: 'attribute5',
+                            align: 'center',
+                            editor: "text",
+                            width: 100,
+                        },
+                        {
+                            header: "Created By",
+                            name: "createdBy",
+                            align: 'center',
+                            width: 70,
+                        },
+                        {
+                            header: 'creationDate',
+                            name: 'creationDate',
+                            align: 'center',
+                            width: 150
+                        },
+                        {
+                            header: "Modified By",
+                            name: "lastModifiedBy",
+                            align: 'center',
+                            width: 70,
+                        },
+                        {
+                            header: 'lastUpdateDate',
+                            name: 'lastUpdateDate',
+                            align: 'center',
+                            width: 150,
+                        },
+                    ],
+                    columnOptions: {
+                        resizable: true
                     }
                 });
-            }
-        });
 
-        $(".save").on("click", function () {
-            // 저장 전 Editing을 끝낸다.
-            grid.finishEditing();
+                // Grid Event
+                grid.on('beforeRequest', function (ev) {
+                    // 요청을 보내기 전
+                    console.log("beforeRequest");
+                });
+                grid.on('response', function (ev) {
+                    // 성공/실패와 관계 없이 응답을 받았을 경우
+                    console.log("response");
+                    console.log(grid.getPagination())
+                    var totalCount = grid.getPaginationTotalCount();
+                    that.totalCount = totalCount;
+                });
 
-            if (grid.isModified()) {
-                var isValid = grid.validate();
-                console.log(isValid);
+                // grid.on('successResponse', function (ev) {
+                //     // 결과가 false인 경우
+                //     console.log("successResponse");
+                // });
 
-                if (isValid.length) {
-                    var message = isValid[0].errors[0].columnName;
-                    bootbox.alert(message + "은(는) 필수입니다.");
-                } else {
-                    bootbox.confirm("저장 하시겠습니까?", function (result) {
-                        if (result) {
-                            grid.request("modifyData", {showConfirm: false});
-                        }
-                    });
-                }
-            } else {
-                bootbox.alert("변경 된 내용이 없습니다.");
+                grid.on('failResponse', function (ev) {
+                    // 결과가 false인 경우
+                    console.log("failResponse");
+                });
+                grid.on('errorResponse', function (ev) {
+                    // 오류가 발생한 경우
+                    console.log("errorResponse");
+                });
             }
         });
         /*]]>*/
