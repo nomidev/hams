@@ -204,7 +204,10 @@
                             check_callback : true,
                             data: that.treeData
                         },
-                        plugins : [ "contextmenu" ],
+                        types: {
+                            "max_depth": 3
+                        },
+                        plugins : ["types", "contextmenu" ],
                     }).on('select_node.jstree', function (evt, data, x) {
                         // console.log("select_node", data);
                         console.log("select_node");
