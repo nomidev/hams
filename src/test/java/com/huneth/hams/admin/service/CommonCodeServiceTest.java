@@ -1,7 +1,7 @@
 package com.huneth.hams.admin.service;
 
 import com.huneth.hams.model.CommonCode;
-import com.huneth.hams.admin.model.QCommonCode;
+import com.huneth.hams.model.QCommonCode;
 import com.huneth.hams.commonEnum.YnFlag;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.extern.slf4j.Slf4j;
