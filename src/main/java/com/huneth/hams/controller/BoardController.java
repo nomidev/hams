@@ -124,6 +124,7 @@ public class BoardController {
 
         // 페이징목록이 10개씩 보일경우;
         // 현재 페이지가 _pageCount와 같을 경우 _pageCount를 벗어나기 때문에 -1을 해줘야 한다.
+        // _pageCount를 곱해야 하는데... 왜 1을 곱했을까?
         int _startPage = ((_curPage - 1) / _pageCount) * 1 + 1;
 
         // 1일 경우 11이기 때문에 1~10되기 위해 -1해줘야 한다.
