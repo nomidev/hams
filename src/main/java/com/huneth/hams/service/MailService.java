@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class MailService {
 
-    @Autowired
+//    @Autowired
     public JavaMailSender javaMailSender;
 
     @Async
@@ -19,6 +19,6 @@ public class MailService {
         simpleMessage.setTo(email);
         simpleMessage.setSubject("휴네스 이메일 인증 테스트");
         simpleMessage.setText("인증번호: 123456");
-        javaMailSender.send(simpleMessage);
+//        javaMailSender.send(simpleMessage);
     }
 }
