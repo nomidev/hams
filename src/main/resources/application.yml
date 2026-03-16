@@ -2,6 +2,13 @@ server:
   port: 9090
 
 spring:
+  thymeleaf:
+    cache: false
+  devtools:
+    livereload:
+      enabled: true
+    restart:
+      enabled: true
   datasource:
     url: jdbc:mariadb://localhost:3306/hams
     driver-class-name: org.mariadb.jdbc.Driver
@@ -27,3 +34,6 @@ spring:
 logging:
   level:
     root: info
+    com.huneth.hams: debug
+    org.hibernate.SQL: debug
+    org.hibernate.orm.jdbc.bind: trace

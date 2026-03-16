@@ -32,7 +32,7 @@
 
     <form th:action="@{/board/form}" th:object="${board}" method="post">
         <input type="hidden" th:field="*{id}">
-        <input type="hidden" name="bulletin_id" th:value="${param.bullletin_id}">
+        <input type="hidden" name="bulletin_id" th:value="${param.bulletin_id}">
         <div class="form-group">
             <label for="title" class="form-label">제목</label>
             <input type="text" class="form-control" id="title" th:field="*{title}"
@@ -52,36 +52,14 @@
 
         <div class="text-right">
             <a class="btn btn-light" href="#" th:href="@{/board/list(bulletin_id=${param.bulletin_id}, page=${param.page})}" role="button">취소</a>
-            <button type="button" class="btn btn-primary" @click.prevent="submitForm">확인</button>
+            <button type="submit" class="btn btn-primary">확인</button>
         </div>
     </form>
 </main>
 
 <th:block layout:fragment="script">
     <script type="text/javascript">
-        /*<![CDATA[*/
 
-        var boardForm = {
-            data: function () {
-                return {
-
-                }
-            },
-            methods: {
-                submitForm: function () {
-                    bootbox.alert('asfasfasdf');
-                }
-            },
-            mounted: function () {
-                $('#summernote').summernote({
-                    height: 250,
-                });
-            }
-        };
-
-        Vue.createApp(boardForm).mount("#boardForm");
-
-        /*]]>*/
     </script>
 </th:block>
 
