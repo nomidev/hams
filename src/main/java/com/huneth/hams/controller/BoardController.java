@@ -1,6 +1,6 @@
 package com.huneth.hams.controller;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
 import com.huneth.hams.config.validator.BoardValidator;
 import com.huneth.hams.model.Board;

@@ -3,8 +3,8 @@ package com.huneth.hams.model;
 import com.huneth.hams.commonEnum.YnFlag;
 import lombok.Data;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 
 /**
  * 메뉴 관리 Entity

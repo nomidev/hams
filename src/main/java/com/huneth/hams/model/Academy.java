@@ -3,7 +3,7 @@ package com.huneth.hams.model;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import javax.persistence.Column;
+import jakarta.persistence.Column;
 import java.sql.Timestamp;
 
 public class Academy {

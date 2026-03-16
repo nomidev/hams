@@ -1,6 +1,6 @@
 package com.huneth.hams.service;
 
-import javax.transaction.Transactional;
+import jakarta.transaction.Transactional;
 
 import com.huneth.hams.model.Role;
 import com.huneth.hams.model.User;

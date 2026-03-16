@@ -3,7 +3,7 @@ package com.huneth.hams.model;
 import com.huneth.hams.commonEnum.YnFlag;
 import lombok.Data;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Data
 @Entity
