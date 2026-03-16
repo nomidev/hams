@@ -91,7 +91,7 @@ public class BoardController {
         board.setUser(user);
         board.setBulletin(bulletin);
         boardRepository.save(board);
-        return "redirect:/board/list?bulletin_id" + bulletin_id;
+        return "redirect:/board/list?bulletin_id=" + bulletin_id;
     }
 
     // controller에서 exceptionHandler를 처리할 수도 있다.
